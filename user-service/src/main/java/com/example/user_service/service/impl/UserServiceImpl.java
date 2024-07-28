@@ -1,11 +1,15 @@
 package com.example.user_service.service.impl;
 
+import com.example.user_service.constants.RoleConstants;
 import com.example.user_service.dto.UserDto;
+import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
 import com.example.user_service.entity.User;
 import com.example.user_service.exception.ResourceNotFoundException;
 import com.example.user_service.exception.UserAlreadyExistsException;
+import com.example.user_service.mapper.CompanyMapper;
 import com.example.user_service.mapper.UserMapper;
+import com.example.user_service.repository.CompanyRepository;
 import com.example.user_service.repository.RoleRepository;
 import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.IUserService;
@@ -25,6 +29,7 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -35,9 +40,15 @@ public class UserServiceImpl implements IUserService {
             throw new UserAlreadyExistsException("User already registered with given email " +
                     userDto.getEmail());
         }
+        Company company = null;
+        if (userDto.getCompanyDto() != null) {
+            company = CompanyMapper.mapToCompany(userDto.getCompanyDto(), new Company());
+            companyRepository.save(company);
+        }
         User user = UserMapper.mapToUser(userDto, new User());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Role role = roleRepository.getRoleByName("USER");
+        user.setCompany(company);
+        Role role = roleRepository.getRoleByName(RoleConstants.USER_ROLE);
         user.setRoles(List.of(role));
 
         userRepository.save(user);
