@@ -6,12 +6,21 @@ import com.example.user_service.entity.User;
 public class UserMapper {
 
     public static UserDto mapToUserDto(User user, UserDto userDto) {
-        // TODO: Implement this method
-        return null;
+        userDto.setEmail(user.getEmail());
+        userDto.setCompany(user.isCompany());
+        userDto.setFullName(user.getFullName());
+        userDto.setMobileNumber(user.getMobileNumber());
+        userDto.setRoleId(user.getRoleId());
+        return userDto;
     }
 
     public static User mapToUser(UserDto userDto, User user) {
-        // TODO: Implement this method
-        return null;
+        user.setEmail(userDto.getEmail());
+        user.setCompany(userDto.isCompany());
+        user.setFullName(userDto.getFullName());
+        user.setMobileNumber(userDto.getMobileNumber());
+        user.setRoleId(userDto.getRoleId());
+        user.setPassword(userDto.getPassword());
+        return user;
     }
 }

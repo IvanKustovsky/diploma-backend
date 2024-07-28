@@ -1,11 +1,10 @@
 package com.example.user_service.service;
 
 import com.example.user_service.dto.UserDto;
-import com.example.user_service.entity.User;
 
 public interface IUserService {
 
-    void registerUser(User user);
+    void registerUser(UserDto userDto);
 
     UserDto fetchUser(String email);
 

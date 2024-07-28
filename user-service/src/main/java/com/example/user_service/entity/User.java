@@ -1,9 +1,11 @@
 package com.example.user_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "users")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
 public class User extends BaseEntity {
@@ -12,7 +14,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long companyId;
+    private Long companyId; // TODO: Change companyId and roleId to @OneToOne relationship
 
     private Long roleId;
 
@@ -22,7 +24,6 @@ public class User extends BaseEntity {
 
     private String email;
 
-    @Column(name = "userMobileNumber")
     private String mobileNumber;
 
     private String password;

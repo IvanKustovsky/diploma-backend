@@ -2,10 +2,16 @@ package com.example.user_service.service.impl;
 
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.User;
+import com.example.user_service.exception.ResourceNotFoundException;
+import com.example.user_service.exception.UserAlreadyExistsException;
+import com.example.user_service.mapper.UserMapper;
 import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 // TODO: Implement this class and add java docs
 
@@ -14,14 +20,25 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    @Override
-    public void registerUser(User user) {
+    private final PasswordEncoder passwordEncoder;
 
+    @Override
+    public void registerUser(UserDto userDto) {
+        User user = UserMapper.mapToUser(userDto, new User());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new UserAlreadyExistsException("User already registered with given email " +
+                    userDto.getEmail());
+        }
+        userRepository.save(user);
     }
 
     @Override
     public UserDto fetchUser(String email) {
-        return null;
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        return UserMapper.mapToUserDto(user, new UserDto());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.user_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,11 +13,14 @@ import lombok.Data;
 @Schema(name = "User", description = "Schema to hold User information")
 public class UserDto {
 
-    @Schema(description = "User ID", example = "1")
+    /*@Schema(description = "User ID", example = "1")
     private Long id;
 
     @Schema(description = "Company ID associated with the user", example = "10")
-    private Long companyId;
+    private Long companyId;*/
+
+    @Schema(description = "Role ID associated with the user", example = "1")
+    private Long roleId;
 
     @Schema(description = "Indicates if the user is a company", example = "false")
     private boolean isCompany;
@@ -35,4 +39,8 @@ public class UserDto {
     @NotEmpty(message = "MobileNumber cannot be null or empty")
     @Pattern(regexp = "(^$|[0-9]{10,20})", message = "MobileNumber must be between 10 and 20 digits")
     private String mobileNumber;
+
+    @Schema(description = "Password of the user", example = "password123")
+    @NotEmpty(message = "Password cannot be null or empty")
+    private String password;
 }
