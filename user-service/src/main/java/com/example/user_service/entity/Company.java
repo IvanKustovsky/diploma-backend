@@ -10,13 +10,14 @@ public class Company extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long companyId;
 
     private String name;
 
     private String code;
 
-    private String contactNumber;
-
     private String address;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private User user;
 }

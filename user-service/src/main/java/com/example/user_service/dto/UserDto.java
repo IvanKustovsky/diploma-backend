@@ -1,29 +1,30 @@
 package com.example.user_service.dto;
 
+import com.example.user_service.entity.Company;
+import com.example.user_service.entity.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 //TODO: Check fields that should be here
 @Data
 @Schema(name = "User", description = "Schema to hold User information")
 public class UserDto {
 
-    /*@Schema(description = "User ID", example = "1")
-    private Long id;
-
-    @Schema(description = "Company ID associated with the user", example = "10")
-    private Long companyId;*/
-
     @Schema(description = "Role ID associated with the user", example = "1")
-    private Long roleId;
+    private List<Role> roles;
 
     @Schema(description = "Indicates if the user is a company", example = "false")
-    private boolean isCompany;
+    @JsonProperty("company")
+    private CompanyDto companyDto;
 
     @Schema(description = "Full name of the user", example = "John Doe")
     @NotEmpty(message = "FullName cannot be null or empty")
