@@ -1,6 +1,7 @@
 package com.example.user_service.service.impl;
 
 import com.example.user_service.constants.RoleConstants;
+import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
@@ -14,6 +15,10 @@ import com.example.user_service.repository.RoleRepository;
 import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +36,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     @Transactional
@@ -41,7 +47,7 @@ public class UserServiceImpl implements IUserService {
                     userDto.getEmail());
         }
         Company company = null;
-        if (userDto.getCompanyDto() != null) {
+        if (userDto.getCompanyDto() != null) { // TODO: Change using CompanyService
             company = CompanyMapper.mapToCompany(userDto.getCompanyDto(), new Company());
             companyRepository.save(company);
         }
@@ -52,6 +58,13 @@ public class UserServiceImpl implements IUserService {
         user.setRoles(List.of(role));
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void login(LoginDto loginDto) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override

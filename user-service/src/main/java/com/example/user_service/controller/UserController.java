@@ -2,6 +2,7 @@ package com.example.user_service.controller;
 
 import com.example.user_service.constants.UserConstants;
 import com.example.user_service.dto.ErrorResponseDto;
+import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.ResponseDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.service.IUserService;
@@ -60,6 +61,36 @@ public class UserController {
                 .body(new ResponseDto(UserConstants.STATUS_201, UserConstants.MESSAGE_201));
     }
 
+    @Operation(summary = "Login user REST API",
+            description = "REST API to login User inside App")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    })
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDto> loginUser(@Valid @RequestBody LoginDto loginDto) {
+        userService.login(loginDto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto("200", "Login successful"));
+        }
+
     @Operation(summary = "Fetch user REST API",
             description = "REST API to fetch User inside App")
     @ApiResponses({
@@ -83,10 +114,5 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(userDto);
     }
-
-    @GetMapping("/greeting")
-    public ResponseEntity<String> greeting() {
-        return ResponseEntity
-                .ok("Hello World!");
-    }
 }
+
