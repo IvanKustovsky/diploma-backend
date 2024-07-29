@@ -1,12 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/energytoolrent
+    url: jdbc:postgresql://localhost:5432/rentapp
     driver-class-name: org.postgresql.Driver
-    username: root
-    password: 123
+    username: postgres
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect

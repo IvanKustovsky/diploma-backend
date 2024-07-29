@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS `company`
 (
-    `company_id`             BIGINT AUTO_INCREMENT PRIMARY KEY,
-    `name`           VARCHAR(255) NOT NULL,
-    `code`           VARCHAR(20)  NOT NULL UNIQUE,
-    `address`        VARCHAR(255) NULL,
-    `created_at`     TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
-    `created_by`     VARCHAR(50)  NOT NULL DEFAULT 'SYSTEM',
-    `updated_at`     TIMESTAMP             DEFAULT NULL,
-    `updated_by`     VARCHAR(50)           DEFAULT NULL
+    `company_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `name`       VARCHAR(255) NOT NULL,
+    `code`       VARCHAR(20)  NOT NULL UNIQUE,
+    `address`    VARCHAR(255) NULL,
+    `created_at` TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    `created_by` VARCHAR(50)  NOT NULL DEFAULT 'SYSTEM',
+    `updated_at` TIMESTAMP             DEFAULT NULL,
+    `updated_by` VARCHAR(50)           DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `role`
 (
-    `role_id`         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `role_id`    SMALLINT AUTO_INCREMENT PRIMARY KEY,
     `name`       VARCHAR(50) NOT NULL UNIQUE,
     `created_at` TIMESTAMP            DEFAULT CURRENT_TIMESTAMP,
     `created_by` VARCHAR(50) NOT NULL DEFAULT 'SYSTEM',
