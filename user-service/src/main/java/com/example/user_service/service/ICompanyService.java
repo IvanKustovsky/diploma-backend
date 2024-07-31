@@ -5,7 +5,7 @@ import com.example.user_service.entity.Company;
 
 public interface ICompanyService {
 
-    void registerCompany(Company company);
+    Company registerCompany(CompanyDto companyDto);
 
     CompanyDto fetchCompany(String companyCode);
 

@@ -2,10 +2,8 @@ package com.example.user_service.dto;
 
 import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -23,8 +21,7 @@ public class UserDto {
     private List<Role> roles;
 
     @Schema(description = "Indicates if the user is a company", example = "false")
-    @JsonProperty("company")
-    private CompanyDto companyDto;
+    private CompanyDto company;
 
     @Schema(description = "Full name of the user", example = "John Doe")
     @NotEmpty(message = "FullName cannot be null or empty")

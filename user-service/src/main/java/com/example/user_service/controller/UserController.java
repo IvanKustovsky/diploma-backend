@@ -88,7 +88,7 @@ public class UserController {
         userService.login(loginDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new ResponseDto("200", "Login successful"));
+                .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
         }
 
     @Operation(summary = "Fetch user REST API",

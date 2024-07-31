@@ -2,28 +2,16 @@ package com.example.user_service.mapper;
 
 import com.example.user_service.dto.CompanyDto;
 import com.example.user_service.entity.Company;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Objects;
 
-public class CompanyMapper {
+@Mapper
+public interface CompanyMapper {
 
-    public static CompanyDto mapToCompanyDto(Company company, CompanyDto companyDto) {
-        if (Objects.isNull(company) || Objects.isNull(companyDto)) { //TODO: Do something about null
-            return null;
-        }
-        companyDto.setName(company.getName());
-        companyDto.setCode(company.getCode());
-        companyDto.setAddress(company.getAddress());
-        return companyDto;
-    }
+    CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
 
-    public static Company mapToCompany(CompanyDto companyDto, Company company) {
-        if (Objects.isNull(companyDto) || Objects.isNull(company)) {
-            return null;
-        }
-        company.setName(companyDto.getName());
-        company.setCode(companyDto.getCode());
-        company.setAddress(companyDto.getAddress());
-        return company;
-    }
+    CompanyDto toDto(Company company);
+
+    Company toEntity(CompanyDto companyDto);
 }

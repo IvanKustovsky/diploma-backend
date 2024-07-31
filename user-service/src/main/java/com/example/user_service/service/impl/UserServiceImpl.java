@@ -8,11 +8,10 @@ import com.example.user_service.entity.Role;
 import com.example.user_service.entity.User;
 import com.example.user_service.exception.ResourceNotFoundException;
 import com.example.user_service.exception.UserAlreadyExistsException;
-import com.example.user_service.mapper.CompanyMapper;
 import com.example.user_service.mapper.UserMapper;
-import com.example.user_service.repository.CompanyRepository;
 import com.example.user_service.repository.RoleRepository;
 import com.example.user_service.repository.UserRepository;
+import com.example.user_service.service.ICompanyService;
 import com.example.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +33,7 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final CompanyRepository companyRepository;
+    private final ICompanyService companyService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -42,16 +41,18 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public void registerUser(UserDto userDto) {
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
-        if (optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) { // TODO: Check for password and mobileNumber
             throw new UserAlreadyExistsException("User already registered with given email " +
                     userDto.getEmail());
         }
+
+        var companyDto = userDto.getCompany();
         Company company = null;
-        if (userDto.getCompanyDto() != null) { // TODO: Change using CompanyService
-            company = CompanyMapper.mapToCompany(userDto.getCompanyDto(), new Company());
-            companyRepository.save(company);
+        if (companyDto != null) {
+            company = companyService.registerCompany(companyDto);
         }
-        User user = UserMapper.mapToUser(userDto, new User());
+
+        User user = UserMapper.INSTANCE.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCompany(company);
         Role role = roleRepository.getRoleByName(RoleConstants.USER_ROLE);
@@ -71,7 +72,7 @@ public class UserServiceImpl implements IUserService {
     public UserDto fetchUser(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
-        return UserMapper.mapToUserDto(user, new UserDto());
+        return UserMapper.INSTANCE.toDto(user);
     }
 
     @Override
