@@ -20,12 +20,16 @@ public class User extends BaseEntity {
     @JoinColumn(name = "company_id", referencedColumnName = "companyId")
     private Company company;
 
+    @Column(nullable = false, name = "full_name")
     private String fullName;
 
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false, name = "mobile_number")
     private String mobileNumber;
 
+    @Column(unique = true, nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

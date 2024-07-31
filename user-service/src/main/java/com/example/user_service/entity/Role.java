@@ -1,13 +1,11 @@
 package com.example.user_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "role")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
 public class Role extends BaseEntity {
@@ -17,5 +15,6 @@ public class Role extends BaseEntity {
     @JsonIgnore
     private int roleId;
 
+    @Column(nullable = false, unique = true, name = "name")
     private String name;
 }
