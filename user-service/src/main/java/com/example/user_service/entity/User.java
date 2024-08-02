@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class User extends BaseEntity {
 
     @Id

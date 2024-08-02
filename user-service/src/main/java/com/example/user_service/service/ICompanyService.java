@@ -1,17 +1,19 @@
 package com.example.user_service.service;
 
+import com.example.user_service.annotation.ValidCompanyCode;
 import com.example.user_service.dto.CompanyDto;
 import com.example.user_service.entity.Company;
+import jakarta.validation.Valid;
 
 public interface ICompanyService {
 
-    Company registerCompany(CompanyDto companyDto);
+    Company registerCompany(@Valid CompanyDto companyDto);
 
-    CompanyDto fetchCompany(String companyCode);
+    CompanyDto fetchCompany(@ValidCompanyCode String companyCode);
 
-    boolean updateCompany(CompanyDto companyDto);
+    boolean updateCompany(@Valid CompanyDto companyDto);
 
-    boolean deleteCompany(String companyCode);
+    boolean deleteCompany(@ValidCompanyCode String companyCode);
 
     // TODO: Add java docs and perhaps change some method signatures
 }

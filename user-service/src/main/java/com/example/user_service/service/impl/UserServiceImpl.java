@@ -55,7 +55,11 @@ public class UserServiceImpl implements IUserService {
         User user = UserMapper.INSTANCE.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCompany(company);
-        Role role = roleRepository.getRoleByName(RoleConstants.USER_ROLE);
+        Role role = roleRepository.getRoleByName(RoleConstants.USER_ROLE)
+                .orElseGet(() -> {
+                    Role newRole = Role.builder().name(RoleConstants.USER_ROLE).build();
+                    return roleRepository.save(newRole);
+                });
         user.setRoles(List.of(role));
 
         userRepository.save(user);
@@ -64,7 +68,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

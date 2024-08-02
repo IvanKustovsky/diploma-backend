@@ -7,6 +7,7 @@ import lombok.*;
 @Table(name = "company")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Company extends BaseEntity {
 
     @Id

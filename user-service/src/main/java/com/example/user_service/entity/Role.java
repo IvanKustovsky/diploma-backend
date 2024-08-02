@@ -8,6 +8,7 @@ import lombok.*;
 @Table(name = "role")
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Role extends BaseEntity {
 
     @Id

@@ -1,18 +1,12 @@
 package com.example.user_service.dto;
 
-import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.List;
 
-//TODO: Check fields that should be here
 @Data
 @Schema(name = "User", description = "Schema to hold User information")
 public class UserDto {
@@ -20,7 +14,7 @@ public class UserDto {
     @Schema(description = "Role ID associated with the user", example = "1")
     private List<Role> roles;
 
-    @Schema(description = "Indicates if the user is a company", example = "false")
+    @Schema(description = "Company of the user if exists", example = "false")
     private CompanyDto company;
 
     @Schema(description = "Full name of the user", example = "John Doe")
@@ -35,10 +29,11 @@ public class UserDto {
 
     @Schema(description = "Mobile number of the user", example = "+380973958378")
     @NotEmpty(message = "MobileNumber cannot be null or empty")
-    @Pattern(regexp = "(^$|[0-9]{10,20})", message = "MobileNumber must be between 10 and 20 digits")
+    @Pattern(regexp = "^\\+380\\d{9}$", message = "MobileNumber must start with +380 and contain 9 digits after the country code")
     private String mobileNumber;
 
     @Schema(description = "Password of the user", example = "password123")
     @NotEmpty(message = "Password cannot be null or empty")
+    @Size(min = 5, message = "Password must be at least 5 symbols")
     private String password;
 }
