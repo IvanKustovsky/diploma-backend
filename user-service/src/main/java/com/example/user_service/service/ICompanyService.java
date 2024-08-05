@@ -11,7 +11,7 @@ public interface ICompanyService {
 
     CompanyDto fetchCompany(@ValidCompanyCode String companyCode);
 
-    boolean updateCompany(@Valid CompanyDto companyDto);
+    boolean updateCompany(@ValidCompanyCode String code, @Valid CompanyDto companyDto);
 
     boolean deleteCompany(@ValidCompanyCode String companyCode);
 

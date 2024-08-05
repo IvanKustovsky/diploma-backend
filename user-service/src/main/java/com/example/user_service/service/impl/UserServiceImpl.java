@@ -40,11 +40,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public void registerUser(UserDto userDto) {
-        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
-        if (optionalUser.isPresent()) { // TODO: Check for password and mobileNumber
-            throw new UserAlreadyExistsException("User already registered with given email " +
-                    userDto.getEmail());
-        }
+        checkIfUserExists(userDto);
 
         var companyDto = userDto.getCompany();
         Company company = null;
@@ -80,12 +76,45 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public boolean updateUser(UserDto userDto) {
-        return false;
+        User existingUser = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", userDto.getEmail()));
+
+        if(!userDto.getEmail().equals(existingUser.getEmail()) ||
+         !userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
+            checkIfUserExists(userDto);
+        }
+
+        existingUser.setFullName(userDto.getFullName());
+        existingUser.setMobileNumber(userDto.getMobileNumber());
+        existingUser.setEmail(userDto.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        userRepository.save(existingUser);
+
+        return true;
     }
 
     @Override
+    @Transactional
     public boolean deleteUser(String email) {
-        return false;
+        User existingUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+
+        existingUser.getRoles().clear();
+        userRepository.save(existingUser);
+
+        userRepository.deleteById(existingUser.getId());
+        return true;
+    }
+
+    private void checkIfUserExists(UserDto userDto) {
+        Optional<User> userByEmail = userRepository.findByEmail(userDto.getEmail());
+        Optional<User> userByMobileNumber = userRepository.findByMobileNumber(userDto.getMobileNumber());
+
+        if (userByEmail.isPresent() || userByMobileNumber.isPresent()) {
+            throw new UserAlreadyExistsException("User already registered with provided email or mobile number");
+        }
     }
 }
