@@ -22,9 +22,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+// TODO: Change "App" to real app name in ALL @Operation tags
 @Tag(
-        name = "CRUD REST APIs for Accounts in EazyBank",
-        description = "CRUD REST APIs in EazyBank to CREATE, FETCH, UPDATE AND DELETE account details"
+        name = "CRUD REST APIs for Users in App",
+        description = "CRUD REST APIs in App to CREATE, FETCH, UPDATE AND DELETE user details"
 )
 @RestController
 @RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -35,9 +36,7 @@ public class UserController {
 
     private final IUserService userService;
 
-    // TODO: Implement this class
-
-    @Operation(summary = "Create user REST API", // TODO: Change "App" to real app name in ALL @Operation tags
+    @Operation(summary = "Create user REST API",
             description = "REST API to create new User inside App")
     @ApiResponses({
             @ApiResponse(
@@ -89,7 +88,7 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
-        }
+    }
 
     @Operation(summary = "Fetch user REST API",
             description = "REST API to fetch User inside App")
@@ -113,6 +112,74 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userDto);
+    }
+
+    @Operation(summary = "Update user REST API",
+            description = "REST API to update User inside App")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Expectation Failed"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UserDto userDto) {
+        boolean isUpdated = userService.updateUser(userDto);
+        if (isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(UserConstants.STATUS_417, UserConstants.MESSAGE_417_UPDATE));
+        }
+    }
+
+    @Operation(summary = "Delete user REST API",
+            description = "REST API to delete User inside App")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Expectation Failed"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam @Email String email) {
+        boolean isDeleted = userService.deleteUser(email);
+        if (isDeleted) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(UserConstants.STATUS_417, UserConstants.MESSAGE_417_DELETE));
+        }
     }
 }
 

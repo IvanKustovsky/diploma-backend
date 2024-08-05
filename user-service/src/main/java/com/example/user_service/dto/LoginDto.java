@@ -7,8 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Schema(name = "Login", description = "Schema to hold login information")
 public class LoginDto {
-
 
     @Schema(description = "Email of the user", example = "john.doe@example.com")
     @NotEmpty(message = "Email cannot be null or empty")

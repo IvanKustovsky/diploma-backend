@@ -3,18 +3,20 @@ package com.example.user_service.dto;
 import com.example.user_service.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 @Schema(name = "User", description = "Schema to hold User information")
 public class UserDto {
 
-    @Schema(description = "Role ID associated with the user", example = "1")
+    @Schema(hidden = true, description = "Role ID associated with the user", example = "1")
     private List<Role> roles;
 
-    @Schema(description = "Company of the user if exists", example = "false")
+    @Schema(description = "Company of the user if exists", example = "Facebook")
     private CompanyDto company;
 
     @Schema(description = "Full name of the user", example = "John Doe")

@@ -4,6 +4,7 @@ import com.example.user_service.annotation.ValidCompanyCode;
 import com.example.user_service.dto.CompanyDto;
 import com.example.user_service.entity.Company;
 import com.example.user_service.exception.CompanyAlreadyExistsException;
+import com.example.user_service.exception.ResourceNotFoundException;
 import com.example.user_service.mapper.CompanyMapper;
 import com.example.user_service.repository.CompanyRepository;
 import com.example.user_service.service.ICompanyService;
@@ -35,16 +36,31 @@ public class CompanyServiceImpl implements ICompanyService {
 
     @Override
     public CompanyDto fetchCompany(@ValidCompanyCode String companyCode) {
-        return null;
+        Optional<Company> company = companyRepository.findByCode(companyCode);
+        if (company.isEmpty()) {
+            throw new ResourceNotFoundException("Company", "code", companyCode);
+        }
+        return CompanyMapper.INSTANCE.toDto(company.get());
     }
 
     @Override
-    public boolean updateCompany(@Valid CompanyDto companyDto) {
-        return false;
+    @Transactional
+    public boolean updateCompany(@ValidCompanyCode String code, @Valid CompanyDto companyDto) {
+        Company existingCompany = companyRepository.findByCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Company", "code", code));
+
+        existingCompany.setName(companyDto.getName());
+        existingCompany.setAddress(companyDto.getAddress());
+
+        companyRepository.save(existingCompany);
+        return true;
     }
 
     @Override
     public boolean deleteCompany(@ValidCompanyCode String companyCode) {
-        return false;
+        var optionalCompany = companyRepository.findByCode(companyCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Company", "code", companyCode));
+        companyRepository.deleteById(optionalCompany.getCompanyId());
+        return true;
     }
 }
