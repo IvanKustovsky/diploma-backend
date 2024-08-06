@@ -11,7 +11,7 @@ import java.util.List;
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,5 +24,5 @@ public class Company extends BaseEntity {
     private String address;
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User user;
+    private UserEntity user;
 }

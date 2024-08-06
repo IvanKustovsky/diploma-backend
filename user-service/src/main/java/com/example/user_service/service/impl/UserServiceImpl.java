@@ -4,8 +4,7 @@ import com.example.user_service.constants.RoleConstants;
 import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.Company;
-import com.example.user_service.entity.Role;
-import com.example.user_service.entity.User;
+import com.example.user_service.entity.UserEntity;
 import com.example.user_service.exception.ResourceNotFoundException;
 import com.example.user_service.exception.UserAlreadyExistsException;
 import com.example.user_service.mapper.UserMapper;
@@ -14,6 +13,7 @@ import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.ICompanyService;
 import com.example.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,6 +36,7 @@ public class UserServiceImpl implements IUserService {
     private final ICompanyService companyService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final AuditorAware<String> auditAware;
 
     @Override
     @Transactional
@@ -48,14 +49,12 @@ public class UserServiceImpl implements IUserService {
             company = companyService.registerCompany(companyDto);
         }
 
-        User user = UserMapper.INSTANCE.toEntity(userDto);
+        UserEntity user = UserMapper.INSTANCE.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCompany(company);
-        Role role = roleRepository.getRoleByName(RoleConstants.USER_ROLE)
-                .orElseGet(() -> {
-                    Role newRole = Role.builder().name(RoleConstants.USER_ROLE).build();
-                    return roleRepository.save(newRole);
-                });
+        var role = roleRepository.getRoleByName(RoleConstants.USER_ROLE)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Role", "role", RoleConstants.USER_ROLE));
         user.setRoles(List.of(role));
 
         userRepository.save(user);
@@ -70,7 +69,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDto fetchUser(String email) {
-        User user = userRepository.findByEmail(email)
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
         return UserMapper.INSTANCE.toDto(user);
     }
@@ -78,11 +77,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean updateUser(UserDto userDto) {
-        User existingUser = userRepository.findByEmail(userDto.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", userDto.getEmail()));
+        String currentAuthenticatorEmail = auditAware.getCurrentAuditor()
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", "No current user"));
 
-        if(!userDto.getEmail().equals(existingUser.getEmail()) ||
-         !userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
+        UserEntity existingUser = userRepository.findByEmail(currentAuthenticatorEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentAuthenticatorEmail));
+
+        if (!userDto.getEmail().equals(currentAuthenticatorEmail) ||
+                !userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
             checkIfUserExists(userDto);
         }
 
@@ -99,7 +101,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean deleteUser(String email) {
-        User existingUser = userRepository.findByEmail(email)
+        UserEntity existingUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
         existingUser.getRoles().clear();
@@ -110,8 +112,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     private void checkIfUserExists(UserDto userDto) {
-        Optional<User> userByEmail = userRepository.findByEmail(userDto.getEmail());
-        Optional<User> userByMobileNumber = userRepository.findByMobileNumber(userDto.getMobileNumber());
+        Optional<UserEntity> userByEmail = userRepository.findByEmail(userDto.getEmail());
+        Optional<UserEntity> userByMobileNumber = userRepository.findByMobileNumber(userDto.getMobileNumber());
 
         if (userByEmail.isPresent() || userByMobileNumber.isPresent()) {
             throw new UserAlreadyExistsException("User already registered with provided email or mobile number");

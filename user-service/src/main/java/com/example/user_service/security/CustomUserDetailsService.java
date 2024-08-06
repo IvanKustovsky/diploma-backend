@@ -3,7 +3,6 @@ package com.example.user_service.security;
 import com.example.user_service.entity.Role;
 import com.example.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
