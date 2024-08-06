@@ -3,6 +3,7 @@ package com.example.user_service.security;
 import com.example.user_service.entity.Role;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.repository.UserRepository;
+import com.example.user_service.service.impl.CustomUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

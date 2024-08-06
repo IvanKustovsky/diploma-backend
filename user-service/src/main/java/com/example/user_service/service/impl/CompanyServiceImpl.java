@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
-// TODO: Implement this class and add java docs
 @Service
 @Validated
 @RequiredArgsConstructor

@@ -25,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-// TODO: Implement this class and add java docs
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {

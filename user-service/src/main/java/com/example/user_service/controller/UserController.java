@@ -22,10 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-// TODO: Change "App" to real app name in ALL @Operation tags
 @Tag(
-        name = "CRUD REST APIs for Users in App",
-        description = "CRUD REST APIs in App to CREATE, FETCH, UPDATE AND DELETE user details"
+        name = "CRUD REST APIs for Users in E2Rent",
+        description = "CRUD REST APIs in E2Rent to CREATE, LOGIN, FETCH, UPDATE AND DELETE user details"
 )
 @RestController
 @RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -37,7 +36,7 @@ public class UserController {
     private final IUserService userService;
 
     @Operation(summary = "Create user REST API",
-            description = "REST API to create new User inside App")
+            description = "REST API to create new User inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
@@ -61,7 +60,7 @@ public class UserController {
     }
 
     @Operation(summary = "Login user REST API",
-            description = "REST API to login User inside App")
+            description = "REST API to login User inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -91,7 +90,7 @@ public class UserController {
     }
 
     @Operation(summary = "Fetch user REST API",
-            description = "REST API to fetch User inside App")
+            description = "REST API to fetch User inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -115,7 +114,7 @@ public class UserController {
     }
 
     @Operation(summary = "Update user REST API",
-            description = "REST API to update User inside App")
+            description = "REST API to update User inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -149,7 +148,7 @@ public class UserController {
     }
 
     @Operation(summary = "Delete user REST API",
-            description = "REST API to delete User inside App")
+            description = "REST API to delete User inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
