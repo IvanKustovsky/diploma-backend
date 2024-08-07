@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -33,6 +34,13 @@ public class Equipment extends BaseEntity{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EquipmentCondition condition;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "main_image_id", referencedColumnName = "id")
+    private Image mainImage;
+
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL)
+    private List<Image> images;
 
     @Column(nullable = false, updatable = false)
     private Long userId;

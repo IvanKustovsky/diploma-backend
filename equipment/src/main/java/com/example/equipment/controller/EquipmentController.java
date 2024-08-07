@@ -5,7 +5,6 @@ import com.example.equipment.dto.EquipmentDto;
 import com.example.equipment.dto.ErrorResponseDto;
 import com.example.equipment.dto.ResponseDto;
 import com.example.equipment.service.IEquipmentService;
-import com.example.equipment.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +35,6 @@ import java.io.IOException;
 public class EquipmentController {
 
     private final IEquipmentService equipmentService;
-    private final ImageService imageService;
 
     @Operation(summary = "Create user REST API",
             description = "REST API to create new User inside E2Rent")
@@ -57,11 +55,38 @@ public class EquipmentController {
     @PostMapping(path = "/register", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDto> registerEquipment(
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
-            @RequestParam("image") MultipartFile file) throws IOException {
-        imageService.uploadImage(file);
-        equipmentService.registerEquipment(equipmentDto);
+            @RequestParam(value = "main-image", required = false) MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            equipmentService.registerEquipment(equipmentDto);
+        } else {
+            equipmentService.registerEquipmentWithMainImage(equipmentDto, file);
+        }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(EquipmentConstants.STATUS_201, EquipmentConstants.MESSAGE_201));
+    }
+
+    @Operation(summary = "Fetch equipment REST API",
+            description = "REST API to fetch Equipment inside E2Rent")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/fetch/{id}")
+    public ResponseEntity<EquipmentDto> fetchEquipment(@PathVariable Long id) {
+        EquipmentDto equipmentDto = equipmentService.fetchEquipment(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(equipmentDto);
     }
 }

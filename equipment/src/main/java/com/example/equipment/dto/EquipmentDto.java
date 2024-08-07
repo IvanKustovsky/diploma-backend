@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Builder
@@ -41,5 +42,11 @@ public class EquipmentDto {
     @Schema(description = "User ID of the owner", example = "1")
     @Positive(message = "User ID must be greater than zero")
     private Long userId;
+
+    @Schema(description = "Main image URL of the equipment", example = "https://example.com/main_image.jpg")
+    private String mainImageUrl;
+
+    @Schema(description = "List of image URLs of the equipment")
+    private List<String> imageUrls;
 }
 

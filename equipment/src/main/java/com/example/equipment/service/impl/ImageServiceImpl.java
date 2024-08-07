@@ -1,5 +1,6 @@
 package com.example.equipment.service.impl;
 
+import com.example.equipment.entity.Equipment;
 import com.example.equipment.entity.Image;
 import com.example.equipment.exception.ResourceNotFoundException;
 import com.example.equipment.repository.ImageRepository;
@@ -21,14 +22,14 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public boolean uploadImage(MultipartFile imageFile) throws IOException {
+    public Image uploadImage(MultipartFile imageFile, Equipment equipment) throws IOException {
         var imageToSave = Image.builder()
                 .name(imageFile.getOriginalFilename())
                 .type(imageFile.getContentType())
                 .imageData(ImageUtils.compressImage(imageFile.getBytes()))
+                .equipment(equipment)
                 .build();
-        imageRepository.save(imageToSave);
-        return true;
+        return imageRepository.save(imageToSave);
     }
 
     @Override
