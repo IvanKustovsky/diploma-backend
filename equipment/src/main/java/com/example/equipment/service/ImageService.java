@@ -9,7 +9,9 @@ import java.util.zip.DataFormatException;
 
 public interface ImageService {
 
-    Image uploadImage(MultipartFile imageFile, Equipment equipment) throws IOException;
+    Image uploadImage(MultipartFile imageFile, Equipment equipment);
 
     byte[] downloadImage(Long id) throws IOException, DataFormatException;
+
+    void deleteImage(Long id);
 }

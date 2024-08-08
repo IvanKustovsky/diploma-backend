@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 @Schema(name = "Equipment", description = "Schema to hold Equipment information")
 public class EquipmentDto {
-    // TODO: Add mainImage and list of images
 
     @Schema(description = "Name of the equipment", example = "Diesel generator")
     @NotEmpty(message = "Name cannot be null or empty")
