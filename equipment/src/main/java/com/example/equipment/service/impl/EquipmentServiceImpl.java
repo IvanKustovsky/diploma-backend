@@ -29,8 +29,6 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     private static final int MAX_IMAGE_COUNT = 5;
 
-    // TODO: Implement this class
-
     @Override
     @Transactional
     public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file) {

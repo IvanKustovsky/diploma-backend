@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: equipment
+    name: equipments
   jpa:
     open-in-view: false
 

@@ -23,7 +23,6 @@ public class Image {
     private String type;
 
     @Lob
-    @Column
     private byte[] imageData;
 
     @ManyToOne

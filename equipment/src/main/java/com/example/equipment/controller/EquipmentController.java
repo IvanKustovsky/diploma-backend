@@ -26,8 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Tag(
-        name = "CRUD REST APIs for Equipment in E2Rent",
-        description = "CRUD REST APIs in E2Rent to CREATE, FETCH, UPDATE AND DELETE equipment details"
+        name = "REST APIs for Equipment in E2Rent",
+        description = "REST APIs in E2Rent to CREATE, FETCH, UPDATE AND DELETE equipment details"
 )
 @RestController
 @RequestMapping(path = "/api/v1/equipment", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -44,6 +44,10 @@ public class EquipmentController {
             @ApiResponse(
                     responseCode = "201",
                     description = "HTTP Status CREATED"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD_REQUEST"
             ),
             @ApiResponse(
                     responseCode = "415",
@@ -103,6 +107,10 @@ public class EquipmentController {
             @ApiResponse(
                     responseCode = "200",
                     description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status BAD_REQUEST"
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -228,7 +236,7 @@ public class EquipmentController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "HTTP Status NOT_FOUND"
+                    description = "HTTP Status BAD_REQUEST"
             ),
             @ApiResponse(
                     responseCode = "404",

@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition(
 		info = @Info(
 				title = "Users microservice REST API Documentation",
-				description = "App Users microservice REST API Documentation",
+				description = "E2Rent Users microservice REST API Documentation",
 				version = "v1",
 				contact = @Contact(
 						name = "Ivan Kustovsky",
@@ -25,7 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 				)
 		),
 		externalDocs = @ExternalDocumentation(
-				description = "App Users microservice REST API Documentation",
+				description = "E2Rent Users microservice REST API Documentation",
 				url = "https://www.project-domain/swagger-ui/index.html"
 		)
 )

@@ -3,6 +3,6 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: users
   jpa:
     open-in-view: false
