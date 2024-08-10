@@ -1,0 +1,64 @@
+services:
+  # Service for the PostgreSQL database
+  e2rentdb:
+    container_name: e2rentdb
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: e2rentdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  configserver:
+    image: "ivankus197/configserver:v1"
+    container_name: configserver-ms
+    ports:
+      - "8888:8888"
+    healthcheck:
+      test: "curl --fail --silent localhost:8888/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  users:
+    image: "ivankus197/users:v1"
+    container_name: users-ms
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: "users"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://rentappdb:5432/e2rent"
+    depends_on:
+      e2rentdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  equipments:
+    image: "ivankus197/equipments:v1"
+    container_name: equipments-ms
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_APPLICATION_NAME: "equipments"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://rentappdb:5432/e2rent"
+    depends_on:
+      rentappdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+networks:
+  e2rent:
+    driver: "bridge"

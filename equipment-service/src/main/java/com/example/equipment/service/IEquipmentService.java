@@ -4,7 +4,6 @@ import com.example.equipment.dto.EquipmentDto;
 import com.example.equipment.dto.EquipmentSummaryDto;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface IEquipmentService {

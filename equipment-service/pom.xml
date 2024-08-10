@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>equipment</artifactId>
+	<artifactId>equipment-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>equipment</name>
+	<name>equipment-service</name>
 	<description>Microservice for Equipment</description>
 	<url/>
 	<licenses>
@@ -110,6 +110,9 @@
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.3.2</version>
 				<configuration>
+					<from>
+						<image>eclipse-temurin:21-jre</image>
+					</from>
 					<to>
 						<image>ivankus197/${project.artifactId}:v1</image>
 					</to>
