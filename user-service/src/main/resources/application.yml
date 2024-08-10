@@ -1,8 +1,5 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: users
-  jpa:
-    open-in-view: false
+  config:
+    import: "optional:configserver:http://localhost:8888/"

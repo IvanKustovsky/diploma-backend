@@ -1,9 +1,6 @@
-server:
-  port: 8090
-
 spring:
   application:
     name: equipments
-  jpa:
-    open-in-view: false
+  config:
+    import: "optional:configserver:http://localhost:8888/"
 
