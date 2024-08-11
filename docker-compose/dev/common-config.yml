@@ -1,20 +1,21 @@
 services:
   network-deploy-service:
     networks:
-      - eazybank
+      - rentapp
 
   microservice-db-config:
     extends:
       service: network-deploy-service
-    image: mysql
+    image: postgres:alpine
     healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      test: ["CMD-SHELL", "pg_isready"]
       timeout: 10s
       retries: 10
       interval: 10s
       start_period: 10s
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
 
   microservice-base-config:
     extends:
@@ -28,7 +29,7 @@ services:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8888/
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
