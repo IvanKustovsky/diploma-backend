@@ -30,7 +30,7 @@ import java.util.List;
         description = "REST APIs in E2Rent to CREATE, FETCH, UPDATE AND DELETE equipment details"
 )
 @RestController
-@RequestMapping(path = "/api/v1/equipment", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j // TODO: Add logging
 @RequiredArgsConstructor
 @Validated
@@ -73,7 +73,7 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Fetch equipment REST API",
-            description = "REST API to fetch Equipment inside E2Rent")
+            description = "REST API to fetch Equipment by its ID inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -92,7 +92,7 @@ public class EquipmentController {
             )
     }
     )
-    @GetMapping("/fetch/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EquipmentDto> fetchEquipment(
             @PathVariable @Positive(message = "Equipment id must be positive number") Long id) {
         EquipmentDto equipmentDto = equipmentService.fetchEquipment(id);
@@ -102,7 +102,7 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Update equipment REST API",
-            description = "REST API to update Equipment inside E2Rent")
+            description = "REST API to update Equipment by its ID inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -125,7 +125,7 @@ public class EquipmentController {
             )
     }
     )
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updateEquipmentDetails(
             @PathVariable @Positive(message = "Equipment id must be positive number") Long id,
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
@@ -137,7 +137,7 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Delete equipment REST API",
-            description = "REST API to delete Equipment inside E2Rent")
+            description = "REST API to delete Equipment by its ID inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -156,8 +156,8 @@ public class EquipmentController {
             )
     }
     )
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDto> deleteUserDetails(
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto> deleteEquipmentDetails(
             @PathVariable @Positive(message = "Equipment id must be positive number") Long id) {
         equipmentService.deleteEquipment(id);
             return ResponseEntity
@@ -166,7 +166,7 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Fetch equipments REST API",
-            description = "REST API to fetch Equipment with main image uploaded inside E2Rent")
+            description = "REST API to fetch all Equipments with main image uploaded inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -181,7 +181,7 @@ public class EquipmentController {
             )
     }
     )
-    @GetMapping("/fetch/all")
+    @GetMapping("/all")
     public ResponseEntity<List<EquipmentSummaryDto>> fetchEquipment() {
         var equipments = equipmentService.findAllEquipmentsWithImage();
         return ResponseEntity
@@ -190,7 +190,7 @@ public class EquipmentController {
     }
 
     @Operation(summary = "Upload Main Image REST API",
-            description = "REST API to upload main image of equipment inside E2Rent")
+            description = "REST API to upload main image of the equipment inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
@@ -217,18 +217,18 @@ public class EquipmentController {
             )
     }
     )
-    @PostMapping(value = "/upload-main-image/{equipmentId}")
-    public ResponseEntity<ResponseDto> uploadMainImage(@PathVariable Long equipmentId,
+    @PostMapping(value = "/{id}/images/main")
+    public ResponseEntity<ResponseDto> uploadMainImage(@PathVariable Long id,
                                                        @RequestParam("main-image") MultipartFile image) {
-        equipmentService.uploadMainImage(equipmentId, image);
+        equipmentService.uploadMainImage(id, image);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
 
     }
 
-    @Operation(summary = "Create user REST API",
-            description = "REST API to create new User inside E2Rent")
+    @Operation(summary = "Upload images REST API",
+            description = "REST API to upload images of the equipment inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
@@ -255,10 +255,10 @@ public class EquipmentController {
             )
     }
     )
-    @PostMapping("/upload-images/{equipmentId}")
-    public ResponseEntity<ResponseDto> uploadImages(@PathVariable Long equipmentId,
+    @PostMapping("/{id}/images")
+    public ResponseEntity<ResponseDto> uploadImages(@PathVariable Long id,
                                                     @RequestParam("images") List<MultipartFile> images) {
-        equipmentService.uploadImages(equipmentId, images);
+        equipmentService.uploadImages(id, images);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
