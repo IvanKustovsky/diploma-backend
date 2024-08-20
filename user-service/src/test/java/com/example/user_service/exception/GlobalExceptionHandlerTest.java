@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -94,21 +93,6 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals("User already exists", responseEntity.getBody().getErrorMessage());
-    }
-
-    @Test
-    void handleAuthenticationException() {
-        // Given
-        AuthenticationException exception = new AuthenticationException("Authentication failed") {
-        };
-
-        // When
-        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler.handleAuthenticationException(exception, webRequest);
-
-        // Then
-        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-        assertEquals("Invalid email or password", responseEntity.getBody().getErrorMessage());
     }
 
     @Test

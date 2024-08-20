@@ -200,7 +200,7 @@ class UserEntityServiceImplTest {
         assertEquals(USER_DTO.getFullName(), savedUser.getFullName());
         assertEquals(USER_DTO.getMobileNumber(), savedUser.getMobileNumber());
         assertNotNull(savedUser.getCompany());
-        assertEquals(USER_ROLE, savedUser.getRoles().get(0));
+        assertEquals(USER_ROLE, savedUser.getRoles().getFirst());
     }
 
     @Test

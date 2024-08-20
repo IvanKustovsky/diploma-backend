@@ -1,6 +1,11 @@
 spring:
   application:
     name: identity-service
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
 server:
   port: 8095
 
@@ -12,3 +17,5 @@ eureka:
     registerWithEureka: true
     serviceUrl:
       defaultZone: http://localhost:8070/eureka/
+
+

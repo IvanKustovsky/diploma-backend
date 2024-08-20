@@ -1,11 +1,11 @@
 package com.example.identity_service.exception;
 
 import com.example.identity_service.dto.ErrorResponseDto;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,29 +36,28 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
 
-    /*@ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception exception,
-                                                                  WebRequest webRequest) {
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponseDto> handleServiceUnavailableException(
+            ServiceUnavailableException ex, WebRequest webRequest) {
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
                 webRequest.getDescription(false),
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                exception.getMessage(),
-                LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(errorResponseDTO);
-    }*/
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleUsernameNotFoundException(UsernameNotFoundException ex,
-                                                                  WebRequest webRequest) {
-        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                webRequest.getDescription(false),
-                HttpStatus.NOT_FOUND,
+                HttpStatus.SERVICE_UNAVAILABLE,
                 ex.getMessage(),
                 LocalDateTime.now()
         );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponseDto> handleJwtException(JwtException ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.UNAUTHORIZED,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(errorResponseDTO);
     }
 }
