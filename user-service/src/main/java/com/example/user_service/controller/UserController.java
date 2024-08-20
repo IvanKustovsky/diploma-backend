@@ -59,36 +59,6 @@ public class UserController {
                 .body(new ResponseDto(UserConstants.STATUS_201, UserConstants.MESSAGE_201));
     }
 
-    @Operation(summary = "Login user REST API",
-            description = "REST API to login User inside E2Rent")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "HTTP Status Unauthorized",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    })
-    @PostMapping("/login")
-    public ResponseEntity<ResponseDto> loginUser(@Valid @RequestBody LoginDto loginDto) {
-        userService.login(loginDto);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
-    }
-
     @Operation(summary = "Fetch user REST API",
             description = "REST API to fetch User inside E2Rent")
     @ApiResponses({
