@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: identity-service
+server:
+  port: 8095
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
