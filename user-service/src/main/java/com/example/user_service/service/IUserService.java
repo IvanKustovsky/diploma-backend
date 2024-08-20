@@ -1,6 +1,5 @@
 package com.example.user_service.service;
 
-import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 
 public interface IUserService {
@@ -10,12 +9,6 @@ public interface IUserService {
      * @param userDto - UserDto Object
      */
     void registerUser(UserDto userDto);
-
-    /**
-     *
-     * @param loginDto - LoginDto Object
-     */
-    void login(LoginDto loginDto);
 
     /**
      *

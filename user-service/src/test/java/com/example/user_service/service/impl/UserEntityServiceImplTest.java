@@ -2,7 +2,6 @@ package com.example.user_service.service.impl;
 
 import com.example.user_service.constants.RoleConstants;
 import com.example.user_service.dto.CompanyDto;
-import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
@@ -19,10 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,9 +90,6 @@ class UserEntityServiceImplTest {
 
     @Mock
     private AuditorAware<String> auditAwareMock;
-
-    @Mock
-    private AuthenticationManager authenticationManagerMock;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
@@ -200,35 +192,13 @@ class UserEntityServiceImplTest {
         assertEquals(USER_DTO.getFullName(), savedUser.getFullName());
         assertEquals(USER_DTO.getMobileNumber(), savedUser.getMobileNumber());
         assertNotNull(savedUser.getCompany());
-        assertEquals(USER_ROLE, savedUser.getRoles().get(0));
-    }
-
-
-    @Test
-    @DisplayName("Should log in user successfully")
-    @Order(6)
-    void loginUser() {
-        // given
-        LoginDto loginDto = new LoginDto();
-        loginDto.setEmail(USER_DTO.getEmail());
-        loginDto.setPassword(USER_DTO.getPassword());
-        Authentication authentication = mock(Authentication.class);
-
-        when(authenticationManagerMock.authenticate(any(Authentication.class))).thenReturn(authentication);
-
-        // when
-        userServiceImpl.login(loginDto);
-
-        // then
-        verify(authenticationManagerMock, times(1))
-                .authenticate(any(UsernamePasswordAuthenticationToken.class));
-        assertEquals(authentication, SecurityContextHolder.getContext().getAuthentication());
+        assertEquals(USER_ROLE, savedUser.getRoles().getFirst());
     }
 
     @Test
     @DisplayName("Should delete user and clear roles")
     @Transactional
-    @Order(7)
+    @Order(6)
     void deleteUser() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.of(EXISTING_USER));
@@ -245,7 +215,7 @@ class UserEntityServiceImplTest {
     @Test
     @DisplayName("Should throw ResourceNotFoundException when deleting non-existent user")
     @Transactional
-    @Order(8)
+    @Order(7)
     void deleteUserWhenNotExists() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.empty());
@@ -262,7 +232,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should successfully update user without changing email or mobile number")
-    @Order(9)
+    @Order(8)
     void updateUserSuccessfullyWithoutChangingEmailOrMobileNumber() {
         // given
         UserDto userDto = UserDto.builder()
@@ -297,7 +267,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistsException when new email exists")
-    @Order(10)
+    @Order(9)
     void updateUserWithExistingEmail() {
         // given
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
@@ -314,7 +284,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistsException when new mobile number exists")
-    @Order(11)
+    @Order(10)
     void updateUserWithExistingMobileNumber() {
         // given
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
@@ -332,7 +302,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistsException when both new email and new mobile number exist")
-    @Order(12)
+    @Order(11)
     void updateUserWithExistingEmailAndMobileNumber() {
         // given
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
