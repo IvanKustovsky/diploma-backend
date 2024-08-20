@@ -1,7 +1,6 @@
 package com.example.user_service.service.impl;
 
 import com.example.user_service.constants.RoleConstants;
-import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.Company;
 import com.example.user_service.entity.UserEntity;
@@ -14,10 +13,6 @@ import com.example.user_service.service.ICompanyService;
 import com.example.user_service.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +28,6 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final ICompanyService companyService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final AuditorAware<String> auditAware;
 
     @Override
@@ -59,13 +53,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void login(LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    @Override
     public UserDto fetchUser(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
@@ -75,6 +62,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public boolean updateUser(UserDto userDto) {
+        // TODO: Get currentAuditor from identity-service, maybe not
         String currentAuthenticatorEmail = auditAware.getCurrentAuditor()
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", "No current user"));
 

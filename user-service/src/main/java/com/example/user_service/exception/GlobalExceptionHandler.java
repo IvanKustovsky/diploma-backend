@@ -73,18 +73,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponseDto> handleAuthenticationException(AuthenticationException exception,
-                                                                          WebRequest webRequest) {
-        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                webRequest.getDescription(false),
-                HttpStatus.UNAUTHORIZED,
-                "Invalid email or password",
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNAUTHORIZED);
-    }
-
     @ExceptionHandler(CompanyAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handleCompanyAlreadyExistsException(CompanyAlreadyExistsException exception,
                                                                              WebRequest webRequest){

@@ -1,6 +1,8 @@
-package com.example.user_service.entity;
+package com.example.identity_service.model;
 
-import lombok.RequiredArgsConstructor;
+import com.example.identity_service.dto.UserDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,10 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class UserPrincipal implements UserDetails {
+@Builder
+@Schema(name = "UserPrincipal", description = "Schema to hold UserPrincipal information")
+public record UserPrincipal(UserDto user) implements UserDetails {
 
-    private final UserEntity user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()

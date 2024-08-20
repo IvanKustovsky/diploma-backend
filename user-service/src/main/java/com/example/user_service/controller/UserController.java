@@ -23,8 +23,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(
-        name = "CRUD REST APIs for Users in E2Rent",
-        description = "CRUD REST APIs in E2Rent to CREATE, LOGIN, FETCH, UPDATE AND DELETE user details"
+        name = "REST APIs for Users in E2Rent",
+        description = "REST APIs in E2Rent to CREATE, LOGIN, FETCH, UPDATE AND DELETE user details"
 )
 @RestController
 @RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -59,36 +59,6 @@ public class UserController {
                 .body(new ResponseDto(UserConstants.STATUS_201, UserConstants.MESSAGE_201));
     }
 
-    @Operation(summary = "Login user REST API",
-            description = "REST API to login User inside E2Rent")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "HTTP Status Unauthorized",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    })
-    @PostMapping("/login")
-    public ResponseEntity<ResponseDto> loginUser(@Valid @RequestBody LoginDto loginDto) {
-        userService.login(loginDto);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
-    }
-
     @Operation(summary = "Fetch user REST API",
             description = "REST API to fetch User inside E2Rent")
     @ApiResponses({
@@ -105,7 +75,7 @@ public class UserController {
             )
     }
     )
-    @GetMapping("/fetch")
+    @GetMapping()
     public ResponseEntity<UserDto> fetchUser(@RequestParam @Email String email) {
         UserDto userDto = userService.fetchUser(email);
         return ResponseEntity
@@ -133,7 +103,7 @@ public class UserController {
             )
     }
     )
-    @PutMapping("/update")
+    @PutMapping()
     public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UserDto userDto) {
         boolean isUpdated = userService.updateUser(userDto);
         if (isUpdated) {
@@ -167,7 +137,7 @@ public class UserController {
             )
     }
     )
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam @Email String email) {
         boolean isDeleted = userService.deleteUser(email);
         if (isDeleted) {
