@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
         description = "REST APIs in E2Rent to CREATE, FETCH, UPDATE AND DELETE user details"
 )
 @RestController
-@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/users/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 @RequiredArgsConstructor
 @Validated

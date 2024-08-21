@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
         description = "REST APIs in E2Rent to Authenticate user"
 )
 @RestController
-@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/auth/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 @RequiredArgsConstructor
 @Validated

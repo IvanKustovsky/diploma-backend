@@ -30,7 +30,7 @@ import java.util.List;
         description = "REST APIs in E2Rent to CREATE, FETCH, UPDATE AND DELETE equipment details"
 )
 @RestController
-@RequestMapping(path = "/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "/equipments/api/v1", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j // TODO: Add logging
 @RequiredArgsConstructor
 @Validated

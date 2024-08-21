@@ -2,7 +2,6 @@ package com.example.user_service.service.impl;
 
 import com.example.user_service.constants.RoleConstants;
 import com.example.user_service.dto.CompanyDto;
-import com.example.user_service.dto.LoginDto;
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.Company;
 import com.example.user_service.entity.Role;
@@ -19,10 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,9 +90,6 @@ class UserEntityServiceImplTest {
 
     @Mock
     private AuditorAware<String> auditAwareMock;
-
-    @Mock
-    private AuthenticationManager authenticationManagerMock;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
