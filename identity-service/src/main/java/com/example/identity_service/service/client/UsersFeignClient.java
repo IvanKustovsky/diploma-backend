@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UsersFeignClient {
 
     @GetMapping
-    ResponseEntity<UserDto> fetchUser(@RequestParam @Email String email);
+    ResponseEntity<UserDto> fetchUser(@RequestParam(name = "email") @Email String email);
 }

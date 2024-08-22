@@ -18,9 +18,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.warn("Searching for user with email: {}", email);
+        log.info("Searching for user with email: {}", email);
         var userDto = feignClient.fetchUser(email).getBody();
-        log.warn("Finish search for user with credentials: {}", userDto);
+        log.info("Finish search for user with credentials: {}", userDto);
         return new UserPrincipal(userDto);
     }
 }

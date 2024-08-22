@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @Data
 @Builder
 @Schema(name = "User", description = "Schema to hold User information")
+@AllArgsConstructor @NoArgsConstructor
 public class UserDto {
 
     @Schema(hidden = true, description = "Role ID associated with the user", example = "1")

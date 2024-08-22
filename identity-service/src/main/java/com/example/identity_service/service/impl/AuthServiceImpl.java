@@ -4,11 +4,17 @@ import com.example.identity_service.model.AuthRequest;
 import com.example.identity_service.service.IAuthService;
 import com.example.identity_service.service.IJwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
@@ -20,12 +26,17 @@ public class AuthServiceImpl implements IAuthService {
     public String generateToken(AuthRequest authRequest) {
         var emailPassAuthToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(),
                 authRequest.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(emailPassAuthToken);
-        if (authenticate.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getEmail());
-        } else {
-            throw new RuntimeException("invalid access");
-        }
+
+        Authentication authentication = authenticationManager.authenticate(emailPassAuthToken);
+
+        Collection<String> roles = mapToRoles(authentication.getAuthorities());
+        return jwtService.generateToken(authRequest.getEmail(), roles);
+    }
+
+    private Collection<String> mapToRoles(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
     }
 
     @Override
