@@ -51,6 +51,12 @@ services:
     container_name: users-ms
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "users"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://e2rent_db:5432/e2rent"
@@ -68,6 +74,12 @@ services:
     container_name: equipments-ms
     ports:
       - "8090:8090"
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "equipments"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://e2rent_db:5432/e2rent"
@@ -76,6 +88,44 @@ services:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  identities:
+    image: "ivankus197/identity-service:v1"
+    container_name: identity-ms
+    ports:
+      - "8095:8095"
+    healthcheck:
+      test: "curl --fail --silent localhost:8095/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "identity-service"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  gatewayserver:
+    image: "ivankus197/gateway-service:v1"
+    container_name: gatewayserver-ms
+    ports:
+      - "9010:9010"
+    depends_on:
+      users:
+        condition: service_healthy
+      equipments:
+        condition: service_healthy
+      identities:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gateway-service"
     extends:
       file: common-config.yml
       service: microservice-eureka-config

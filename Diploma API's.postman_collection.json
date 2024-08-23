@@ -27,61 +27,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/register",
+							"raw": "http://localhost:8080/users/api/v1/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"users",
 								"api",
 								"v1",
 								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "username",
-									"value": "ivank1234@gmail.com",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "password123",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"ivank1234@gmail.com\",\r\n    \"password\": \"password123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"login"
 							]
 						}
 					},
@@ -105,13 +61,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/register",
+							"raw": "http://localhost:8080/users/api/v1/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"users",
 								"api",
 								"v1",
 								"register"
@@ -129,13 +86,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1?email=ivank1234@gmail.com",
+							"raw": "http://localhost:8080/users/api/v1?email=ivank1234@gmail.com",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"users",
 								"api",
 								"v1"
 							],
@@ -153,19 +111,7 @@
 					"name": "UpdateUser",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "username",
-									"value": "ivank1235@gmail.com",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "password123",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PUT",
 						"header": [],
@@ -179,13 +125,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1",
+							"raw": "http://localhost:8080/users/api/v1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"users",
 								"api",
 								"v1"
 							]
@@ -197,30 +144,19 @@
 					"name": "DeleteUser",
 					"request": {
 						"auth": {
-							"type": "basic",
-							"basic": [
-								{
-									"key": "username",
-									"value": "ivank1234@gmail.com",
-									"type": "string"
-								},
-								{
-									"key": "password",
-									"value": "password123",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1?email=ivank1234@gmail.com",
+							"raw": "http://localhost:8080/users/api/v1?email=ivank1234@gmail.com",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
+								"users",
 								"api",
 								"v1"
 							],
@@ -228,6 +164,76 @@
 								{
 									"key": "email",
 									"value": "ivank1234@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "GenerateToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ivank1234@gmail.com\",\r\n    \"password\": \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8095/auth/api/v1/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8095",
+							"path": [
+								"auth",
+								"api",
+								"v1",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8095/auth/api/v1/validate?token=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8095",
+							"path": [
+								"auth",
+								"api",
+								"v1",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": ""
 								}
 							]
 						}
@@ -262,13 +268,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/register",
+							"raw": "http://localhost:8090/equipments/api/v1/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"register"
@@ -294,13 +301,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/register",
+							"raw": "http://localhost:8090/equipments/api/v1/register",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"register"
@@ -329,13 +337,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/4/images",
+							"raw": "http://localhost:8090/equipments/api/v1/4/images",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"4",
@@ -361,13 +370,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/4/images/main",
+							"raw": "http://localhost:8090/equipments/api/v1/4/images/main",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"4",
@@ -384,6 +394,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwiaWF0IjoxNzI0MjMwMDQ5LCJleHAiOjE3MjQyMzE4NDl9.UYaSDvwclm4lN4A0hOB7sxJmISwRipaZJ738dcWvXJE",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -391,13 +411,14 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/12",
+							"raw": "http://localhost:8090/equipments/api/v1/12",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"12"
@@ -419,13 +440,14 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/all",
+							"raw": "http://localhost:8090/equipments/api/v1/all",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"all"
@@ -456,13 +478,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8090/api/v1/3",
+							"raw": "http://localhost:8090/equipments/api/v1/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
 								"3"
@@ -477,16 +500,17 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8090/api/v1/22",
+							"raw": "http://localhost:8090/equipments/api/v1/222",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8090",
 							"path": [
+								"equipments",
 								"api",
 								"v1",
-								"22"
+								"222"
 							]
 						}
 					},
@@ -503,6 +527,16 @@
 						{
 							"name": "RegisterEquipmentWithMainImage",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -512,7 +546,7 @@
 											"key": "main-image",
 											"contentType": "",
 											"type": "file",
-											"src": "/D:/C# projects/DPGI/lab6/Images/caesar.png"
+											"src": "/C:/Users/user/Desktop/Фото/Моє фото.jpg"
 										},
 										{
 											"key": "equipmentDto",
@@ -543,6 +577,16 @@
 						{
 							"name": "RegisterJustEquipment",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -577,6 +621,16 @@
 						{
 							"name": "UploadImages",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -586,15 +640,14 @@
 											"key": "images",
 											"type": "file",
 											"src": [
-												"/D:/Зображення/wallpaper fentesi/cherepeha-v-pustyne.jpg",
-												"/D:/Зображення/wallpaper fentesi/elfiyskiy-gorod.jpg",
-												"/D:/Зображення/wallpaper fentesi/elfiyskiy-gorod-derevo.jpg"
+												"/C:/Users/user/Desktop/Фото/Фотошоп/порохНегр.jpg",
+												"/C:/Users/user/Desktop/Фото/Фотошоп/шак.jpg"
 											]
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:9010/e2rent/equipments/api/v1/4/images",
+									"raw": "http://localhost:9010/e2rent/equipments/api/v1/3/images",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -605,7 +658,7 @@
 										"equipments",
 										"api",
 										"v1",
-										"4",
+										"3",
 										"images"
 									]
 								}
@@ -615,6 +668,16 @@
 						{
 							"name": "UploadMainImage",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -623,12 +686,12 @@
 										{
 											"key": "main-image",
 											"type": "file",
-											"src": "/D:/Зображення/петя.jpg"
+											"src": "/C:/Users/user/Desktop/Фото/Фотошоп/дівчинаЗтв.jpg"
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:9010/e2rent/equipments/api/v1/4/images/main",
+									"raw": "http://localhost:9010/e2rent/equipments/api/v1/1/images/main",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -639,7 +702,7 @@
 										"equipments",
 										"api",
 										"v1",
-										"4",
+										"1",
 										"images",
 										"main"
 									]
@@ -653,6 +716,16 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -660,7 +733,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://localhost:9010/e2rent/equipments/api/v1/12",
+									"raw": "http://localhost:9010/e2rent/equipments/api/v1/3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -671,7 +744,7 @@
 										"equipments",
 										"api",
 										"v1",
-										"12"
+										"3"
 									]
 								}
 							},
@@ -683,6 +756,9 @@
 								"disableBodyPruning": true
 							},
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "GET",
 								"header": [],
 								"body": {
@@ -710,6 +786,16 @@
 						{
 							"name": "UpdateEquipment",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -749,10 +835,20 @@
 						{
 							"name": "DeleteEquipment",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9010/e2rent/equipments/api/v1/22",
+									"raw": "http://localhost:9010/e2rent/equipments/api/v1/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -763,7 +859,7 @@
 										"equipments",
 										"api",
 										"v1",
-										"22"
+										"2"
 									]
 								}
 							},
@@ -784,7 +880,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1235@gmail.com\",\r\n    \"mobileNumber\": \"+380965843712\",\r\n    \"password\" : \"password123\"\r\n}",
+									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1237@gmail.com\",\r\n    \"mobileNumber\": \"+380965843714\",\r\n    \"password\" : \"password123\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -810,53 +906,6 @@
 							"response": []
 						},
 						{
-							"name": "Login",
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "username",
-											"value": "ivank1234@gmail.com",
-											"type": "string"
-										},
-										{
-											"key": "password",
-											"value": "password123",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"ivank1234@gmail.com\",\r\n    \"password\": \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:9010/e2rent/users/api/v1/login",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "9010",
-									"path": [
-										"e2rent",
-										"users",
-										"api",
-										"v1",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "RegisterUserWithCompany",
 							"request": {
 								"auth": {
@@ -866,7 +915,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1234@gmail.com\",\r\n    \"mobileNumber\": \"+380966958693\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892166\",\r\n        \"address\": \"1234 Elm Street\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1235@gmail.com\",\r\n    \"mobileNumber\": \"+380966958691\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892167\",\r\n        \"address\": \"1234 Elm Street\"\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -895,12 +944,19 @@
 							"name": "FetchUser",
 							"request": {
 								"auth": {
-									"type": "noauth"
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+											"type": "string"
+										}
+									]
 								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9010/e2rent/users/api/v1?email=ivank1234@gmail.com",
+									"raw": "http://localhost:9010/e2rent/users/api/v1?email=ivank1235@gmail.com",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -915,7 +971,7 @@
 									"query": [
 										{
 											"key": "email",
-											"value": "ivank1234@gmail.com"
+											"value": "ivank1235@gmail.com"
 										}
 									]
 								}
@@ -926,16 +982,11 @@
 							"name": "UpdateUser",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
+									"type": "bearer",
+									"bearer": [
 										{
-											"key": "username",
-											"value": "ivank1235@gmail.com",
-											"type": "string"
-										},
-										{
-											"key": "password",
-											"value": "password123",
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
 											"type": "string"
 										}
 									]
@@ -972,16 +1023,11 @@
 							"name": "DeleteUser",
 							"request": {
 								"auth": {
-									"type": "basic",
-									"basic": [
+									"type": "bearer",
+									"bearer": [
 										{
-											"key": "username",
-											"value": "ivank1234@gmail.com",
-											"type": "string"
-										},
-										{
-											"key": "password",
-											"value": "password123",
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
 											"type": "string"
 										}
 									]
@@ -989,7 +1035,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:9010/e2rent/users/api/v1?email=ivank1234@gmail.com",
+									"raw": "http://localhost:9010/e2rent/users/api/v1?email=ivank1237@gmail.com",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1004,7 +1050,76 @@
 									"query": [
 										{
 											"key": "email",
-											"value": "ivank1234@gmail.com"
+											"value": "ivank1237@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "gateway-authentication",
+					"item": [
+						{
+							"name": "GenerateToken",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"ivank1237@gmail.com\",\r\n    \"password\": \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:9010/e2rent/auth/api/v1/token",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9010",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ValidateToken",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:9010/e2rent/auth/api/v1/validate?token=eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "9010",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"validate"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6Iml2YW5rMTIzN0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ0MDExNjgsImV4cCI6MTcyNDQwMjk2OH0.0VT9jiMhDQWMLUUGW0hNlSz9kqm3_FsIUQ5MYaSzm-c"
 										}
 									]
 								}
