@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.time.LocalDateTime;
@@ -16,9 +15,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleGlobalException(
-            Exception exception, WebRequest webRequest) {
+            Exception exception, ServerWebExchange exchange) {
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                webRequest.getDescription(false),
+                exchange.getRequest().getPath().toString(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage(),
                 LocalDateTime.now()
@@ -29,9 +28,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingAuthorizationHeaderException.class)
     public ResponseEntity<ErrorResponseDto> handleMissingAuthorizationHeaderException(
-            MissingAuthorizationHeaderException exception, WebRequest webRequest) {
+            MissingAuthorizationHeaderException exception, ServerWebExchange exchange) {
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                webRequest.getDescription(false),
+                exchange.getRequest().getPath().toString(),
                 HttpStatus.NETWORK_AUTHENTICATION_REQUIRED,
                 exception.getMessage(),
                 LocalDateTime.now()

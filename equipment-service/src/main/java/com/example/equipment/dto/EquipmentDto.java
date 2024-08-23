@@ -4,9 +4,11 @@ import com.example.equipment.enums.EquipmentCondition;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @Data
 @Builder
 @Schema(name = "Equipment", description = "Schema to hold Equipment information")
+@AllArgsConstructor @NoArgsConstructor
 public class EquipmentDto {
 
     @Schema(description = "Name of the equipment", example = "Diesel generator")

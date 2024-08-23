@@ -94,7 +94,7 @@ public class EquipmentController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<EquipmentDto> fetchEquipment(
-            @PathVariable @Positive(message = "Equipment id must be positive number") Long id) {
+            @PathVariable(value = "id") @Positive(message = "Equipment id must be positive number") Long id) {
         EquipmentDto equipmentDto = equipmentService.fetchEquipment(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -127,13 +127,13 @@ public class EquipmentController {
     )
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto> updateEquipmentDetails(
-            @PathVariable @Positive(message = "Equipment id must be positive number") Long id,
+            @PathVariable(value = "id") @Positive(message = "Equipment id must be positive number") Long id,
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
             @RequestParam(value = "main-image", required = false) MultipartFile image) {
         equipmentService.updateEquipment(id, equipmentDto, image);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
     }
 
     @Operation(summary = "Delete equipment REST API",
@@ -158,11 +158,11 @@ public class EquipmentController {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto> deleteEquipmentDetails(
-            @PathVariable @Positive(message = "Equipment id must be positive number") Long id) {
+            @PathVariable(value = "id") @Positive(message = "Equipment id must be positive number") Long id) {
         equipmentService.deleteEquipment(id);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
     }
 
     @Operation(summary = "Fetch equipments REST API",
@@ -218,7 +218,7 @@ public class EquipmentController {
     }
     )
     @PostMapping(value = "/{id}/images/main")
-    public ResponseEntity<ResponseDto> uploadMainImage(@PathVariable Long id,
+    public ResponseEntity<ResponseDto> uploadMainImage(@PathVariable(value = "id") Long id,
                                                        @RequestParam("main-image") MultipartFile image) {
         equipmentService.uploadMainImage(id, image);
         return ResponseEntity
@@ -256,7 +256,7 @@ public class EquipmentController {
     }
     )
     @PostMapping("/{id}/images")
-    public ResponseEntity<ResponseDto> uploadImages(@PathVariable Long id,
+    public ResponseEntity<ResponseDto> uploadImages(@PathVariable(value = "id") Long id,
                                                     @RequestParam("images") List<MultipartFile> images) {
         equipmentService.uploadImages(id, images);
         return ResponseEntity

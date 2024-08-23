@@ -75,7 +75,7 @@ public class UserController {
     }
     )
     @GetMapping
-    public ResponseEntity<UserDto> fetchUser(@RequestParam @Email String email) {
+    public ResponseEntity<UserDto> fetchUser(@RequestParam(name = "email") @Email String email) {
         UserDto userDto = userService.fetchUser(email);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -137,7 +137,7 @@ public class UserController {
     }
     )
     @DeleteMapping
-    public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam @Email String email) {
+    public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam(name = "email") @Email String email) {
         boolean isDeleted = userService.deleteUser(email);
         if (isDeleted) {
             return ResponseEntity
