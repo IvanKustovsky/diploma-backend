@@ -1,25 +1,25 @@
 package com.example.gatewayservice.filter;
 
+import com.example.gatewayservice.config.CustomProps;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
 import java.util.function.Predicate;
 
 @Component
+@RequiredArgsConstructor
 public class RouteValidator {
 
-    // TODO: define all open api endpoints
-    public static final List<String> openApiEndpoints = List.of(
-            "/auth/api/v1/token",
-            "/auth/api/v1/validate",
-            "/equipments/api/v1/all",
-            "/users/api/v1/register"
-    );
+    private final CustomProps customProps;
 
-    public Predicate<ServerHttpRequest> isSecured =
-            request -> openApiEndpoints
-                    .stream()
-                    .noneMatch(uri -> request.getURI().getPath().contains(uri));
+    public Predicate<ServerHttpRequest> isSecured;
 
+    @PostConstruct
+    public void init() {
+        isSecured = request -> customProps.getEndpoints()
+                .stream()
+                .noneMatch(uri -> request.getURI().getPath().contains(uri));
+    }
 }
