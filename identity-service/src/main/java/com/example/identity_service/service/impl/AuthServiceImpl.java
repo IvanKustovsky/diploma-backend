@@ -33,14 +33,19 @@ public class AuthServiceImpl implements IAuthService {
         return jwtService.generateToken(authRequest.getEmail(), roles);
     }
 
+    @Override
+    public void validateToken(String token) {
+        jwtService.validateToken(token);
+    }
+
+    @Override
+    public String extractEmail(String token) {
+        return jwtService.extractEmail(token);
+    }
+
     private Collection<String> mapToRoles(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void validateToken(String token) {
-        jwtService.validateToken(token);
     }
 }

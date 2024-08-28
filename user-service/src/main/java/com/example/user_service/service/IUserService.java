@@ -20,9 +20,10 @@ public interface IUserService {
     /**
      *
      * @param userDto - UserDto Object
+     * @param authorizationToken - Authorization token
      * @return boolean indicating if the update of User is successful or not
      */
-    boolean updateUser(UserDto userDto);
+    boolean updateUser(UserDto userDto, String authorizationToken);
 
     /**
      *

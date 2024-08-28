@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -104,5 +105,37 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(AuthConstants.STATUS_200, AuthConstants.MESSAGE_200));
+    }
+
+    @Operation(summary = "Extract email REST API",
+            description = "REST API to extract email from JWT token inside E2Rent")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status Bad Request"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/email")
+    public ResponseEntity<String> extractEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        String email = service.extractEmail(token);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(email);
     }
 }

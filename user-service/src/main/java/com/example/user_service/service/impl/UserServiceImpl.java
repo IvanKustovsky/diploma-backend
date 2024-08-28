@@ -11,8 +11,8 @@ import com.example.user_service.repository.RoleRepository;
 import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.ICompanyService;
 import com.example.user_service.service.IUserService;
+import com.example.user_service.service.client.IdentityFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final ICompanyService companyService;
     private final PasswordEncoder passwordEncoder;
-    private final AuditorAware<String> auditAware;
+    private final IdentityFeignClient identityFeignClient;
 
     @Override
     @Transactional
@@ -61,17 +61,18 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public boolean updateUser(UserDto userDto) {
-        // TODO: Get currentAuditor from identity-service, maybe not
-        String currentAuthenticatorEmail = auditAware.getCurrentAuditor()
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", "No current user"));
+    public boolean updateUser(UserDto userDto, String authorizationToken) {
+        String currentUserEmail = identityFeignClient.extractEmail(authorizationToken).getBody();
 
-        UserEntity existingUser = userRepository.findByEmail(currentAuthenticatorEmail)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentAuthenticatorEmail));
+        UserEntity existingUser = userRepository.findByEmail(currentUserEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentUserEmail));
 
-        if (!userDto.getEmail().equals(currentAuthenticatorEmail) ||
-                !userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
-            checkIfUserExists(userDto);
+        if (!userDto.getEmail().equals(currentUserEmail)) {
+            checkIfUserExistsByEmail(userDto.getEmail());
+        }
+
+        if (!userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
+            checkIfUserExistsByMobileNumber(userDto.getMobileNumber());
         }
 
         existingUser.setFullName(userDto.getFullName());
@@ -98,11 +99,23 @@ public class UserServiceImpl implements IUserService {
     }
 
     private void checkIfUserExists(UserDto userDto) {
-        Optional<UserEntity> userByEmail = userRepository.findByEmail(userDto.getEmail());
-        Optional<UserEntity> userByMobileNumber = userRepository.findByMobileNumber(userDto.getMobileNumber());
+        checkIfUserExistsByEmail(userDto.getEmail());
+        checkIfUserExistsByMobileNumber(userDto.getMobileNumber());
+    }
 
-        if (userByEmail.isPresent() || userByMobileNumber.isPresent()) {
-            throw new UserAlreadyExistsException("User already registered with provided email or mobile number");
+    private void checkIfUserExistsByEmail(String email) {
+        Optional<UserEntity> userByEmail = userRepository.findByEmail(email);
+
+        if (userByEmail.isPresent()) {
+            throw new UserAlreadyExistsException("User already registered with provided email");
+        }
+    }
+
+    private void checkIfUserExistsByMobileNumber(String mobileNumber) {
+        Optional<UserEntity> userByMobileNumber = userRepository.findByMobileNumber(mobileNumber);
+
+        if (userByMobileNumber.isPresent()) {
+            throw new UserAlreadyExistsException("User already registered with provided mobile number");
         }
     }
 }

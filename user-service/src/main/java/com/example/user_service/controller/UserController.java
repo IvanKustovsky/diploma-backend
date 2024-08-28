@@ -15,9 +15,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,8 +105,9 @@ public class UserController {
     }
     )
     @PutMapping
-    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UserDto userDto) {
-        boolean isUpdated = userService.updateUser(userDto);
+    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UserDto userDto,
+                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        boolean isUpdated = userService.updateUser(userDto, token);
         if (isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -136,6 +139,7 @@ public class UserController {
             )
     }
     )
+    @PreAuthorize("hasAuthority('ROLES_ADMIN')") // TODO: Make it work
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam(name = "email") @Email String email) {
         boolean isDeleted = userService.deleteUser(email);
