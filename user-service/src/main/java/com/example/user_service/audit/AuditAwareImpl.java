@@ -10,6 +10,7 @@ public class AuditAwareImpl implements AuditorAware<String> {
     /**
      * @return the current auditor
      */
+    // TODO: probably fix it and replace tests
     @Override
     public Optional<String> getCurrentAuditor() {
         return Optional.of("System");

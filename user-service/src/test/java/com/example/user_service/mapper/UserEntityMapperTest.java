@@ -42,7 +42,7 @@ class UserEntityMapperTest {
         assertEquals(user.getPassword(), userDto.getPassword());
         assertEquals(user.getCompany().getName(), userDto.getCompany().getName());
         assertEquals(user.getRoles().size(), userDto.getRoles().size());
-        assertEquals(user.getRoles().get(0).getName(), userDto.getRoles().get(0).getName());
+        assertEquals(user.getRoles().getFirst().getName(), userDto.getRoles().getFirst().getName());
     }
 
     @Test
@@ -71,7 +71,7 @@ class UserEntityMapperTest {
         assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getCompany().getName(), user.getCompany().getName());
         assertEquals(userDto.getRoles().size(), user.getRoles().size());
-        assertEquals(userDto.getRoles().get(0).getName(), user.getRoles().get(0).getName());
+        assertEquals(userDto.getRoles().getFirst().getName(), user.getRoles().getFirst().getName());
     }
 
     @Test
@@ -113,11 +113,8 @@ class UserEntityMapperTest {
 
     @Test
     void shouldHandleUserDtoEqualsNull() {
-        // given
-        UserDto userDto = null;
-
         // when
-        UserEntity user = UserMapper.INSTANCE.toEntity(userDto);
+        UserEntity user = UserMapper.INSTANCE.toEntity(null);
 
         // then
         assertNull(user);
@@ -125,11 +122,8 @@ class UserEntityMapperTest {
 
     @Test
     void shouldHandleUserEqualsNull() {
-        // given
-        UserEntity user = null;
-
         // when
-        UserDto userDto = UserMapper.INSTANCE.toDto(user);
+        UserDto userDto = UserMapper.INSTANCE.toDto(null);
 
         // then
         assertNull(userDto);

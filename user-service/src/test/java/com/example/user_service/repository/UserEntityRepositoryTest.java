@@ -1,39 +1,21 @@
 package com.example.user_service.repository;
 
-import com.example.user_service.audit.AuditConfig;
 import com.example.user_service.entity.UserEntity;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import(AuditConfig.class)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserEntityRepositoryTest {
 
     @Autowired
     private UserRepository userRepositoryTest;
-
-    @BeforeAll
-    static void setUp() {
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("testUser")
-                .password("password").roles("USER").build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
-    }
 
     @Test
     void findByEmailThatRegistered() {

@@ -11,13 +11,14 @@ import com.example.user_service.exception.UserAlreadyExistsException;
 import com.example.user_service.repository.RoleRepository;
 import com.example.user_service.repository.UserRepository;
 import com.example.user_service.service.ICompanyService;
+import com.example.user_service.service.client.IdentityFeignClient;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.AuditorAware;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +40,11 @@ class UserEntityServiceImplTest {
     private static final String NEW_EMAIL = "new@example.com";
     private static final String FULL_NAME = "Updated Name";
     private static final String MOBILE_NUMBER = "987654321";
-    private static final String NEW_PASSWORD = "newpassword";
+    private static final String NEW_PASSWORD = "new_password";
     private static final String OLD_NAME = "Old Name";
     private static final String OLD_MOBILE_NUMBER = "123456789";
-    private static final String OLD_PASSWORD = "oldpassword";
+    private static final String OLD_PASSWORD = "old_password";
+    private static final String AUTHORIZATION_TOKEN = "Bearer some.jwt.token";
 
     private static final UserEntity EXISTING_USER = UserEntity.builder()
             .email(CURRENT_EMAIL)
@@ -68,14 +70,6 @@ class UserEntityServiceImplTest {
             .roles(USER_ROLES)
             .build();
 
-    private static final UserEntity UPDATED_USER = UserEntity.builder()
-            .email(NEW_EMAIL)
-            .fullName(FULL_NAME)
-            .mobileNumber(MOBILE_NUMBER)
-            .password(NEW_PASSWORD)
-            .roles(USER_ROLES)
-            .build();
-
     @Mock
     private UserRepository userRepositoryMock;
 
@@ -89,7 +83,7 @@ class UserEntityServiceImplTest {
     private ICompanyService companyServiceMock;
 
     @Mock
-    private AuditorAware<String> auditAwareMock;
+    private IdentityFeignClient identityFeignClientMock;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
@@ -134,7 +128,7 @@ class UserEntityServiceImplTest {
         // when, then
         assertThatThrownBy(() -> userServiceImpl.registerUser(USER_DTO))
                 .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessageContaining("User already registered with provided email or mobile number");
+                .hasMessageContaining("User already registered with provided email");
 
         verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
         verify(userRepositoryMock, never()).save(any(UserEntity.class));
@@ -149,7 +143,7 @@ class UserEntityServiceImplTest {
         when(passwordEncoderMock.encode(USER_DTO.getPassword())).thenReturn("encodedPassword");
         when(roleRepositoryMock.getRoleByName(RoleConstants.USER_ROLE))
                 .thenReturn(Optional.of(USER_ROLE));
-        when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(UPDATED_USER);
+        when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(any(UserEntity.class));
 
         // when
         userServiceImpl.registerUser(USER_DTO);
@@ -174,7 +168,7 @@ class UserEntityServiceImplTest {
         when(passwordEncoderMock.encode(USER_DTO.getPassword())).thenReturn("encodedPassword");
         when(roleRepositoryMock.getRoleByName(RoleConstants.USER_ROLE))
                 .thenReturn(Optional.of(USER_ROLE));
-        when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(UPDATED_USER);
+        when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity());
         when(companyServiceMock.registerCompany(companyDto)).thenReturn(new Company());
 
         // when
@@ -235,17 +229,15 @@ class UserEntityServiceImplTest {
     @Order(8)
     void updateUserSuccessfullyWithoutChangingEmailOrMobileNumber() {
         // given
-        UserDto userDto = UserDto.builder()
-                .email(CURRENT_EMAIL) // unchanged email
-                .fullName(FULL_NAME)
-                .mobileNumber(OLD_MOBILE_NUMBER) // unchanged mobile number
-                .password(NEW_PASSWORD)
-                .roles(USER_ROLES)
-                .build();
+        UserDto userDto = USER_DTO;
 
+        userDto.setFullName(FULL_NAME);
+        userDto.setPassword(NEW_PASSWORD);
+
+        when((identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN)))
+                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
         when(passwordEncoderMock.encode(NEW_PASSWORD)).thenReturn("encodedPassword");
-        when(auditAwareMock.getCurrentAuditor()).thenReturn(Optional.of(CURRENT_EMAIL));
 
         // Capture the saved user
         ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
@@ -253,7 +245,7 @@ class UserEntityServiceImplTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        boolean result = userServiceImpl.updateUser(userDto);
+        boolean result = userServiceImpl.updateUser(userDto, AUTHORIZATION_TOKEN);
 
         // then
         assertTrue(result);
@@ -270,14 +262,15 @@ class UserEntityServiceImplTest {
     @Order(9)
     void updateUserWithExistingEmail() {
         // given
+        when((identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN)))
+                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
         when(userRepositoryMock.findByEmail(NEW_EMAIL)).thenReturn(Optional.of(new UserEntity()));
-        when(auditAwareMock.getCurrentAuditor()).thenReturn(Optional.of(CURRENT_EMAIL));
 
         // when, then
-        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO))
+        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO, AUTHORIZATION_TOKEN))
                 .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessage("User already registered with provided email or mobile number");
+                .hasMessage("User already registered with provided email");
 
         verify(userRepositoryMock, never()).save(any(UserEntity.class));
     }
@@ -287,35 +280,17 @@ class UserEntityServiceImplTest {
     @Order(10)
     void updateUserWithExistingMobileNumber() {
         // given
+        when(identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN))
+                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
         when(userRepositoryMock.findByEmail(NEW_EMAIL)).thenReturn(Optional.empty());
         when(userRepositoryMock.findByMobileNumber(MOBILE_NUMBER)).thenReturn(Optional.of(new UserEntity()));
-        when(auditAwareMock.getCurrentAuditor()).thenReturn(Optional.of(CURRENT_EMAIL));
 
         // when, then
-        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO))
+        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO, AUTHORIZATION_TOKEN))
                 .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessage("User already registered with provided email or mobile number");
+                .hasMessage("User already registered with provided mobile number");
 
         verify(userRepositoryMock, never()).save(any(UserEntity.class));
     }
-
-    @Test
-    @DisplayName("Should throw UserAlreadyExistsException when both new email and new mobile number exist")
-    @Order(11)
-    void updateUserWithExistingEmailAndMobileNumber() {
-        // given
-        when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
-        when(userRepositoryMock.findByEmail(NEW_EMAIL)).thenReturn(Optional.of(new UserEntity()));
-        when(userRepositoryMock.findByMobileNumber(MOBILE_NUMBER)).thenReturn(Optional.of(new UserEntity()));
-        when(auditAwareMock.getCurrentAuditor()).thenReturn(Optional.of(CURRENT_EMAIL));
-
-        // when, then
-        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO))
-                .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessage("User already registered with provided email or mobile number");
-
-        verify(userRepositoryMock, never()).save(any(UserEntity.class));
-    }
-
 }

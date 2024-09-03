@@ -55,15 +55,17 @@ class GlobalExceptionHandlerTest {
     @Test
     void handleGlobalException() {
         // Given
+        String errorMessage = "Global error";
         Exception exception = new Exception("Global error");
 
         // When
-        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler.handleGlobalException(exception, webRequest);
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleGlobalException(exception, webRequest);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Global error", responseEntity.getBody().getErrorMessage());
+        assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }
 
     @Test
@@ -72,7 +74,8 @@ class GlobalExceptionHandlerTest {
         var exception = new ResourceNotFoundException("Resource not found", "resource", "value");
 
         // When
-        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler.handleResourceNotFoundException(exception, webRequest);
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleResourceNotFoundException(exception, webRequest);
 
         // Then
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -84,28 +87,64 @@ class GlobalExceptionHandlerTest {
     @Test
     void handleUserAlreadyExistsException() {
         // Given
-        UserAlreadyExistsException exception = new UserAlreadyExistsException("User already exists");
+        String errorMessage = "User already exists";
+        UserAlreadyExistsException exception = new UserAlreadyExistsException(errorMessage);
 
         // When
-        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler.handleCardAlreadyExistsException(exception, webRequest);
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleCardAlreadyExistsException(exception, webRequest);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("User already exists", responseEntity.getBody().getErrorMessage());
+        assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }
 
     @Test
     void handleCompanyAlreadyExistsException() {
         // Given
-        CompanyAlreadyExistsException exception = new CompanyAlreadyExistsException("Company already exists");
+        String errorMessage = "Company already exists";
+        CompanyAlreadyExistsException exception = new CompanyAlreadyExistsException(errorMessage);
 
         // When
-        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler.handleCompanyAlreadyExistsException(exception, webRequest);
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleCompanyAlreadyExistsException(exception, webRequest);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Company already exists", responseEntity.getBody().getErrorMessage());
+        assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
+    }
+
+    @Test
+    void handleServiceUnavailableException() {
+        // Given
+        String errorMessage = "Identity service is currently unavailable.";
+        ServiceUnavailableException exception = new ServiceUnavailableException(errorMessage);
+
+        // When
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleServiceUnavailableException(exception, webRequest);
+
+        // Then
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
+    }
+
+    @Test
+    void handleUnauthorizedException() {
+        // Given
+        String errorMessage = "Identity service is currently unavailable.";
+        UnauthorizedException exception = new UnauthorizedException(errorMessage);
+
+        // When
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleUnauthorizedException(exception, webRequest);
+
+        // Then
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+        assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }
 }
