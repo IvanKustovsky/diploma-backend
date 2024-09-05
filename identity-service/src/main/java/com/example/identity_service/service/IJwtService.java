@@ -8,7 +8,7 @@ public interface IJwtService {
      *
      * @param token - JWT token to validate
      */
-    void validateToken(String token);
+    boolean validateToken(final String token);
 
     /**
      *

@@ -128,11 +128,18 @@ public class AuthController {
                     content = @Content(
                             schema = @Schema(implementation = ErrorResponseDto.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "511",
+                    description = "Network Authentication Required",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
             )
     }
     )
     @GetMapping("/email")
-    public ResponseEntity<String> extractEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<String> extractEmail(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token) {
         String email = service.extractEmail(token);
         return ResponseEntity
                 .status(HttpStatus.OK)

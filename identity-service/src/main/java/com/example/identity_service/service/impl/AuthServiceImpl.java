@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -35,7 +36,9 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public void validateToken(String token) {
-        jwtService.validateToken(token);
+        if(!jwtService.validateToken(token)) {
+            throw new JwtException("Invalid JWT token");
+        }
     }
 
     @Override
