@@ -1,7 +1,6 @@
 package com.example.gatewayservice.exception;
 
 import com.example.gatewayservice.dto.ErrorResponseDto;
-import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -39,9 +38,22 @@ public class GlobalExceptionHandler {
                 .body(errorResponseDTO);
     }
 
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ErrorResponseDto> handleJwtException(JwtException ex,
-                                                               ServerWebExchange exchange) {
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponseDto> handleServiceUnavailableException(
+            ServiceUnavailableException ex, ServerWebExchange exchange) {
+        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+                exchange.getRequest().getPath().toString(),
+                HttpStatus.SERVICE_UNAVAILABLE,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUnauthorizedException(
+            UnauthorizedException ex, ServerWebExchange exchange) {
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
                 exchange.getRequest().getPath().toString(),
                 HttpStatus.UNAUTHORIZED,

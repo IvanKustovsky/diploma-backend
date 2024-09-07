@@ -1,21 +1,26 @@
 package com.example.gatewayservice.filter;
 
 import com.example.gatewayservice.exception.MissingAuthorizationHeaderException;
-import com.example.gatewayservice.utils.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import com.example.gatewayservice.service.client.IdentityFeignClient;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 @Component
-@RequiredArgsConstructor
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final RouteValidator validator;
 
-    private final JwtUtil jwtUtil;
+    private final IdentityFeignClient identityFeignClient;
+
+    public AuthenticationFilter(RouteValidator validator,
+                                @Lazy IdentityFeignClient identityFeignClient) {
+        this.validator = validator;
+        this.identityFeignClient = identityFeignClient;
+    }
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -28,7 +33,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 String token = authHeader.substring(7);
-                jwtUtil.validateToken(token);
+                identityFeignClient.validateToken(token);
             }
             return chain.filter(exchange);
         };
