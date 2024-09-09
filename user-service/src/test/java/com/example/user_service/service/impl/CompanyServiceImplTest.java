@@ -137,7 +137,6 @@ class CompanyServiceImplTest {
         companyDto.setAddress("New Address");
 
         when(companyRepositoryMock.findByCode(COMPANY_CODE)).thenReturn(Optional.of(TEST_COMPANY));
-        when(companyRepositoryMock.save(TEST_COMPANY)).thenReturn(TEST_COMPANY);
 
         // when
         boolean result = companyServiceImplTest.updateCompany(COMPANY_CODE, companyDto);
@@ -147,7 +146,6 @@ class CompanyServiceImplTest {
         assertEquals(companyDto.getName(), TEST_COMPANY.getName());
         assertEquals(companyDto.getAddress(), TEST_COMPANY.getAddress());
         verify(companyRepositoryMock, times(1)).findByCode(COMPANY_CODE);
-        verify(companyRepositoryMock, times(1)).save(TEST_COMPANY);
     }
 
     @Test

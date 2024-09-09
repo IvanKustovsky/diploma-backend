@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
@@ -75,12 +75,8 @@ public class UserServiceImpl implements IUserService {
             checkIfUserExistsByMobileNumber(userDto.getMobileNumber());
         }
 
-        existingUser.setFullName(userDto.getFullName());
-        existingUser.setMobileNumber(userDto.getMobileNumber());
-        existingUser.setEmail(userDto.getEmail());
+        UserMapper.INSTANCE.updateUserEntityFromDto(userDto, existingUser);
         existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        userRepository.save(existingUser);
 
         return true;
     }
@@ -91,8 +87,7 @@ public class UserServiceImpl implements IUserService {
         UserEntity existingUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        existingUser.getRoles().clear();
-        userRepository.save(existingUser);
+        existingUser.deleteRoles();
 
         userRepository.deleteById(existingUser.getId());
         return true;
@@ -104,18 +99,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     private void checkIfUserExistsByEmail(String email) {
-        Optional<UserEntity> userByEmail = userRepository.findByEmail(email);
-
-        if (userByEmail.isPresent()) {
-            throw new UserAlreadyExistsException("User already registered with provided email");
-        }
+        userRepository.findByEmail(email)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException("User already registered with provided email");
+                });
     }
 
     private void checkIfUserExistsByMobileNumber(String mobileNumber) {
-        Optional<UserEntity> userByMobileNumber = userRepository.findByMobileNumber(mobileNumber);
-
-        if (userByMobileNumber.isPresent()) {
-            throw new UserAlreadyExistsException("User already registered with provided mobile number");
-        }
+        userRepository.findByMobileNumber(mobileNumber)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException("User already registered with provided mobile number");
+                });
     }
 }

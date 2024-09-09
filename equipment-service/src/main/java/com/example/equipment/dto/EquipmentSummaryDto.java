@@ -25,5 +25,5 @@ public class EquipmentSummaryDto {
     private String name;
 
     @Schema(description = "Main image ID", example = "6")
-    private String mainImageId; // TODO: Should return real image??
+    private Long mainImageId; // TODO: Should return real image??
 }

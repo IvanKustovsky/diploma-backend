@@ -2,6 +2,8 @@ package com.example.equipment.service;
 
 import com.example.equipment.dto.EquipmentDto;
 import com.example.equipment.dto.EquipmentSummaryDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -38,7 +40,7 @@ public interface IEquipmentService {
      *
      * @return list of all equipments with main image uploaded
      */
-    List<EquipmentSummaryDto> findAllEquipmentsWithImage();
+    Page<EquipmentSummaryDto> findAllEquipmentsWithImage(Pageable pageable);
 
     /**
      *

@@ -202,7 +202,7 @@ class UserEntityServiceImplTest {
 
         // then
         verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
-        verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
+        //verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
         verify(userRepositoryMock, times(1)).deleteById(EXISTING_USER.getId());
     }
 
@@ -234,27 +234,23 @@ class UserEntityServiceImplTest {
         userDto.setFullName(FULL_NAME);
         userDto.setPassword(NEW_PASSWORD);
 
-        when((identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN)))
+        when(identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN))
                 .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
         when(passwordEncoderMock.encode(NEW_PASSWORD)).thenReturn("encodedPassword");
-
-        // Capture the saved user
-        ArgumentCaptor<UserEntity> userCaptor = ArgumentCaptor.forClass(UserEntity.class);
-        when(userRepositoryMock.save(userCaptor.capture()))
-                .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
         boolean result = userServiceImpl.updateUser(userDto, AUTHORIZATION_TOKEN);
 
         // then
         assertTrue(result);
-        verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
-        UserEntity updatedUser = userCaptor.getValue();
-        assertEquals(CURRENT_EMAIL, updatedUser.getEmail());
-        assertEquals(FULL_NAME, updatedUser.getFullName());
-        assertEquals(OLD_MOBILE_NUMBER, updatedUser.getMobileNumber());
-        assertEquals("encodedPassword", updatedUser.getPassword());
+        verify(userRepositoryMock, times(1)).findByEmail(CURRENT_EMAIL);
+        verify(passwordEncoderMock, times(1)).encode(NEW_PASSWORD);
+
+        assertEquals(CURRENT_EMAIL, EXISTING_USER.getEmail());
+        assertEquals(FULL_NAME, EXISTING_USER.getFullName());
+        assertEquals(OLD_MOBILE_NUMBER, EXISTING_USER.getMobileNumber());
+        assertEquals("encodedPassword", EXISTING_USER.getPassword());
     }
 
     @Test

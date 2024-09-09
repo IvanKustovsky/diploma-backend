@@ -4,13 +4,11 @@ import com.example.equipment.enums.EquipmentCondition;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -51,6 +49,6 @@ public class EquipmentDto {
     private String mainImageUrl;
 
     @Schema(description = "List of image URLs of the equipment")
-    private List<String> imageUrls;
+    private List<String> imageUrls = new ArrayList<>();
 }
 

@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -182,8 +184,8 @@ public class EquipmentController {
     }
     )
     @GetMapping("/all")
-    public ResponseEntity<List<EquipmentSummaryDto>> fetchEquipment() {
-        var equipments = equipmentService.findAllEquipmentsWithImage();
+    public ResponseEntity<Page<EquipmentSummaryDto>> fetchEquipment(Pageable pageable) {
+        var equipments = equipmentService.findAllEquipmentsWithImage(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(equipments);

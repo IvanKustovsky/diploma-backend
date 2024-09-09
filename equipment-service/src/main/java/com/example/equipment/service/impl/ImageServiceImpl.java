@@ -21,6 +21,7 @@ import java.util.zip.DataFormatException;
 
 @Slf4j // TODO: Add logging
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
@@ -51,7 +52,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public byte[] downloadImage(Long id) throws IOException, DataFormatException {
         Image dbImage = imageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image", "id", String.valueOf(id)));
@@ -59,9 +60,10 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public void deleteImage(Long id) {
         imageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(id)));
+                .orElseThrow(() -> new ResourceNotFoundException("Image", "ID", String.valueOf(id)));
 
         imageRepository.deleteById(id);
     }

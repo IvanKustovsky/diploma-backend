@@ -37,4 +37,8 @@ public class UserEntity extends BaseEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
     private List<Role> roles = new ArrayList<>();
+
+    public void deleteRoles() {
+        this.roles.clear();
+    }
 }

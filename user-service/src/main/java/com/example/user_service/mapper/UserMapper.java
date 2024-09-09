@@ -2,7 +2,7 @@ package com.example.user_service.mapper;
 
 import com.example.user_service.dto.UserDto;
 import com.example.user_service.entity.UserEntity;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 
@@ -14,4 +14,10 @@ public interface UserMapper {
     UserDto toDto(UserEntity user);
 
     UserEntity toEntity(UserDto userDto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "company", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    void updateUserEntityFromDto(UserDto userDto, @MappingTarget UserEntity existingUser);
 }

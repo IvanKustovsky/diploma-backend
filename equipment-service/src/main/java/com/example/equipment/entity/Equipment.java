@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,9 +40,14 @@ public class Equipment extends BaseEntity {
     @JoinColumn(name = "main_image_id", referencedColumnName = "id")
     private Image mainImage;
 
-    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL)
-    private List<Image> images;
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     private Long userId;
+
+    public void addImage(Image image) {
+        image.setEquipment(this);
+        images.add(image);
+    }
 }

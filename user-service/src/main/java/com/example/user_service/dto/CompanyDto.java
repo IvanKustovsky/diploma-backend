@@ -3,11 +3,14 @@ package com.example.user_service.dto;
 import com.example.user_service.annotation.ValidCompanyCode;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NoArgsConstructor;
 
 @Data
 @Schema(name = "Company", description = "Schema to hold Company information")
+@AllArgsConstructor @NoArgsConstructor
 public class CompanyDto {
 
     @Schema(description = "Name of the company", example = "Tech Solutions")

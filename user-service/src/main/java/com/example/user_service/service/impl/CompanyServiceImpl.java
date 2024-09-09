@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 @Service
 @Validated
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements ICompanyService {
 
@@ -26,20 +25,19 @@ public class CompanyServiceImpl implements ICompanyService {
     @Override
     @Transactional
     public Company registerCompany(@Valid CompanyDto companyDto) {
-        Optional<Company> company = companyRepository.findByCode(companyDto.getCode());
-        if (company.isPresent()) {
-            throw new CompanyAlreadyExistsException("Company already registered with given code " + companyDto.getCode());
-        }
+        companyRepository.findByCode(companyDto.getCode())
+                .ifPresent(company -> {
+                    throw new CompanyAlreadyExistsException("Company already registered with given code "
+                            + companyDto.getCode());
+                });
         return companyRepository.save(CompanyMapper.INSTANCE.toEntity(companyDto));
     }
 
     @Override
     public CompanyDto fetchCompany(@ValidCompanyCode String companyCode) {
-        Optional<Company> company = companyRepository.findByCode(companyCode);
-        if (company.isEmpty()) {
-            throw new ResourceNotFoundException("Company", "code", companyCode);
-        }
-        return CompanyMapper.INSTANCE.toDto(company.get());
+        return companyRepository.findByCode(companyCode)
+                .map(CompanyMapper.INSTANCE::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Company", "code", companyCode));
     }
 
     @Override
@@ -50,12 +48,11 @@ public class CompanyServiceImpl implements ICompanyService {
 
         existingCompany.setName(companyDto.getName());
         existingCompany.setAddress(companyDto.getAddress());
-
-        companyRepository.save(existingCompany);
         return true;
     }
 
     @Override
+    @Transactional
     public boolean deleteCompany(@ValidCompanyCode String companyCode) {
         var optionalCompany = companyRepository.findByCode(companyCode)
                 .orElseThrow(() -> new ResourceNotFoundException("Company", "code", companyCode));
