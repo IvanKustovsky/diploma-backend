@@ -1,6 +1,7 @@
 package com.e2rent.equipment.entity;
 
 import com.e2rent.equipment.enums.EquipmentCondition;
+import com.e2rent.equipment.enums.EquipmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "equipment", indexes = {
+        @Index(name = "idx_unique_main_image_id", columnList = "main_image_id", unique = true)
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,8 +40,13 @@ public class Equipment extends BaseEntity {
     @Column(nullable = false)
     private EquipmentCondition condition;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EquipmentStatus status;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "main_image_id", referencedColumnName = "id")
+    @JoinColumn(name = "main_image_id", referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "fk_equipment_main_image_id"))
     private Image mainImage;
 
     @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -26,6 +26,10 @@ public class Image {
     private byte[] imageData;
 
     @ManyToOne
-    @JoinColumn(name = "equipment_id", nullable = false)
+    @JoinColumn(
+            name = "equipment_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_image_equipment")
+    )
     private Equipment equipment;
 }

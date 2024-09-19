@@ -4,6 +4,7 @@ import com.e2rent.equipment.dto.EquipmentDto;
 import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
+import com.e2rent.equipment.enums.EquipmentStatus;
 import com.e2rent.equipment.exception.ImageLimitExceededException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.mapper.EquipmentMapper;
@@ -34,7 +35,7 @@ public class EquipmentServiceImpl implements IEquipmentService {
     @Transactional
     public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file) {
         Equipment equipment = EquipmentMapper.INSTANCE.toEquipment(equipmentDto);
-
+        equipment.setStatus(EquipmentStatus.ACTIVE);
         Equipment savedEquipment = equipmentRepository.save(equipment);
 
         if (file != null && !file.isEmpty()) {
