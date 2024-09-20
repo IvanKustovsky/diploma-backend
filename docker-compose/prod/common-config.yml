@@ -1,7 +1,7 @@
 services:
   network-deploy-service:
     networks:
-      - rentapp
+      - e2rent
 
   microservice-db-config:
     extends:
@@ -15,8 +15,9 @@ services:
       interval: 10s
       start_period: 10s
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
 
   microservice-base-config:
     extends:
@@ -30,13 +31,13 @@ services:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8888/
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: "${SPRING_CONFIG_IMPORT}"
+      SPRING_DATASOURCE_USERNAME: "${SPRING_DATASOURCE_USERNAME}"
+      SPRING_DATASOURCE_PASSWORD: "${SPRING_DATASOURCE_PASSWORD}"
 
   microservice-eureka-config:
     extends:
       service: microservice-configserver-config
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE}"
