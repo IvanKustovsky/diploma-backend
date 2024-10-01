@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -93,7 +94,7 @@ class GlobalExceptionHandlerTest {
     void handleUserAlreadyExistsException() {
         // Given
         String errorMessage = "User already exists";
-        UserAlreadyExistsException exception = new UserAlreadyExistsException(errorMessage);
+        var exception = new UserAlreadyExistsException(errorMessage);
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
@@ -109,7 +110,7 @@ class GlobalExceptionHandlerTest {
     void handleCompanyAlreadyExistsException() {
         // Given
         String errorMessage = "Company already exists";
-        CompanyAlreadyExistsException exception = new CompanyAlreadyExistsException(errorMessage);
+        var exception = new CompanyAlreadyExistsException(errorMessage);
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
@@ -125,7 +126,7 @@ class GlobalExceptionHandlerTest {
     void handleServiceUnavailableException() {
         // Given
         String errorMessage = "Identity service is currently unavailable.";
-        ServiceUnavailableException exception = new ServiceUnavailableException(errorMessage);
+        var exception = new ServiceUnavailableException(errorMessage);
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
@@ -138,17 +139,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleUnauthorizedException() {
+    void handleAuthorizationDeniedException() {
         // Given
-        String errorMessage = "Identity service is currently unavailable.";
-        UnauthorizedException exception = new UnauthorizedException(errorMessage);
+        String errorMessage = "Access Denied";
+        var exception = new AuthorizationDeniedException(errorMessage, () -> false);
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
-                .handleUnauthorizedException(exception, webRequest);
+                .handleAuthorizationDeniedException(exception, webRequest);
 
         // Then
-        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }

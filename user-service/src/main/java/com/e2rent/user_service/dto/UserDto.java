@@ -1,6 +1,5 @@
 package com.e2rent.user_service.dto;
 
-import com.e2rent.user_service.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -8,16 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @Schema(name = "User", description = "Schema to hold User information")
 @AllArgsConstructor @NoArgsConstructor
 public class UserDto {
-
-    @Schema(hidden = true, description = "Role ID associated with the user", example = "1")
-    private List<Role> roles;
 
     @Schema(description = "Company of the user if exists", example = "Facebook")
     private CompanyDto company;
@@ -36,9 +30,4 @@ public class UserDto {
     @NotEmpty(message = "MobileNumber cannot be null or empty")
     @Pattern(regexp = "^\\+380\\d{9}$", message = "MobileNumber must start with +380 and contain 9 digits after the country code")
     private String mobileNumber;
-
-    @Schema(description = "Password of the user", example = "password123")
-    @NotEmpty(message = "Password cannot be null or empty")
-    @Size(min = 5, message = "Password must be at least 5 symbols")
-    private String password;
 }

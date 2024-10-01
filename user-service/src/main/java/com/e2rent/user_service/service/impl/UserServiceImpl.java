@@ -1,23 +1,21 @@
 package com.e2rent.user_service.service.impl;
 
-import com.e2rent.user_service.constants.RoleConstants;
+import com.e2rent.user_service.dto.RegisterUserDto;
+import com.e2rent.user_service.dto.UpdateUserDto;
 import com.e2rent.user_service.dto.UserDto;
 import com.e2rent.user_service.entity.Company;
 import com.e2rent.user_service.exception.ResourceNotFoundException;
-import com.e2rent.user_service.repository.RoleRepository;
 import com.e2rent.user_service.service.IUserService;
-import com.e2rent.user_service.service.client.IdentityFeignClient;
 import com.e2rent.user_service.entity.UserEntity;
 import com.e2rent.user_service.exception.UserAlreadyExistsException;
 import com.e2rent.user_service.mapper.UserMapper;
 import com.e2rent.user_service.repository.UserRepository;
 import com.e2rent.user_service.service.ICompanyService;
+import com.e2rent.user_service.service.KeycloakUserService;
+import com.e2rent.user_service.service.TokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,29 +23,25 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final ICompanyService companyService;
-    private final PasswordEncoder passwordEncoder;
-    private final IdentityFeignClient identityFeignClient;
+    private final KeycloakUserService keycloakUserService;
+    private final TokenService tokenService;
 
     @Override
     @Transactional
-    public void registerUser(UserDto userDto) {
-        checkIfUserExists(userDto);
+    public void registerUser(RegisterUserDto registerUserDto) {
+        checkIfUserExists(registerUserDto.getEmail(), registerUserDto.getMobileNumber());
 
-        var companyDto = userDto.getCompany();
+        var companyDto = registerUserDto.getCompany();
         Company company = null;
         if (companyDto != null) {
             company = companyService.registerCompany(companyDto);
         }
 
-        UserEntity user = UserMapper.INSTANCE.toEntity(userDto);
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        UserEntity user = UserMapper.INSTANCE.toEntity(registerUserDto);
         user.setCompany(company);
-        var role = roleRepository.getRoleByName(RoleConstants.USER_ROLE)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Role", "role", RoleConstants.USER_ROLE));
-        user.setRoles(List.of(role));
+
+        keycloakUserService.createUser(registerUserDto);
 
         userRepository.save(user);
     }
@@ -61,22 +55,17 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public boolean updateUser(UserDto userDto, String authorizationToken) {
-        String currentUserEmail = identityFeignClient.extractEmail(authorizationToken).getBody();
+    public boolean updateUser(UpdateUserDto updateUserDto, String authorizationToken) {
+        String currentUserEmail = tokenService.extractEmail(authorizationToken);
 
         UserEntity existingUser = userRepository.findByEmail(currentUserEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", currentUserEmail));
 
-        if (!userDto.getEmail().equals(currentUserEmail)) {
-            checkIfUserExistsByEmail(userDto.getEmail());
+        if (!updateUserDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
+            checkIfUserExistsByMobileNumber(updateUserDto.getMobileNumber());
         }
 
-        if (!userDto.getMobileNumber().equals(existingUser.getMobileNumber())) {
-            checkIfUserExistsByMobileNumber(userDto.getMobileNumber());
-        }
-
-        UserMapper.INSTANCE.updateUserEntityFromDto(userDto, existingUser);
-        existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        UserMapper.INSTANCE.updateUserEntityFromDto(updateUserDto, existingUser);
 
         return true;
     }
@@ -87,15 +76,14 @@ public class UserServiceImpl implements IUserService {
         UserEntity existingUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        existingUser.deleteRoles();
-
         userRepository.deleteById(existingUser.getId());
+        keycloakUserService.deleteByEmail(email);
         return true;
     }
 
-    private void checkIfUserExists(UserDto userDto) {
-        checkIfUserExistsByEmail(userDto.getEmail());
-        checkIfUserExistsByMobileNumber(userDto.getMobileNumber());
+    private void checkIfUserExists(String email, String mobileNumber) {
+        checkIfUserExistsByEmail(email);
+        checkIfUserExistsByMobileNumber(mobileNumber);
     }
 
     private void checkIfUserExistsByEmail(String email) {

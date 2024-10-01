@@ -1,9 +1,7 @@
 package com.e2rent.user_service.controller;
 
-import com.e2rent.user_service.dto.UserDto;
+import com.e2rent.user_service.dto.*;
 import com.e2rent.user_service.constants.UserConstants;
-import com.e2rent.user_service.dto.ErrorResponseDto;
-import com.e2rent.user_service.dto.ResponseDto;
 import com.e2rent.user_service.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,7 +51,7 @@ public class UserController {
     }
     )
     @PostMapping("/register")
-    public ResponseEntity<ResponseDto> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<ResponseDto> registerUser(@Valid @RequestBody RegisterUserDto userDto) {
         userService.registerUser(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -105,9 +103,9 @@ public class UserController {
     }
     )
     @PutMapping
-    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UserDto userDto,
+    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UpdateUserDto updateUserDto,
                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        boolean isUpdated = userService.updateUser(userDto, token);
+        boolean isUpdated = userService.updateUser(updateUserDto, token);
         if (isUpdated) {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -139,7 +137,7 @@ public class UserController {
             )
     }
     )
-    @PreAuthorize("hasAuthority('ROLES_ADMIN')") // TODO: Make it work
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam(name = "email") @Email String email) {
         boolean isDeleted = userService.deleteUser(email);

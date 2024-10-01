@@ -1,14 +1,16 @@
 package com.e2rent.user_service.service;
 
+import com.e2rent.user_service.dto.RegisterUserDto;
+import com.e2rent.user_service.dto.UpdateUserDto;
 import com.e2rent.user_service.dto.UserDto;
 
 public interface IUserService {
 
     /**
      *
-     * @param userDto - UserDto Object
+     * @param registerUserDto - RegisterUserDto Object
      */
-    void registerUser(UserDto userDto);
+    void registerUser(RegisterUserDto registerUserDto);
 
     /**
      *
@@ -19,11 +21,11 @@ public interface IUserService {
 
     /**
      *
-     * @param userDto - UserDto Object
+     * @param updateUserDto - UpdateUserDto Object
      * @param authorizationToken - Authorization token
      * @return boolean indicating if the update of User is successful or not
      */
-    boolean updateUser(UserDto userDto, String authorizationToken);
+    boolean updateUser(UpdateUserDto updateUserDto, String authorizationToken);
 
     /**
      *

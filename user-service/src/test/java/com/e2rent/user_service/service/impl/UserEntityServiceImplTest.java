@@ -1,25 +1,23 @@
 package com.e2rent.user_service.service.impl;
 
-import com.e2rent.user_service.constants.RoleConstants;
 import com.e2rent.user_service.dto.CompanyDto;
+import com.e2rent.user_service.dto.RegisterUserDto;
+import com.e2rent.user_service.dto.UpdateUserDto;
 import com.e2rent.user_service.dto.UserDto;
 import com.e2rent.user_service.entity.Company;
-import com.e2rent.user_service.entity.Role;
 import com.e2rent.user_service.entity.UserEntity;
 import com.e2rent.user_service.exception.ResourceNotFoundException;
 import com.e2rent.user_service.exception.UserAlreadyExistsException;
-import com.e2rent.user_service.repository.RoleRepository;
 import com.e2rent.user_service.repository.UserRepository;
 import com.e2rent.user_service.service.ICompanyService;
-import com.e2rent.user_service.service.client.IdentityFeignClient;
+import com.e2rent.user_service.service.KeycloakUserService;
+import com.e2rent.user_service.service.TokenService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -33,57 +31,47 @@ import static org.mockito.Mockito.*;
 @DisplayName("User Service Test Class")
 class UserEntityServiceImplTest {
 
-    private static final Role USER_ROLE = Role.builder()
-            .name(RoleConstants.USER_ROLE).build();
-    private static final List<Role> USER_ROLES = new ArrayList<>(Collections.singletonList(USER_ROLE));
     private static final String CURRENT_EMAIL = "current@example.com";
-    private static final String NEW_EMAIL = "new@example.com";
-    private static final String FULL_NAME = "Updated Name";
     private static final String MOBILE_NUMBER = "987654321";
-    private static final String NEW_PASSWORD = "new_password";
-    private static final String OLD_NAME = "Old Name";
+    private static final String OLD_FIRST_NAME = "OldFirstName";
+    private static final String OLD_LAST_NAME = "OldLastName";
+    private static final String NEW_FIRST_NAME = "NewFirstName";
+    private static final String NEW_LAST_NAME = "NewLastName";
     private static final String OLD_MOBILE_NUMBER = "123456789";
     private static final String OLD_PASSWORD = "old_password";
     private static final String AUTHORIZATION_TOKEN = "Bearer some.jwt.token";
 
     private static final UserEntity EXISTING_USER = UserEntity.builder()
             .email(CURRENT_EMAIL)
-            .fullName(OLD_NAME)
+            .fullName(OLD_FIRST_NAME + " " + OLD_LAST_NAME)
+            .mobileNumber(OLD_MOBILE_NUMBER)
+            .build();
+
+    private static final RegisterUserDto REGISTER_USER_DTO = RegisterUserDto.builder()
+            .email(CURRENT_EMAIL)
+            .firstName(OLD_FIRST_NAME)
+            .lastName(OLD_LAST_NAME)
             .mobileNumber(OLD_MOBILE_NUMBER)
             .password(OLD_PASSWORD)
-            .roles(USER_ROLES)
             .build();
 
     private static final UserDto USER_DTO = UserDto.builder()
             .email(CURRENT_EMAIL)
-            .fullName(OLD_NAME)
+            .fullName(OLD_FIRST_NAME + " " + OLD_LAST_NAME)
             .mobileNumber(OLD_MOBILE_NUMBER)
-            .password(OLD_PASSWORD)
-            .roles(USER_ROLES)
-            .build();
-
-    private static final UserDto USER_UPDATE_DTO = UserDto.builder()
-            .email(NEW_EMAIL)
-            .fullName(FULL_NAME)
-            .mobileNumber(MOBILE_NUMBER)
-            .password(NEW_PASSWORD)
-            .roles(USER_ROLES)
             .build();
 
     @Mock
     private UserRepository userRepositoryMock;
 
     @Mock
-    private PasswordEncoder passwordEncoderMock;
-
-    @Mock
-    private RoleRepository roleRepositoryMock;
-
-    @Mock
     private ICompanyService companyServiceMock;
 
     @Mock
-    private IdentityFeignClient identityFeignClientMock;
+    private KeycloakUserService keycloakUserService;
+
+    @Mock
+    private TokenService tokenService;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
@@ -123,14 +111,15 @@ class UserEntityServiceImplTest {
     @Order(3)
     void registerUserWhenEmailExists() {
         // given
-        when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.of(EXISTING_USER));
+        when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail()))
+                .thenReturn(Optional.of(EXISTING_USER));
 
         // when, then
-        assertThatThrownBy(() -> userServiceImpl.registerUser(USER_DTO))
+        assertThatThrownBy(() -> userServiceImpl.registerUser(REGISTER_USER_DTO))
                 .isInstanceOf(UserAlreadyExistsException.class)
                 .hasMessageContaining("User already registered with provided email");
 
-        verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
+        verify(userRepositoryMock, times(1)).findByEmail(REGISTER_USER_DTO.getEmail());
         verify(userRepositoryMock, never()).save(any(UserEntity.class));
     }
 
@@ -139,17 +128,16 @@ class UserEntityServiceImplTest {
     @Order(4)
     void registerUserWithoutCompanyWhenEmailDoesNotExist() {
         // given
-        when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoderMock.encode(USER_DTO.getPassword())).thenReturn("encodedPassword");
-        when(roleRepositoryMock.getRoleByName(RoleConstants.USER_ROLE))
-                .thenReturn(Optional.of(USER_ROLE));
+        when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail()))
+                .thenReturn(Optional.empty());
+        when(keycloakUserService.createUser(REGISTER_USER_DTO)).thenReturn(true);
         when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(any(UserEntity.class));
 
         // when
-        userServiceImpl.registerUser(USER_DTO);
+        userServiceImpl.registerUser(REGISTER_USER_DTO);
 
         // then
-        verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
+        verify(userRepositoryMock, times(1)).findByEmail(REGISTER_USER_DTO.getEmail());
         verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
     }
 
@@ -162,31 +150,27 @@ class UserEntityServiceImplTest {
         companyDto.setCode("11665522");
         companyDto.setName("Company Name");
         companyDto.setAddress("Company Address");
-        USER_DTO.setCompany(companyDto);
+        REGISTER_USER_DTO.setCompany(companyDto);
 
-        when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.empty());
-        when(passwordEncoderMock.encode(USER_DTO.getPassword())).thenReturn("encodedPassword");
-        when(roleRepositoryMock.getRoleByName(RoleConstants.USER_ROLE))
-                .thenReturn(Optional.of(USER_ROLE));
+        when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail())).thenReturn(Optional.empty());
         when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity());
         when(companyServiceMock.registerCompany(companyDto)).thenReturn(new Company());
+        when(keycloakUserService.createUser(REGISTER_USER_DTO)).thenReturn(true);
 
         // when
-        userServiceImpl.registerUser(USER_DTO);
+        userServiceImpl.registerUser(REGISTER_USER_DTO);
 
         // then
-        verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
+        verify(userRepositoryMock, times(1)).findByEmail(REGISTER_USER_DTO.getEmail());
         verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
 
         ArgumentCaptor<UserEntity> userArgumentCaptor = ArgumentCaptor.forClass(UserEntity.class);
         verify(userRepositoryMock, times(1)).save(userArgumentCaptor.capture());
 
         UserEntity savedUser = userArgumentCaptor.getValue();
-        assertEquals(USER_DTO.getEmail(), savedUser.getEmail());
-        assertEquals(USER_DTO.getFullName(), savedUser.getFullName());
-        assertEquals(USER_DTO.getMobileNumber(), savedUser.getMobileNumber());
+        assertEquals(REGISTER_USER_DTO.getEmail(), savedUser.getEmail());
+        assertEquals(REGISTER_USER_DTO.getMobileNumber(), savedUser.getMobileNumber());
         assertNotNull(savedUser.getCompany());
-        assertEquals(USER_ROLE, savedUser.getRoles().getFirst());
     }
 
     @Test
@@ -202,7 +186,6 @@ class UserEntityServiceImplTest {
 
         // then
         verify(userRepositoryMock, times(1)).findByEmail(USER_DTO.getEmail());
-        //verify(userRepositoryMock, times(1)).save(any(UserEntity.class));
         verify(userRepositoryMock, times(1)).deleteById(EXISTING_USER.getId());
     }
 
@@ -225,50 +208,29 @@ class UserEntityServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should successfully update user without changing email or mobile number")
+    @DisplayName("Should successfully update user without changing mobile number")
     @Order(8)
-    void updateUserSuccessfullyWithoutChangingEmailOrMobileNumber() {
+    void updateUserSuccessfullyWithoutChangingMobileNumber() {
         // given
-        UserDto userDto = USER_DTO;
+        UpdateUserDto updateUserDto = UpdateUserDto.builder()
+                .mobileNumber(EXISTING_USER.getMobileNumber())
+                .firstName(NEW_FIRST_NAME)
+                .lastName(NEW_LAST_NAME)
+                .build();
 
-        userDto.setFullName(FULL_NAME);
-        userDto.setPassword(NEW_PASSWORD);
-
-        when(identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN))
-                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
+        when(tokenService.extractEmail(AUTHORIZATION_TOKEN)).thenReturn(CURRENT_EMAIL);
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
-        when(passwordEncoderMock.encode(NEW_PASSWORD)).thenReturn("encodedPassword");
 
         // when
-        boolean result = userServiceImpl.updateUser(userDto, AUTHORIZATION_TOKEN);
+        boolean result = userServiceImpl.updateUser(updateUserDto, AUTHORIZATION_TOKEN);
 
         // then
         assertTrue(result);
         verify(userRepositoryMock, times(1)).findByEmail(CURRENT_EMAIL);
-        verify(passwordEncoderMock, times(1)).encode(NEW_PASSWORD);
+        verify(tokenService, times(1)).extractEmail(AUTHORIZATION_TOKEN);
 
-        assertEquals(CURRENT_EMAIL, EXISTING_USER.getEmail());
-        assertEquals(FULL_NAME, EXISTING_USER.getFullName());
+        assertEquals(NEW_FIRST_NAME + " " + NEW_LAST_NAME, EXISTING_USER.getFullName());
         assertEquals(OLD_MOBILE_NUMBER, EXISTING_USER.getMobileNumber());
-        assertEquals("encodedPassword", EXISTING_USER.getPassword());
-    }
-
-    @Test
-    @DisplayName("Should throw UserAlreadyExistsException when new email exists")
-    @Order(9)
-    void updateUserWithExistingEmail() {
-        // given
-        when((identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN)))
-                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
-        when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
-        when(userRepositoryMock.findByEmail(NEW_EMAIL)).thenReturn(Optional.of(new UserEntity()));
-
-        // when, then
-        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO, AUTHORIZATION_TOKEN))
-                .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessage("User already registered with provided email");
-
-        verify(userRepositoryMock, never()).save(any(UserEntity.class));
     }
 
     @Test
@@ -276,14 +238,18 @@ class UserEntityServiceImplTest {
     @Order(10)
     void updateUserWithExistingMobileNumber() {
         // given
-        when(identityFeignClientMock.extractEmail(AUTHORIZATION_TOKEN))
-                .thenReturn(ResponseEntity.ok(CURRENT_EMAIL));
+        UpdateUserDto updateUserDto = UpdateUserDto.builder()
+                .mobileNumber(MOBILE_NUMBER)
+                .firstName(NEW_FIRST_NAME)
+                .lastName(NEW_LAST_NAME)
+                .build();
+
+        when(tokenService.extractEmail(AUTHORIZATION_TOKEN)).thenReturn(CURRENT_EMAIL);
         when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(EXISTING_USER));
-        when(userRepositoryMock.findByEmail(NEW_EMAIL)).thenReturn(Optional.empty());
         when(userRepositoryMock.findByMobileNumber(MOBILE_NUMBER)).thenReturn(Optional.of(new UserEntity()));
 
         // when, then
-        assertThatThrownBy(() -> userServiceImpl.updateUser(USER_UPDATE_DTO, AUTHORIZATION_TOKEN))
+        assertThatThrownBy(() -> userServiceImpl.updateUser(updateUserDto, AUTHORIZATION_TOKEN))
                 .isInstanceOf(UserAlreadyExistsException.class)
                 .hasMessage("User already registered with provided mobile number");
 

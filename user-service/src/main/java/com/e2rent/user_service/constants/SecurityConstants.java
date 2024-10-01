@@ -1,12 +1,9 @@
 package com.e2rent.user_service.constants;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
-
-public class SecurityConstants {
+public final class SecurityConstants {
 
     private SecurityConstants() {
     }
 
-    public static final int STRENGTH = 14;
-    public static final BCryptVersion B_CRYPT_VERSION = BCryptVersion.$2B;
+    public static final String REGISTER_ENDPOINT = "/users/api/v1/register";
 }

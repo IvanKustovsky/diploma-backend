@@ -1,18 +1,15 @@
 package com.e2rent.user_service.mapper;
 
 import com.e2rent.user_service.dto.CompanyDto;
+import com.e2rent.user_service.dto.RegisterUserDto;
 import com.e2rent.user_service.dto.UserDto;
 import com.e2rent.user_service.entity.Company;
-import com.e2rent.user_service.entity.Role;
 import com.e2rent.user_service.entity.UserEntity;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserEntityMapperTest {
-
 
     @Test
     void shouldMapUserToDto() {
@@ -22,15 +19,11 @@ class UserEntityMapperTest {
         user.setFullName("John Doe");
         user.setEmail("john.doe@example.com");
         user.setMobileNumber("1234567890");
-        user.setPassword("password123");
 
         Company company = new Company();
         company.setCompanyId(1L);
         company.setName("Tech Solutions");
         user.setCompany(company);
-
-        Role role = new Role(1, "ADMIN");
-        user.setRoles(List.of(role));
 
         // when
         UserDto userDto = UserMapper.INSTANCE.toDto(user);
@@ -39,17 +32,15 @@ class UserEntityMapperTest {
         assertEquals(user.getFullName(), userDto.getFullName());
         assertEquals(user.getEmail(), userDto.getEmail());
         assertEquals(user.getMobileNumber(), userDto.getMobileNumber());
-        assertEquals(user.getPassword(), userDto.getPassword());
         assertEquals(user.getCompany().getName(), userDto.getCompany().getName());
-        assertEquals(user.getRoles().size(), userDto.getRoles().size());
-        assertEquals(user.getRoles().getFirst().getName(), userDto.getRoles().getFirst().getName());
     }
 
     @Test
     void shouldMapUserDtoToEntity() {
         // given
-        UserDto userDto = UserDto.builder()
-                .fullName("Jane Doe")
+        RegisterUserDto userDto = RegisterUserDto.builder()
+                .firstName("Jane")
+                .lastName("Doe")
                 .email("jane.doe@example.com")
                 .mobileNumber("+380987654321")
                 .password("password321").build();
@@ -58,20 +49,18 @@ class UserEntityMapperTest {
         companyDto.setName("Tech Solutions");
         userDto.setCompany(companyDto);
 
-        Role role = new Role(1, "ADMIN");
-        userDto.setRoles(List.of(role));
-
         // when
         UserEntity user = UserMapper.INSTANCE.toEntity(userDto);
 
         // then
-        assertEquals(userDto.getFullName(), user.getFullName());
+        String[] fullName = user.getFullName().split(" ");
+        String userFirstName = fullName[0];
+        String userLastName = fullName[1];
+        assertEquals(userDto.getFirstName(), userFirstName);
+        assertEquals(userDto.getLastName(), userLastName);
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getMobileNumber(), user.getMobileNumber());
-        assertEquals(userDto.getPassword(), user.getPassword());
         assertEquals(userDto.getCompany().getName(), user.getCompany().getName());
-        assertEquals(userDto.getRoles().size(), user.getRoles().size());
-        assertEquals(userDto.getRoles().getFirst().getName(), user.getRoles().getFirst().getName());
     }
 
     @Test
@@ -88,27 +77,24 @@ class UserEntityMapperTest {
         assertEquals(user.getFullName(), userDto.getFullName());
         assertEquals(user.getEmail(), userDto.getEmail());
         assertEquals(user.getMobileNumber(), userDto.getMobileNumber());
-        assertEquals(user.getPassword(), userDto.getPassword());
         assertNull(userDto.getCompany());
-        assertTrue(userDto.getRoles().isEmpty());
     }
 
     @Test
     void shouldHandleNullFieldsInUserDto() {
         // given
-        UserDto userDto = UserDto.builder().build();
-        // fullName, email, mobileNumber, password, company, and roles are null
+        RegisterUserDto userDto = RegisterUserDto.builder().build();
+        // firstName, lastName, email, mobileNumber, password, company are null
 
         // when
         UserEntity user = UserMapper.INSTANCE.toEntity(userDto);
 
         // then
-        assertEquals(userDto.getFullName(), user.getFullName());
+        assertNull(userDto.getFirstName());
+        assertNull(userDto.getLastName());
         assertEquals(userDto.getEmail(), user.getEmail());
         assertEquals(userDto.getMobileNumber(), user.getMobileNumber());
-        assertEquals(userDto.getPassword(), user.getPassword());
         assertNull(user.getCompany());
-        assertNull(user.getRoles());
     }
 
     @Test

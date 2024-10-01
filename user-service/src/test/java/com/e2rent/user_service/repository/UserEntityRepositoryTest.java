@@ -22,7 +22,7 @@ class UserEntityRepositoryTest {
     void findByEmailThatRegistered() {
         // given
         var user = UserEntity.builder().email("usertestemail@gmail.com")
-                .password("hashedPassword").fullName("Doe Joe")
+                .fullName("Doe Joe")
                 .id(12L).mobileNumber("3809678531").build();
         String email = "usertestemail@gmail.com";
         userRepositoryTest.save(user);
