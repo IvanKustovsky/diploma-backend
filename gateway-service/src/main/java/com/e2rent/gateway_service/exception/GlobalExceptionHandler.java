@@ -37,34 +37,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED)
                 .body(errorResponseDTO);
     }
-
-    @ExceptionHandler(ServiceUnavailableException.class)
-    public ResponseEntity<ErrorResponseDto> handleServiceUnavailableException(
-            ServiceUnavailableException ex, ServerWebExchange exchange) {
-        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                exchange.getRequest().getPath().toString(),
-                HttpStatus.SERVICE_UNAVAILABLE,
-                ex.getMessage(),
-                LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(errorResponseDTO);
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorResponseDto> handleUnauthorizedException(
-            UnauthorizedException ex, ServerWebExchange exchange) {
-        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
-                exchange.getRequest().getPath().toString(),
-                HttpStatus.UNAUTHORIZED,
-                ex.getMessage(),
-                LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(errorResponseDTO);
-    }
-
 }
-
-
-

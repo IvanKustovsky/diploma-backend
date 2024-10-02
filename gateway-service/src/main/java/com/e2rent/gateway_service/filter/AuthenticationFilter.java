@@ -1,26 +1,18 @@
 package com.e2rent.gateway_service.filter;
 
 import com.e2rent.gateway_service.exception.MissingAuthorizationHeaderException;
-import com.e2rent.gateway_service.service.client.IdentityFeignClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 @Component
+@RequiredArgsConstructor
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     private final RouteValidator validator;
-
-    private final IdentityFeignClient identityFeignClient;
-
-    public AuthenticationFilter(RouteValidator validator,
-                                @Lazy IdentityFeignClient identityFeignClient) {
-        this.validator = validator;
-        this.identityFeignClient = identityFeignClient;
-    }
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -31,9 +23,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                     throw new MissingAuthorizationHeaderException("Missing or invalid authorization header");
                 }
-
-                String token = authHeader.substring(7);
-                identityFeignClient.validateToken(token);
             }
             return chain.filter(exchange);
         };
@@ -43,5 +32,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     }
 
-    public static class Config { }
+    public static class Config {
+    }
 }
