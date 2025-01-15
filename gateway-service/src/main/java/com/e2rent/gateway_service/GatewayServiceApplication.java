@@ -30,9 +30,11 @@ public class GatewayServiceApplication {
                                 .filter(authFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://EQUIPMENTS"))
                 .route(p -> p
-                        .path("/e2rent/auth/**")
-                        .filters(f -> f.rewritePath("/e2rent/auth/(?<segment>.*)", "/auth/${segment}"))
-                        .uri("lb://IDENTITY-SERVICE"))
+                        .path("/e2rent/auth/api/v1/**")
+                        .filters(f -> f
+                                .rewritePath("/e2rent/auth/api/v1/(?<segment>.*)",
+                                        "/realms/e2rent_dev/protocol/openid-connect/${segment}"))
+                        .uri("http://localhost:8020")) // Локальний URL Keycloak
                 .build();
     }
 }

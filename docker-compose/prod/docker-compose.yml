@@ -90,30 +90,6 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
 
-  identities:
-    image: "ivankus197/identity-service:v1"
-    container_name: identity-ms
-    ports:
-      - "8095:8095"
-    healthcheck:
-      test: "curl --fail --silent localhost:8095/actuator/health/readiness | grep UP || exit 1"
-      interval: 20s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-    environment:
-      SPRING_APPLICATION_NAME: "identity-service"
-      APP_JWT_EXPIRES_IN: "${APP_JWT_EXPIRES_IN}"
-      APP_JWT_ALGORITHM: "${APP_JWT_ALGORITHM}"
-      APP_JWT_ISSUER: "${APP_JWT_ISSUER}"
-      APP_JWT_SECRET: "${APP_JWT_SECRET}"
-    depends_on:
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-eureka-config
-
   gatewayserver:
     image: "ivankus197/gateway-service:v1"
     container_name: gatewayserver-ms
@@ -123,8 +99,6 @@ services:
       users:
         condition: service_healthy
       equipments:
-        condition: service_healthy
-      identities:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gateway-service"

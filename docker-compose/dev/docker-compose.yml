@@ -1,6 +1,6 @@
 services:
-  rentappdb:
-    container_name: rentapp-db
+  rent-app-db:
+    container_name: rent-app-db
     ports:
       - "5432:5432"
     extends:
@@ -59,7 +59,7 @@ services:
       SPRING_APPLICATION_NAME: "users"
       SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
     depends_on:
-      rentappdb:
+      rent-app-db:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -82,32 +82,8 @@ services:
       SPRING_APPLICATION_NAME: "equipments"
       SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
     depends_on:
-      rentappdb:
+      rent-app-db:
         condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: microservice-eureka-config
-
-  identities:
-    image: "ivankus197/identity-service:v1"
-    container_name: identity-ms
-    ports:
-      - "8095:8095"
-    healthcheck:
-      test: "curl --fail --silent localhost:8095/actuator/health/readiness | grep UP || exit 1"
-      interval: 20s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-    environment:
-      SPRING_APPLICATION_NAME: "identity-service"
-      APP_JWT_EXPIRES_IN: "${APP_JWT_EXPIRES_IN}"
-      APP_JWT_ALGORITHM: "${APP_JWT_ALGORITHM}"
-      APP_JWT_ISSUER: "${APP_JWT_ISSUER}"
-      APP_JWT_SECRET: "${APP_JWT_SECRET}"
-    depends_on:
       eurekaserver:
         condition: service_healthy
     extends:
@@ -124,8 +100,6 @@ services:
         condition: service_healthy
       equipments:
         condition: service_healthy
-      identities:
-        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gateway-service"
     extends:
@@ -133,5 +107,5 @@ services:
       service: microservice-eureka-config
 
 networks:
-  rentapp:
+  rent-app:
     driver: "bridge"

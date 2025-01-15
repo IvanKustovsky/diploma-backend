@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1239@gmail.com\",\r\n    \"mobileNumber\": \"+380965843712\",\r\n    \"password\" : \"password123\"\r\n}",
+							"raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Kustovsky\",\r\n    \"email\": \"vankust1215@gmail.com\",\r\n    \"mobileNumber\": \"+380965843716\",\r\n    \"password\" : \"password123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -53,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1234@gmail.com\",\r\n    \"mobileNumber\": \"+380966958693\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892166\",\r\n        \"address\": \"1234 Elm Street\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"email\": \"ivank1222@gmail.com\",\r\n    \"mobileNumber\": \"+380966958691\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892162\",\r\n        \"address\": \"1234 Elm Street\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +86,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/users/api/v1?email=ivank1238@gmail.com",
+							"raw": "http://localhost:8085/users/api/v1?email=ivank1234@gmail.com",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -100,7 +100,7 @@
 							"query": [
 								{
 									"key": "email",
-									"value": "ivank1238@gmail.com"
+									"value": "ivank1234@gmail.com"
 								}
 							]
 						}
@@ -115,7 +115,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNTg4MjgxMiwiaWF0IjoxNzI1ODgyMjEyfQ.SMpGtuxdngIna3GM7aDkkdOAnvemRdK2sJEhYHlKI5Q",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3Mjc3OTgxNTQsImlhdCI6MTcyNzc5Nzg1NCwianRpIjoiNmQzN2IzNGItNjlmYy00NjY2LTliYTctMWY4NTBhMjhmYjhjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImQ1ODc1NTI3LWNlNWUtNGY1Ny1hOTFhLThhNGE0NDQ3MzcyMSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI3MzM3N2Y1Yy1kZjU5LTQ0YjMtOTk3OS0zOTQ2NjJmN2MzYWIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBZG1pbiBBZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbWluMTIzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJBZG1pbiIsImZhbWlseV9uYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluMTIzQGdtYWlsLmNvbSJ9.mNp6S8jww9CPIDnl4epBZLzm2S-d-h2pMSvP7Qu4LCJIUsBLdQsY2h9IgYPxL1VXcCX2FKmIJTOBVxuF_848lkfsRrnwq46A5sD6grSicuFL2u_l82xF9vQ9nFTYVTlQqx_ZDmC9Lz2bboIGeiMUBhtAeA6k5bd0CB4-OrXJSxSl-axuV5tlDHG-tFTOZXznhU231KjHMWs0O6KhnxjZ3GVpRCIHsr__PqJuBLFIN5_uD1NJWU8tadgs-EnhSLwxsLzPvo1R2NOFgIM2N3E2hZgok8ri_gdA0Wy2TRWuuyxOraquGkWdqUtk_Xc_WOf6c5E5ezXw0-DOn3WjeCvVOQ",
 									"type": "string"
 								}
 							]
@@ -151,12 +151,19 @@
 					"name": "DeleteUser",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8085/users/api/v1?email=ivank1239@gmail.com",
+							"raw": "http://localhost:8085/users/api/v1?email=ivank1225@gmail.com",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -170,10 +177,18 @@
 							"query": [
 								{
 									"key": "email",
-									"value": "ivank1239@gmail.com"
+									"value": "ivank1225@gmail.com"
 								}
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -571,7 +586,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyNDExNywiaWF0IjoxNzI2ODIzNTE3fQ.1U9sZHpalzjsS6jm-9EHYFJbR7SKQ-AUeXhUA-9jtYU",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3Mjc3OTI5NTksImlhdCI6MTcyNzc5MjY1OSwianRpIjoiZDkwMjU1ZDYtYjcwNy00YzAwLTlmNjUtZDRmNzAzMzNhMjcwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImQ1ODc1NTI3LWNlNWUtNGY1Ny1hOTFhLThhNGE0NDQ3MzcyMSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI0ZDBiZmQzNy0zOGVhLTQzYjEtYmNkNy0zNWY0OWM4Y2E4NzMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBZG1pbiBBZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbWluMTIzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJBZG1pbiIsImZhbWlseV9uYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluMTIzQGdtYWlsLmNvbSJ9.fsolUTngUuJEz_5peW76Edf5INWR0qwO62oVVgLMnWsbxD4nmDyp_UWVJbTTm8P7xas-6_5Qlm0hq6Ud0sOUTh7waegi4vSKZjtAvqsQcO86baTy7cL7KgGZDqj-AUqWfs4KzlEqfy5WzGpw7jDJUCw3ktvEXq-O7k3dNnpe9FFdzWyVborE_BE4HSIN2RTgIXTqdT2hHVQ8T8f2C8KwSVZAhzGNehZIOBK55h-EUZ9xgVS3lG5tTRrPBMaEX8S-U3uMrGvTCLld4WJXOccpN-CenTRkderTgDu_7Ejt6uKCKPz7kOT3Al6d7wgjomRcTnEuWlzr1C2fzHU3xF6ltQ",
 											"type": "string"
 										}
 									]
@@ -621,7 +636,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyMTQ0NywiaWF0IjoxNzI2ODIwODQ3fQ.hA0pnclZpMrGca1pXbpGqYezXZYilTpHJueWrAJOX8A",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3Mjc3ODIyNDUsImlhdCI6MTcyNzc4MTk0NSwianRpIjoiZjgxNzJhMDUtNTYyYS00YjBmLWFjYzMtYWMzODI2ZjcxMzBmIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImFmYmZmODA1LWZmMzMtNDE5OC05NWMxLTVlMjc2MzBlNjg1MyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIxOWQ3ZWY2OS0xNWU3LTQxMWMtOTc2MS1mNWY4YzUyZjg4NTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbmsxMjI1QGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMTIyNUBnbWFpbC5jb20ifQ.An-16zMrp1dpLmKEPHbaQBVLpayAfo8X8ElpGw3FQoAjcVIYzELgH30I_2T-i12pVX65t0NwWny0b0pxZf-OJ9u3TVGSn2WfOwsonVjaEM6R-01ifudXtEP7Jbnzhjw0dWSpATNtPZE2wELxmqEdlFrtLAxGmLh3HaOhpxfFGBXLy3KOo40fuw-2RU-gTeKXNhIM3gAZyVOpqGO7zcjUfglpLRKbh_Go3ffvPV8iGBKxGAQoeCU4zr_JjSjwG-r7xhSe0PbhfRq87ZXtuEIf8fmfJqcbx9n3dxyiqqZqic3oNnZ2Ddyya7W2Htx7zjLUeC6AJxaroBRKC3uUxs1LCQ",
 											"type": "string"
 										}
 									]
@@ -760,7 +775,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzhAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjIxMTI0MiwiaWF0IjoxNzI2MjEwNjQyfQ.H--2LnNWgISWas8ibEJ2rcgZLY7-Rr9J5MFmn6Xh5Pw",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3MzY5MzAwNzQsImlhdCI6MTczNjkyOTc3NCwianRpIjoiM2ViZjk3YzUtN2UwYS00ZDE5LWE4OWUtZTc5Yzg4YmQyZmFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjdiZmQ0MjI3LWU4MDYtNDIzNy1iZGJkLTUwYWRmZTFmZDg5MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI2ZDUwZmY2Ni04NGYwLTQwOTYtYjI3MS00M2Y5NTk3MmZiOGIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMzRAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMzRAZ21haWwuY29tIn0.Z0XRxpUmYh5WEOm7t6_eF_qP_Qe39oNZ5AQad-xiN7T6UGEVazcRuY2EObDZa_6ylCJeR8qzRLVQpJY_YaxTEcqDn0v5Y2SHNA_V60AoqYmggAAMsqWDnWW2e-hB0UkLkXGrDnV9oou47DVjuoR4ttaDyDPXJbTFUCiuxiU9nm-7mq8_lpRT9CLJtKuvpZd23g0AYEgJupIU71YvdkeRqT4-BBJvMWgbYzBhRmo6e10xteKuomC8Wlu5D_9XHAe9y84QSiBEW-vnoC-RBkeqXI3u2eVsQTlep27ZYfVCWO08qAFFE6TwL3ozKANHhZWazLLHP5jGhubWkNLufT7Z5g",
 											"type": "string"
 										}
 									]
@@ -913,13 +928,20 @@
 							"name": "RegisterUser",
 							"request": {
 								"auth": {
-									"type": "noauth"
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3MzY5MzU3NDEsImlhdCI6MTczNjkzNTQ0MSwianRpIjoiNWFhNjE5MmQtMGEyMi00ZDM2LTkyYTQtYjJiNjdlM2EzYzg1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjdiZmQ0MjI3LWU4MDYtNDIzNy1iZGJkLTUwYWRmZTFmZDg5MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI3MTRkMWE4OS1hNThlLTRmNmUtYjZiYi1jOTdhN2UwYTM1YTMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMzRAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMzRAZ21haWwuY29tIn0.L5ESzx2zb0ijCg9HWebGGOqg3clc6eT3x2Zts2yMicXjZ5DyffzHwcjNWWjElt84AinFqiei8zhBTCcgFpOyAxuxM_aiaRtN6T0ufsrM0f-iRiih8Dk2u4pqaPeu9HSf2a_sSUjPG5c_O_ppxLu7aBoDFNG3kiAXJilyktkztZBw_drEIoImfP_b3zNkDdd7TwnMRZJuuzjPY6L8nV3I_KQmaHDnOsPqPfSR3rGoTlIdn13nbaOolkJOZzQZArr2F-p8mdFLMJx-FuiyVAvglyBM4leI48Y6adEhGnBhz0ek2dNwR2CHrdE4B7Bcvv3yMbOORzSP2G90-58Rxhi0Lw",
+											"type": "string"
+										}
+									]
 								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1237@gmail.com\",\r\n    \"mobileNumber\": \"+380965843714\",\r\n    \"password\" : \"password123\"\r\n}",
+									"raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Kustovsky\",\r\n    \"email\": \"ivank12391@gmail.com\",\r\n    \"mobileNumber\": \"+380965843777\",\r\n    \"password\" : \"password123\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -954,7 +976,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"fullName\": \"Ivan Kustovsky\",\r\n    \"email\": \"ivank1235@gmail.com\",\r\n    \"mobileNumber\": \"+380966958697\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892161\",\r\n        \"address\": \"1254 Elm Street\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Kustovsky\",\r\n    \"email\": \"ivank1235@gmail.com\",\r\n    \"mobileNumber\": \"+380966958690\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71892161\",\r\n        \"address\": \"1254 Elm Street\"\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -987,7 +1009,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyMTQ0NywiaWF0IjoxNzI2ODIwODQ3fQ.hA0pnclZpMrGca1pXbpGqYezXZYilTpHJueWrAJOX8A",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3MzY5MzU3NDEsImlhdCI6MTczNjkzNTQ0MSwianRpIjoiNWFhNjE5MmQtMGEyMi00ZDM2LTkyYTQtYjJiNjdlM2EzYzg1IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjdiZmQ0MjI3LWU4MDYtNDIzNy1iZGJkLTUwYWRmZTFmZDg5MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI3MTRkMWE4OS1hNThlLTRmNmUtYjZiYi1jOTdhN2UwYTM1YTMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMzRAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMzRAZ21haWwuY29tIn0.L5ESzx2zb0ijCg9HWebGGOqg3clc6eT3x2Zts2yMicXjZ5DyffzHwcjNWWjElt84AinFqiei8zhBTCcgFpOyAxuxM_aiaRtN6T0ufsrM0f-iRiih8Dk2u4pqaPeu9HSf2a_sSUjPG5c_O_ppxLu7aBoDFNG3kiAXJilyktkztZBw_drEIoImfP_b3zNkDdd7TwnMRZJuuzjPY6L8nV3I_KQmaHDnOsPqPfSR3rGoTlIdn13nbaOolkJOZzQZArr2F-p8mdFLMJx-FuiyVAvglyBM4leI48Y6adEhGnBhz0ek2dNwR2CHrdE4B7Bcvv3yMbOORzSP2G90-58Rxhi0Lw",
 											"type": "string"
 										}
 									]
@@ -995,7 +1017,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank1238@gmail.com",
+									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank1235@gmail.com",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1010,7 +1032,7 @@
 									"query": [
 										{
 											"key": "email",
-											"value": "ivank1238@gmail.com"
+											"value": "ivank1235@gmail.com"
 										}
 									]
 								}
@@ -1066,7 +1088,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjc0NjUwMiwiaWF0IjoxNzI2NzQ1OTAyfQ.TsXs7KkByTefgogNczwy2FI7xqnVesB6V8UOEPw-PO0",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3Mjc3ODI2NjksImlhdCI6MTcyNzc4MjM2OSwianRpIjoiMzczMDEwMWItN2Y2My00ZTg1LWJkNjItYjAwZTlkYjJmZTkzIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImQ1ODc1NTI3LWNlNWUtNGY1Ny1hOTFhLThhNGE0NDQ3MzcyMSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJmOTZmNTk0NS1lYTQwLTQ3ZmMtOTRhOC0zZThkNmJlMzJlOGIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJBZG1pbiBBZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbWluMTIzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJBZG1pbiIsImZhbWlseV9uYW1lIjoiQWRtaW4iLCJlbWFpbCI6ImFkbWluMTIzQGdtYWlsLmNvbSJ9.h7FVzfiVBBBy73ovJHAoZnM9VJsDY4mdCTl3q-1Qa3Fl0MePL6bnVfpb2vo7k7-L_qnJYWFSxEtFR0gDfdS2Y9jgy_TCvbE1HcM8dH5a-r4LcskJiT6vIVlIfF1XStmN-mdQlGkOuG6FzdJVKcsZx4bnLPFzmUHEJonHjsej_kn7XIlG2UpP8iUshsamAftphTCM8H9w_pp8WgilSdVvVnSDgpxeBuTyPu5uzQdKffKyb5YEoHOvfm8iSGnO5waxlmJAmlkBNDElJtrn_BVVFa7ivO3nqi8aKI9QmWdZKQm_clGdh6f1pkZul7nIXZkiavVvrdkE9qBIJkX0VudIDw",
 											"type": "string"
 										}
 									]
@@ -1074,7 +1096,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank1237@gmail.com",
+									"raw": "http://localhost:8080/e2rent/users/api/v1?email=vankust1222@gmail.com",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1089,7 +1111,7 @@
 									"query": [
 										{
 											"key": "email",
-											"value": "ivank1237@gmail.com"
+											"value": "vankust1222@gmail.com"
 										}
 									]
 								}
@@ -1110,13 +1132,34 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"ivank1235@gmail.com\",\r\n    \"password\": \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "e2rent-dev-keycloak",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "6PHWUuyvcKki6AIz0T52bAigGv8MQ6bt",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "vankust1234@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "password123",
+											"type": "text"
 										}
-									}
+									]
 								},
 								"url": {
 									"raw": "http://localhost:8080/e2rent/auth/api/v1/token",
@@ -1137,51 +1180,40 @@
 							"response": []
 						},
 						{
-							"name": "ValidateToken",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/validate?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyMTQ0NywiaWF0IjoxNzI2ODIwODQ3fQ.hA0pnclZpMrGca1pXbpGqYezXZYilTpHJueWrAJOX8A",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"auth",
-										"api",
-										"v1",
-										"validate"
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyMTQ0NywiaWF0IjoxNzI2ODIwODQ3fQ.hA0pnclZpMrGca1pXbpGqYezXZYilTpHJueWrAJOX8A"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "ExtractEmail",
+							"name": "RefreshToken",
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
 										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzVAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjgyMTQ0NywiaWF0IjoxNzI2ODIwODQ3fQ.hA0pnclZpMrGca1pXbpGqYezXZYilTpHJueWrAJOX8A",
-											"type": "string"
+											"key": "client_id",
+											"value": "e2rent-dev-keycloak",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "6PHWUuyvcKki6AIz0T52bAigGv8MQ6bt",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4OTBkMGU3Ni1iMDM5LTRmMDAtYWU2YS0wNTA1Y2VlNDE1MDMifQ.eyJleHAiOjE3MzY5MzcyMzIsImlhdCI6MTczNjkzNTQzMiwianRpIjoiNTYyZjgxNmMtZjNjNy00ZjJlLWFhNDEtZDllODRlNjU5ODRiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2Iiwic3ViIjoiN2JmZDQyMjctZTgwNi00MjM3LWJkYmQtNTBhZGZlMWZkODkxIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI3MTRkMWE4OS1hNThlLTRmNmUtYjZiYi1jOTdhN2UwYTM1YTMiLCJzY29wZSI6ImFjciByb2xlcyBiYXNpYyB3ZWItb3JpZ2lucyBwcm9maWxlIGVtYWlsIn0.zKA50nZpAa8qgofKCIaJWXQR7SFbPA8PRrKrX7K4KWjpeHWgxg2urpD_f3dnIJO_XMWDpzUVg6UDI9gtism_eA",
+											"type": "text"
 										}
 									]
 								},
-								"method": "GET",
-								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/email?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzhAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjIxMTI0MiwiaWF0IjoxNzI2MjEwNjQyfQ.H--2LnNWgISWas8ibEJ2rcgZLY7-Rr9J5MFmn6Xh5Pw",
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/token",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1192,13 +1224,7 @@
 										"auth",
 										"api",
 										"v1",
-										"email"
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwOTUiLCJzdWIiOiJpdmFuazEyMzhAZ21haWwuY29tIiwicm9sZSI6WyJVU0VSIl0sImV4cCI6MTcyNjIxMTI0MiwiaWF0IjoxNzI2MjEwNjQyfQ.H--2LnNWgISWas8ibEJ2rcgZLY7-Rr9J5MFmn6Xh5Pw"
-										}
+										"token"
 									]
 								}
 							},
@@ -1262,6 +1288,174 @@
 							"port": "8888",
 							"path": [
 								"decrypt"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Keycloak API",
+			"item": [
+				{
+					"name": "AdminToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "admin-cli",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "vFCKlLkUG7aOHilYjoI853qLzXPlwoQs",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8020/realms/e2rent_dev/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8020",
+							"path": [
+								"realms",
+								"e2rent_dev",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "e2rent-dev-keycloak",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "6PHWUuyvcKki6AIz0T52bAigGv8MQ6bt",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "vankust1234@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8020/realms/e2rent_dev/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8020",
+							"path": [
+								"realms",
+								"e2rent_dev",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "e2rent-dev-keycloak",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "6PHWUuyvcKki6AIz0T52bAigGv8MQ6bt",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4OTBkMGU3Ni1iMDM5LTRmMDAtYWU2YS0wNTA1Y2VlNDE1MDMifQ.eyJleHAiOjE3MzY5MzE1NzQsImlhdCI6MTczNjkyOTc3NCwianRpIjoiZDIxNDJhYWEtNjc1My00NTE1LWI5YWQtYzhkZWY4MmM5NjNiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2Iiwic3ViIjoiN2JmZDQyMjctZTgwNi00MjM3LWJkYmQtNTBhZGZlMWZkODkxIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI2ZDUwZmY2Ni04NGYwLTQwOTYtYjI3MS00M2Y5NTk3MmZiOGIiLCJzY29wZSI6ImFjciByb2xlcyBiYXNpYyB3ZWItb3JpZ2lucyBwcm9maWxlIGVtYWlsIn0.Pb5bv_460asdN19IfB_NueZXOXEUjLvTQ8i2wmmWnUxkekFUGiy1qFXE7ZH1xgu61TiWfpfNCzJIBp_5N6g0bQ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8020/realms/e2rent_dev/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8020",
+							"path": [
+								"realms",
+								"e2rent_dev",
+								"protocol",
+								"openid-connect",
+								"token"
 							]
 						}
 					},
