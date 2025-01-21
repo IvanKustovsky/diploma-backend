@@ -3,9 +3,40 @@ services:
     container_name: e2rent-db
     ports:
       - "5432:5432"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     extends:
       file: common-config.yml
       service: microservice-db-config
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    container_name: keycloak
+    ports:
+      - "8020:8080"
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL_HOST: rent-app-db
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_URL_PORT: 5432
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    command: >
+      -v start-dev --import-realm
+    depends_on:
+      e2rent_db:
+        condition: service_healthy
+    networks:
+      - e2rent
 
   configserver:
     image: "ivankus197/config-service:v1"
@@ -58,6 +89,10 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "users"
       SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
+      SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
+      KEYCLOAK_DOMAIN: "${KEYCLOAK_DOMAIN}"
+      KEYCLOAK_REST_API_CLIENT_ID: "${KEYCLOAK_REST_API_CLIENT_ID}"
+      KEYCLOAK_REST_API_CLIENT_SECRET: "${KEYCLOAK_REST_API_CLIENT_SECRET}"
     depends_on:
       e2rent_db:
         condition: service_healthy
@@ -102,6 +137,8 @@ services:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gateway-service"
+      SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
+      KEYCLOAK_URI: "${KEYCLOAK_URI}"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
