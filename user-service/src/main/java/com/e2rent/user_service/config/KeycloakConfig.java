@@ -20,8 +20,8 @@ public class KeycloakConfig {
                 .serverUrl(keycloakProperties.getAuthUrl())
                 .realm(keycloakProperties.getRealm())
                 .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-                .clientId(keycloakProperties.getAdminClientId())
-                .clientSecret(keycloakProperties.getAdminClientSecret())
+                .clientId(keycloakProperties.getRestApiClientId())
+                .clientSecret(keycloakProperties.getRestApiClientSecret())
                 .build();
     }
 

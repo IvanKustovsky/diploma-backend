@@ -13,16 +13,8 @@ public class KeycloakProperties {
 
     private String realm;
     private String domain;
-    private String adminClientId;
-    private String adminClientSecret;
-    private Client client;
-
-    @Getter
-    @Setter
-    public static class Client {
-        private String id;
-        private String secret;
-    }
+    private String restApiClientId;
+    private String restApiClientSecret;
 
     public String getAuthUrl() {
         return "http://" + domain;

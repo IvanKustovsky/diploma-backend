@@ -1,6 +1,7 @@
 package com.e2rent.gateway_service;
 
 import com.e2rent.gateway_service.filter.AuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -9,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class GatewayServiceApplication {
+
+    @Value("${keycloak.uri:http://localhost:8020}")
+    private String keycloakUri;
 
     public static void main(String[] args) {
         SpringApplication.run(GatewayServiceApplication.class, args);
@@ -34,7 +38,7 @@ public class GatewayServiceApplication {
                         .filters(f -> f
                                 .rewritePath("/e2rent/auth/api/v1/(?<segment>.*)",
                                         "/realms/e2rent_dev/protocol/openid-connect/${segment}"))
-                        .uri("http://localhost:8020")) // Локальний URL Keycloak
+                        .uri(keycloakUri))
                 .build();
     }
 }
