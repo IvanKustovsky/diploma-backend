@@ -21,10 +21,10 @@ class UserEntityRepositoryTest {
     @Test
     void findByEmailThatRegistered() {
         // given
-        var user = UserEntity.builder().email("usertestemail@gmail.com")
-                .fullName("Doe Joe")
-                .id(12L).mobileNumber("3809678531").build();
         String email = "usertestemail@gmail.com";
+        var user = UserEntity.builder().email(email)
+                .fullName("Doe Joe")
+                .id(12L).mobileNumber("+380966989321").build();
         userRepositoryTest.save(user);
 
         // when

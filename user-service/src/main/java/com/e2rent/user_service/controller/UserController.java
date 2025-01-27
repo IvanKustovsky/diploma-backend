@@ -39,7 +39,15 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description = "HTTP Status CREATED"
+                    description = "HTTP Status Created"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "HTTP Status Bad Request"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "HTTP Status Conflict"
             ),
             @ApiResponse(
                     responseCode = "500",
@@ -66,6 +74,14 @@ public class UserController {
                     description = "HTTP Status OK"
             ),
             @ApiResponse(
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status Not Found"
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "HTTP Status Internal Server Error",
                     content = @Content(
@@ -90,8 +106,12 @@ public class UserController {
                     description = "HTTP Status OK"
             ),
             @ApiResponse(
-                    responseCode = "417",
-                    description = "Expectation Failed"
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status Not Found"
             ),
             @ApiResponse(
                     responseCode = "500",
@@ -105,16 +125,10 @@ public class UserController {
     @PutMapping
     public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UpdateUserDto updateUserDto,
                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        boolean isUpdated = userService.updateUser(updateUserDto, token);
-        if (isUpdated) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseDto(UserConstants.STATUS_417, UserConstants.MESSAGE_417_UPDATE));
-        }
+        userService.updateUser(updateUserDto, token);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
     }
 
     @Operation(summary = "Delete user REST API",
@@ -125,8 +139,16 @@ public class UserController {
                     description = "HTTP Status OK"
             ),
             @ApiResponse(
-                    responseCode = "417",
-                    description = "Expectation Failed"
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "HTTP Status Forbidden"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status Not Found"
             ),
             @ApiResponse(
                     responseCode = "500",
@@ -140,16 +162,11 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteUserDetails(@RequestParam(name = "email") @Email String email) {
-        boolean isDeleted = userService.deleteUser(email);
-        if (isDeleted) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseDto(UserConstants.STATUS_417, UserConstants.MESSAGE_417_DELETE));
-        }
+        userService.deleteUser(email);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
+
     }
 }
 

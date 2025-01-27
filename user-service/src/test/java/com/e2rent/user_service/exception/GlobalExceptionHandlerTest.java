@@ -98,10 +98,10 @@ class GlobalExceptionHandlerTest {
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
-                .handleCardAlreadyExistsException(exception, webRequest);
+                .handleUserAlreadyExistsException(exception, webRequest);
 
         // Then
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }
@@ -117,7 +117,7 @@ class GlobalExceptionHandlerTest {
                 .handleCompanyAlreadyExistsException(exception, webRequest);
 
         // Then
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
         assertEquals(errorMessage, responseEntity.getBody().getErrorMessage());
     }

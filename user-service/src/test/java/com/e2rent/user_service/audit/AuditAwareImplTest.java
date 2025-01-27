@@ -9,10 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,36 +35,6 @@ public class AuditAwareImplTest {
     }
 
     @Test
-    void shouldReturnCurrentAuditor() {
-        // given
-        String expectedUsername = "user@gmail.com";
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.getName()).thenReturn(expectedUsername);
-        when(authentication.isAuthenticated()).thenReturn(true);
-
-        // when
-        Optional<String> auditor = auditAwareImpl.getCurrentAuditor();
-
-        // then
-        assertTrue(auditor.isPresent());
-        assertEquals(expectedUsername, auditor.get());
-    }
-
-    @Test
-    void shouldReturnEmptyWhenAuthenticationNameIsNull() {
-        // given
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.getName()).thenReturn(null);
-        when(authentication.isAuthenticated()).thenReturn(true);
-
-        // when
-        Optional<String> auditor = auditAwareImpl.getCurrentAuditor();
-
-        // then
-        assertTrue(auditor.isEmpty());
-    }
-
-    @Test
     void shouldReturnSystemWhenAuthenticationIsNullOrNotAuthenticated() {
         // given
         when(securityContext.getAuthentication()).thenReturn(null);
@@ -80,6 +52,55 @@ public class AuditAwareImplTest {
 
         // when
         auditor = auditAwareImpl.getCurrentAuditor();
+
+        // then
+        assertTrue(auditor.isPresent());
+        assertEquals("System", auditor.get());
+    }
+
+    @Test
+    void shouldReturnEmailWhenAuthenticationIsAuthenticatedAndJwtContainsEmail() {
+        // given
+        Jwt jwt = mock(Jwt.class);
+        when(jwt.getClaim("email")).thenReturn("user@example.com");
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn(jwt);
+
+        // when
+        Optional<String> auditor = auditAwareImpl.getCurrentAuditor();
+
+        // then
+        assertTrue(auditor.isPresent());
+        assertEquals("user@example.com", auditor.get());
+    }
+
+    @Test
+    void shouldReturnSystemWhenAuthenticationIsAuthenticatedButJwtDoesNotContainEmail() {
+        // given
+        Jwt jwt = mock(Jwt.class);
+        when(jwt.getClaim("email")).thenReturn(null);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn(jwt);
+
+        // when
+        Optional<String> auditor = auditAwareImpl.getCurrentAuditor();
+
+        // then
+        assertTrue(auditor.isPresent());
+        assertEquals("System", auditor.get());
+    }
+
+    @Test
+    void shouldReturnSystemWhenPrincipalIsNotJwt() {
+        // given
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn("NotJwtPrincipal");
+
+        // when
+        Optional<String> auditor = auditAwareImpl.getCurrentAuditor();
 
         // then
         assertTrue(auditor.isPresent());
