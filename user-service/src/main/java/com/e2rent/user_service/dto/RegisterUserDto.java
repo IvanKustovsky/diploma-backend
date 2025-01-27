@@ -1,6 +1,7 @@
 package com.e2rent.user_service.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class RegisterUserDto {
 
     @Schema(description = "Company of the user if exists", example = "Facebook")
+    @Valid
     private CompanyDto company;
 
     @Schema(description = "First name of the user", example = "John")
