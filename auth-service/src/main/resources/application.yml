@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: auth-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI:http://localhost:8020/realms/e2rent_dev/protocol/openid-connect/certs}
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+keycloak:
+  realm: "e2rent_dev"
+  domain: "localhost:8020"
+  url: "http://${keycloak.domain}"
+  restApiClientId: ${KEYCLOAK_REST_API_CLIENT_ID}
+  restApiClientSecret: ${KEYCLOAK_REST_API_CLIENT_SECRET}
+
+server:
+  port: 8585
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+
+logging:
+  level:
+    com:
+      example:
+        user_service: INFO
+
+info:
+  app:
+    name: "auth-service"
+    description: "E2Rent Authentication Application"
+    version: "1.0.0"
