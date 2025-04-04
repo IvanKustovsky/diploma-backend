@@ -22,8 +22,8 @@ class CompanyRepositoryTest {
     void findByCodeThatRegistered() {
         // given
         String code = "11223344";
-        Company company = Company.builder().companyId(1L)
-                .code(code).name("Company Name").address("Company address").build();
+        Company company = Company.builder().code(code).name("Company Name").address("Company address")
+                .build();
         companyRepositoryTest.save(company);
 
         // when

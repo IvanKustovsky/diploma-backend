@@ -10,14 +10,16 @@ import com.e2rent.user_service.exception.ResourceNotFoundException;
 import com.e2rent.user_service.exception.UserAlreadyExistsException;
 import com.e2rent.user_service.repository.UserRepository;
 import com.e2rent.user_service.service.ICompanyService;
-import com.e2rent.user_service.service.KeycloakUserService;
 import com.e2rent.user_service.service.TokenService;
+import com.e2rent.user_service.service.client.AuthFeignClient;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -68,7 +70,7 @@ class UserEntityServiceImplTest {
     private ICompanyService companyServiceMock;
 
     @Mock
-    private KeycloakUserService keycloakUserService;
+    private AuthFeignClient authFeignClient;
 
     @Mock
     private TokenService tokenService;
@@ -128,9 +130,10 @@ class UserEntityServiceImplTest {
     @Order(4)
     void registerUserWithoutCompanyWhenEmailDoesNotExist() {
         // given
+        var responseEntity = ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail()))
                 .thenReturn(Optional.empty());
-        when(keycloakUserService.createUser(REGISTER_USER_DTO)).thenReturn(true);
+        when(authFeignClient.registerUser(REGISTER_USER_DTO)).thenReturn(responseEntity);
         when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(any(UserEntity.class));
 
         // when
@@ -146,6 +149,7 @@ class UserEntityServiceImplTest {
     @Order(5)
     void registerUserWithCompanyWhenEmailDoesNotExist() {
         // given
+        var responseEntity = ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         CompanyDto companyDto = new CompanyDto();
         companyDto.setCode("11665522");
         companyDto.setName("Company Name");
@@ -155,7 +159,7 @@ class UserEntityServiceImplTest {
         when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail())).thenReturn(Optional.empty());
         when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(new UserEntity());
         when(companyServiceMock.registerCompany(companyDto)).thenReturn(new Company());
-        when(keycloakUserService.createUser(REGISTER_USER_DTO)).thenReturn(true);
+        when(authFeignClient.registerUser(REGISTER_USER_DTO)).thenReturn(responseEntity);
 
         // when
         userServiceImpl.registerUser(REGISTER_USER_DTO);

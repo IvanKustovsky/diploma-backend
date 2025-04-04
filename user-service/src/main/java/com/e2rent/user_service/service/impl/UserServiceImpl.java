@@ -11,21 +11,24 @@ import com.e2rent.user_service.exception.UserAlreadyExistsException;
 import com.e2rent.user_service.mapper.UserMapper;
 import com.e2rent.user_service.repository.UserRepository;
 import com.e2rent.user_service.service.ICompanyService;
-import com.e2rent.user_service.service.KeycloakUserService;
 import com.e2rent.user_service.service.TokenService;
+import com.e2rent.user_service.service.client.AuthFeignClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final ICompanyService companyService;
-    private final KeycloakUserService keycloakUserService;
     private final TokenService tokenService;
+    private final AuthFeignClient authFeignClient;
 
     @Override
     @Transactional
@@ -41,7 +44,12 @@ public class UserServiceImpl implements IUserService {
         UserEntity user = UserMapper.INSTANCE.toEntity(registerUserDto);
         user.setCompany(company);
 
-        keycloakUserService.createUser(registerUserDto);
+        // Використовуємо Feign клієнт для реєстрації користувача в Keycloak
+        var response = authFeignClient.registerUser(registerUserDto);
+        log.info("Response {}: ", response);
+        if (response.getStatusCode().value() != HttpStatus.CREATED.value()) {
+            throw new RuntimeException("Failed to register user in auth-service");
+        }
 
         userRepository.save(user);
     }
@@ -77,7 +85,7 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
         userRepository.deleteById(existingUser.getId());
-        keycloakUserService.deleteByEmail(email);
+        authFeignClient.deleteByEmail(email);
         return true;
     }
 
