@@ -3,6 +3,7 @@ package com.e2rent.auth_service.service.client;
 import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,17 +24,17 @@ public interface KeycloakFeignClient {
     @PostMapping(value = "/admin/realms/{realm}/users")
     ResponseEntity<Void> createUser(@PathVariable("realm") String realm,
                                     @RequestBody UserRepresentation user,
-                                    @RequestHeader("Authorization") String authorization);
+                                    @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization);
 
     @GetMapping(value = "/admin/realms/{realm}/users", produces = "application/json")
     List<UserRepresentation> findUsersByEmail(@PathVariable("realm") String realm,
                                               @RequestParam("email") String email,
                                               @RequestParam("exact") boolean exact,
-                                              @RequestHeader("Authorization") String authorization
+                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization
     );
 
     @DeleteMapping(value = "/admin/realms/{realm}/users/{id}")
     void deleteUser(@PathVariable("realm") String realm,
                     @PathVariable("id") String userId,
-                    @RequestHeader("Authorization") String authorization);
+                    @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization);
 }
