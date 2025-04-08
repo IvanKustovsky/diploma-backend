@@ -35,6 +35,14 @@ public interface IAuthService {
     AccessTokenResponseDto refreshToken(String refreshToken, HttpServletResponse response);
 
     /**
+     * Logs out the currently authenticated user by removing the refresh token cookie.
+     * This effectively ends the user's session on the client side.
+     *
+     * @param response the HttpServletResponse used to remove authentication-related cookies (e.g., refresh token).
+     */
+    void logout(HttpServletResponse response);
+
+    /**
      * Retrieves a user representation from Keycloak by their email address.
      *
      * @param email the email address of the user to be found.

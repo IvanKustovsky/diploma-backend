@@ -13,10 +13,10 @@ public class TokenUtil {
     private final static int REFRESH_COOKIE_AGE_DAYS = 1;
     private final static int REFRESH_COOKIE_AGE_HOURS = 12;
     private final static int REFRESH_COOKIE_AGE_MINUTES = 30;
-    private static final int MAX_AGE_SECONDS = Duration.ofDays(REFRESH_COOKIE_AGE_DAYS)
+    private static final int MAX_AGE_SECONDS = (int) Duration.ofDays(REFRESH_COOKIE_AGE_DAYS)
             .plusHours(REFRESH_COOKIE_AGE_HOURS)
             .plusMinutes(REFRESH_COOKIE_AGE_MINUTES)
-            .toSecondsPart();
+            .toSeconds();
 
     public static AccessTokenResponseDto processTokenResponse(AccessTokenResponse tokenResponse,
                                                               HttpServletResponse response) {

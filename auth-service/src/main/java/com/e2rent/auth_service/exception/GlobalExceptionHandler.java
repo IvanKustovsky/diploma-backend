@@ -82,4 +82,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponseDTO);
     }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleRefreshTokenNotFoundException(RefreshTokenNotFoundException exception,
+                                                                        WebRequest webRequest) {
+        log.error("RefreshTokenNotFoundException occurred. Message: {}", exception.getMessage());
+        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponseDTO);
+    }
 }

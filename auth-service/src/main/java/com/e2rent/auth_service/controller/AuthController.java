@@ -5,6 +5,7 @@ import com.e2rent.auth_service.dto.AccessTokenResponseDto;
 import com.e2rent.auth_service.dto.ErrorResponseDto;
 import com.e2rent.auth_service.dto.LoginDto;
 import com.e2rent.auth_service.dto.RegisterUserDto;
+import com.e2rent.auth_service.exception.RefreshTokenNotFoundException;
 import com.e2rent.auth_service.service.IAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -147,14 +148,35 @@ public class AuthController {
     }
     )
     @PostMapping("/refresh")
-    public ResponseEntity<AccessTokenResponseDto> refresh(@CookieValue("refresh_token") String refreshToken,
+    public ResponseEntity<AccessTokenResponseDto> refresh(@CookieValue(value = "refresh_token", required = false) String refreshToken,
                                                           HttpServletResponse response) {
         if (refreshToken == null) {
             log.warn("Refresh token not found.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new RefreshTokenNotFoundException("Refresh token not found in cookies.");
         }
-
         var tokenResponse = authService.refreshToken(refreshToken, response);
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    @Operation(summary = "Logout user REST API",
+            description = "REST API to logout User inside E2Rent Keycloak realm")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "HTTP Status No Content"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        authService.logout(response);
+        return ResponseEntity.noContent().build();
     }
 }

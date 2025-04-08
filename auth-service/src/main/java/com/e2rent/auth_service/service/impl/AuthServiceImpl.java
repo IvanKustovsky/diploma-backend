@@ -10,6 +10,7 @@ import com.e2rent.auth_service.service.client.KeycloakFeignClient;
 import com.e2rent.auth_service.utils.TokenRequestUtil;
 import com.e2rent.auth_service.utils.TokenUtil;
 import com.e2rent.auth_service.utils.UserRepresentationUtil;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,16 @@ public class AuthServiceImpl implements IAuthService {
                 refreshToken, keycloakProperties);
         var tokenResponse = keycloakFeignClient.refreshToken(keycloakProperties.getRealm(), form);
         return TokenUtil.processTokenResponse(tokenResponse, response);
+    }
+
+    @Override
+    public void logout(HttpServletResponse response) {
+        Cookie refreshTokenCookie = new Cookie(OAuth2Constants.REFRESH_TOKEN, "");
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(false); // або true, якщо HTTPS
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0); // видалення куки
+        response.addCookie(refreshTokenCookie);
     }
 
     @Override
