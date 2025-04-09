@@ -85,9 +85,6 @@ services:
       SPRING_APPLICATION_NAME: "users"
       SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
       SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
-      KEYCLOAK_DOMAIN: "${KEYCLOAK_DOMAIN}"
-      KEYCLOAK_REST_API_CLIENT_ID: "${KEYCLOAK_REST_API_CLIENT_ID}"
-      KEYCLOAK_REST_API_CLIENT_SECRET: "${KEYCLOAK_REST_API_CLIENT_SECRET}"
     depends_on:
       rent-app-db:
         condition: service_healthy
@@ -120,20 +117,41 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
 
+  auth-service:
+    image: "ivankus197/auth-service:v1"
+    container_name: authentication-ms
+    ports:
+      - "8585:8585"
+    healthcheck:
+      test: "curl --fail --silent localhost:8585/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "auth-service"
+      SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
+      KEYCLOAK_URL: "${KEYCLOAK_URL}"
+      KEYCLOAK_REST_API_CLIENT_ID: "${KEYCLOAK_REST_API_CLIENT_ID}"
+      KEYCLOAK_REST_API_CLIENT_SECRET: "${KEYCLOAK_REST_API_CLIENT_SECRET}"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
   gatewayserver:
     image: "ivankus197/gateway-service:v1"
     container_name: gatewayserver-ms
     ports:
       - "8080:8080"
     depends_on:
-      users:
-        condition: service_healthy
-      equipments:
+      eurekaserver:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gateway-service"
       SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
-      KEYCLOAK_URI: "${KEYCLOAK_URI}"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
