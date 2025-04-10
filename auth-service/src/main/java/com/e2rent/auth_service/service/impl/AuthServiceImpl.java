@@ -46,7 +46,7 @@ public class AuthServiceImpl implements IAuthService {
         var form = TokenRequestUtil.createTokenRequest(OAuth2Constants.PASSWORD, loginDto.getUsername(),
                 loginDto.getPassword(), null, keycloakProperties);
         var tokenResponse = keycloakFeignClient.getToken(keycloakProperties.getRealm(), form);
-        return TokenUtil.processTokenResponse(tokenResponse, response);
+        return TokenUtil.processTokenResponse(tokenResponse, response, true);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AuthServiceImpl implements IAuthService {
         var form = TokenRequestUtil.createTokenRequest(OAuth2Constants.REFRESH_TOKEN, null, null,
                 refreshToken, keycloakProperties);
         var tokenResponse = keycloakFeignClient.refreshToken(keycloakProperties.getRealm(), form);
-        return TokenUtil.processTokenResponse(tokenResponse, response);
+        return TokenUtil.processTokenResponse(tokenResponse, response, false);
     }
 
     @Override
