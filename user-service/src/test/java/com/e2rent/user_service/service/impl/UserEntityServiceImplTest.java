@@ -81,12 +81,12 @@ class UserEntityServiceImplTest {
     @Test
     @DisplayName("Should throw ResourceNotFoundException when fetching non-existent user")
     @Order(1)
-    void fetchUserWhenNotExists() {
+    void fetchUserByEmailWhenNotExists() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.empty());
 
         // when, then
-        assertThatThrownBy(() -> userServiceImpl.fetchUser(USER_DTO.getEmail()))
+        assertThatThrownBy(() -> userServiceImpl.fetchUserByEmail(USER_DTO.getEmail()))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(String.format("%s not found with the given input data %s: '%s'",
                         "User", "email", USER_DTO.getEmail()));
@@ -97,12 +97,42 @@ class UserEntityServiceImplTest {
     @Test
     @DisplayName("Should fetch user when it exists")
     @Order(2)
-    void fetchUserWhenExists() {
+    void fetchUserByEmailWhenExists() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.of(EXISTING_USER));
 
         // when
-        UserDto result = userServiceImpl.fetchUser(USER_DTO.getEmail());
+        UserDto result = userServiceImpl.fetchUserByEmail(USER_DTO.getEmail());
+
+        // then
+        assertEquals(USER_DTO, result);
+    }
+
+    @Test
+    @DisplayName("Should throw ResourceNotFoundException when fetching non-existent user")
+    @Order(3)
+    void fetchUserByIdWhenNotExists() {
+        // given
+        when(userRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> userServiceImpl.fetchUserById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("%s not found with the given input data %s: '%s'",
+                        "User", "ID", 1L));
+
+        verify(userRepositoryMock, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Should fetch user when it exists")
+    @Order(4)
+    void fetchUserByIdWhenExists() {
+        // given
+        when(userRepositoryMock.findById(1L)).thenReturn(Optional.of(EXISTING_USER));
+
+        // when
+        UserDto result = userServiceImpl.fetchUserById(1L);
 
         // then
         assertEquals(USER_DTO, result);
@@ -110,7 +140,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistsException when trying to register user with existing email")
-    @Order(3)
+    @Order(5)
     void registerUserWhenEmailExists() {
         // given
         when(userRepositoryMock.findByEmail(REGISTER_USER_DTO.getEmail()))
@@ -127,7 +157,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should register user without company when email does not exist")
-    @Order(4)
+    @Order(6)
     void registerUserWithoutCompanyWhenEmailDoesNotExist() {
         // given
         var responseEntity = ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
@@ -146,7 +176,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should register user with company when email does not exist")
-    @Order(5)
+    @Order(7)
     void registerUserWithCompanyWhenEmailDoesNotExist() {
         // given
         var responseEntity = ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
@@ -180,7 +210,7 @@ class UserEntityServiceImplTest {
     @Test
     @DisplayName("Should delete user and clear roles")
     @Transactional
-    @Order(6)
+    @Order(8)
     void deleteUser() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.of(EXISTING_USER));
@@ -196,7 +226,7 @@ class UserEntityServiceImplTest {
     @Test
     @DisplayName("Should throw ResourceNotFoundException when deleting non-existent user")
     @Transactional
-    @Order(7)
+    @Order(9)
     void deleteUserWhenNotExists() {
         // given
         when(userRepositoryMock.findByEmail(USER_DTO.getEmail())).thenReturn(Optional.empty());
@@ -213,7 +243,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should successfully update user without changing mobile number")
-    @Order(8)
+    @Order(10)
     void updateUserSuccessfullyWithoutChangingMobileNumber() {
         // given
         UpdateUserDto updateUserDto = UpdateUserDto.builder()
@@ -239,7 +269,7 @@ class UserEntityServiceImplTest {
 
     @Test
     @DisplayName("Should throw UserAlreadyExistsException when new mobile number exists")
-    @Order(10)
+    @Order(11)
     void updateUserWithExistingMobileNumber() {
         // given
         UpdateUserDto updateUserDto = UpdateUserDto.builder()

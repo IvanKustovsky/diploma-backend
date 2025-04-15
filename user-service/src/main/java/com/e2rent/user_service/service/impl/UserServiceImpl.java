@@ -55,9 +55,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDto fetchUser(String email) {
+    public UserDto fetchUserByEmail(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        return UserMapper.INSTANCE.toDto(user);
+    }
+
+    @Override
+    public UserDto fetchUserById(Long id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "ID", String.valueOf(id)));
         return UserMapper.INSTANCE.toDto(user);
     }
 
@@ -87,6 +94,18 @@ public class UserServiceImpl implements IUserService {
         userRepository.deleteById(existingUser.getId());
         authFeignClient.deleteByEmail(email);
         return true;
+    }
+
+    @Override
+    public String extractEmailFromToken(String authorizationToken) {
+        return tokenService.extractEmail(authorizationToken);
+    }
+
+    @Override
+    public Long getUserIdByEmail(String email) {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+        return user.getId();
     }
 
     private void checkIfUserExists(String email, String mobileNumber) {

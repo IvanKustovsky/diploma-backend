@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @Operation(summary = "Fetch user REST API",
-            description = "REST API to fetch User inside E2Rent")
+            description = "REST API to fetch User by email inside E2Rent")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
@@ -91,11 +91,41 @@ public class UserController {
     }
     )
     @GetMapping
-    public ResponseEntity<UserDto> fetchUser(@RequestParam(name = "email") @Email String email) {
-        UserDto userDto = userService.fetchUser(email);
+    public ResponseEntity<UserDto> fetchUserByEmail(@RequestParam(name = "email") @Email String email) {
+        UserDto userDto = userService.fetchUserByEmail(email);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userDto);
+    }
+
+    @Operation(summary = "Fetch user REST API",
+            description = "REST API to fetch User by ID inside E2Rent")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "HTTP Status Unauthorized"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status Not Found"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> fetchUserById(@PathVariable Long id) {
+        UserDto userDto = userService.fetchUserById(id);
+        return ResponseEntity.ok(userDto);
     }
 
     @Operation(summary = "Update user REST API",
@@ -167,6 +197,14 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
 
+    }
+
+    @GetMapping("/getUserIdFromToken")
+    public ResponseEntity<Long> getUserIdFromToken(@RequestHeader(HttpHeaders.AUTHORIZATION)
+                                                       String authorizationToken) {
+        String email = userService.extractEmailFromToken(authorizationToken);
+        Long userId = userService.getUserIdByEmail(email);
+        return ResponseEntity.ok(userId);
     }
 }
 

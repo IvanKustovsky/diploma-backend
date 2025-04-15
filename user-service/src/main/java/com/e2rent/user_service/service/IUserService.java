@@ -17,7 +17,14 @@ public interface IUserService {
      * @param email - Input Email
      * @return User details based on a given email
      */
-    UserDto fetchUser(String email);
+    UserDto fetchUserByEmail(String email);
+
+    /**
+     *
+     * @param id - Input id
+     * @return User details based on a given id
+     */
+    UserDto fetchUserById(Long id);
 
     /**
      *
@@ -33,4 +40,8 @@ public interface IUserService {
      * @return boolean indicating if the delete of User is successful or not
      */
     boolean deleteUser(String email);
+
+    String extractEmailFromToken(String authorizationToken);
+
+    Long getUserIdByEmail(String email);
 }
