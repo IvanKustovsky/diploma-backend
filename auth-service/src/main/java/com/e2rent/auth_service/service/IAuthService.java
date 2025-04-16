@@ -3,6 +3,7 @@ package com.e2rent.auth_service.service;
 import com.e2rent.auth_service.dto.AccessTokenResponseDto;
 import com.e2rent.auth_service.dto.LoginDto;
 import com.e2rent.auth_service.dto.RegisterUserDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -40,7 +41,7 @@ public interface IAuthService {
      *
      * @param response the HttpServletResponse used to remove authentication-related cookies (e.g., refresh token).
      */
-    void logout(HttpServletResponse response);
+    void logout(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * Retrieves a user representation from Keycloak by their email address.

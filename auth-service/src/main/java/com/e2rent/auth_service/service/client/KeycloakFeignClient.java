@@ -21,6 +21,10 @@ public interface KeycloakFeignClient {
             consumes = "application/x-www-form-urlencoded")
     AccessTokenResponse refreshToken(@PathVariable("realm") String realm, @RequestBody Map<String, ?> form);
 
+    @PostMapping(value = "/realms/{realm}/protocol/openid-connect/logout",
+            consumes = "application/x-www-form-urlencoded")
+    ResponseEntity<Void> logout(@PathVariable("realm") String realm, @RequestBody Map<String, ?> form);
+
     @PostMapping(value = "/admin/realms/{realm}/users")
     ResponseEntity<Void> createUser(@PathVariable("realm") String realm,
                                     @RequestBody UserRepresentation user,

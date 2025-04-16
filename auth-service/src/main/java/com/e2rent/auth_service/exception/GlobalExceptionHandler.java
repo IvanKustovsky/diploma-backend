@@ -56,17 +56,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ErrorResponseDto> handleFeignException(FeignException exception,
-                                                                  WebRequest webRequest) {
-        log.error("FeignException occurred: Status Code: {}, Message: {}", exception.status(),
-                exception.getMessage());
+                                                                 WebRequest webRequest) {
+        int statusCode = exception.status();
+        HttpStatus status;
+
+        log.error("FeignException occurred: Status Code: {}, Message: {}",
+                statusCode, exception.getMessage());
+
+        try {
+            status = HttpStatus.valueOf(statusCode);
+        } catch (IllegalArgumentException ex) {
+            status = HttpStatus.SERVICE_UNAVAILABLE;
+        }
+
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
                 webRequest.getDescription(false),
-                HttpStatus.valueOf(exception.status()),
+                status,
                 exception.getMessage(),
                 LocalDateTime.now()
         );
-        return ResponseEntity.status(HttpStatus.valueOf(exception.status()))
-                .body(errorResponseDTO);
+
+        return ResponseEntity.status(status).body(errorResponseDTO);
     }
 
     @ExceptionHandler(UserNotFoundException.class)

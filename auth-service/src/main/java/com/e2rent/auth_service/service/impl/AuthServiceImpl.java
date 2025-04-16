@@ -10,7 +10,7 @@ import com.e2rent.auth_service.service.client.KeycloakFeignClient;
 import com.e2rent.auth_service.utils.TokenRequestUtil;
 import com.e2rent.auth_service.utils.TokenUtil;
 import com.e2rent.auth_service.utils.UserRepresentationUtil;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,6 @@ public class AuthServiceImpl implements IAuthService {
         var response = keycloakFeignClient.createUser(keycloakProperties.getRealm(),
                 userRepresentation, "Bearer " + adminAccessToken);
 
-        log.info("Response status: {}", response.getStatusCode());
         return response.getStatusCode() == HttpStatus.CREATED;
     }
 
@@ -51,20 +50,22 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public AccessTokenResponseDto refreshToken(String refreshToken, HttpServletResponse response) {
-        var form = TokenRequestUtil.createTokenRequest(OAuth2Constants.REFRESH_TOKEN, null, null,
+        var form = TokenRequestUtil.createTokenRequest(OAuth2Constants.REFRESH_TOKEN,
+                null, null,
                 refreshToken, keycloakProperties);
         var tokenResponse = keycloakFeignClient.refreshToken(keycloakProperties.getRealm(), form);
         return TokenUtil.processTokenResponse(tokenResponse, response, false);
     }
 
     @Override
-    public void logout(HttpServletResponse response) {
-        Cookie refreshTokenCookie = new Cookie(OAuth2Constants.REFRESH_TOKEN, "");
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false); // або true, якщо HTTPS
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(0); // видалення куки
-        response.addCookie(refreshTokenCookie);
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = TokenUtil.extractRefreshTokenFromCookies(request);
+
+        if (refreshToken != null) {
+            performKeycloakLogout(refreshToken);
+        }
+
+        TokenUtil.clearRefreshTokenCookie(response);
     }
 
     @Override
@@ -100,5 +101,19 @@ public class AuthServiceImpl implements IAuthService {
         );
 
         return keycloakFeignClient.getToken(keycloakProperties.getRealm(), form).getToken();
+    }
+
+    private void performKeycloakLogout(String refreshToken) {
+        var form = TokenRequestUtil.createTokenRequest(OAuth2Constants.REFRESH_TOKEN,
+                null, null,
+                refreshToken, keycloakProperties);
+
+        var logoutResponse = keycloakFeignClient.logout(keycloakProperties.getRealm(), form);
+
+        if (logoutResponse.getStatusCode() != HttpStatus.NO_CONTENT) {
+            throw new IllegalStateException("Unexpected Keycloak logout response: " + logoutResponse.getStatusCode());
+        }
+
+        log.info("Successfully logged out from Keycloak.");
     }
 }
