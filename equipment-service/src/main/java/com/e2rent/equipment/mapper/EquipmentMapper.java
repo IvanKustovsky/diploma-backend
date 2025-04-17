@@ -12,8 +12,10 @@ public interface EquipmentMapper {
 
     Equipment toEquipment(EquipmentDto equipmentDto);
 
-    @Mapping(target = "mainImageUrl", source = "mainImage.name")
-    @Mapping(target = "imageUrls", expression = "java(equipment.getImages().stream().map(Image::getName).collect(java.util.stream.Collectors.toList()))")
+    @Mapping(target = "id", source = "equipmentId")
+    @Mapping(target = "mainImageId", source = "mainImage.id")
+    @Mapping(target = "imageIds", expression = "java(equipment.getImages().stream().map(image -> image.getId())" +
+            ".collect(java.util.stream.Collectors.toList()))")
     EquipmentDto toEquipmentDto(Equipment equipment);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

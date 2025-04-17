@@ -21,4 +21,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
     @Query("SELECT e FROM Equipment e LEFT JOIN FETCH e.mainImage " +
             "LEFT JOIN FETCH e.images WHERE e.equipmentId = :equipmentId")
     Optional<Equipment> findEquipmentById(@Param("equipmentId") Long equipmentId);
+
+    @Query("SELECT new com.e2rent.equipment.dto.EquipmentSummaryDto(e.equipmentId, e.name, " +
+            "CASE WHEN e.mainImage IS NOT NULL THEN e.mainImage.id ELSE NULL END) " +
+            "FROM Equipment e WHERE e.userId = :userId")
+    Page<EquipmentSummaryDto> findAllByUserId(@Param("userId") Long userId, Pageable pageable);
 }

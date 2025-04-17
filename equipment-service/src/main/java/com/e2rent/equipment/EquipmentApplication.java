@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @OpenAPIDefinition(
@@ -29,6 +30,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 				url = "https://www.project-domain/swagger-ui/index.html"
 		)
 )
+@EnableFeignClients(basePackages = "com.e2rent.equipment.service.client")
 public class EquipmentApplication {
 
 	public static void main(String[] args) {

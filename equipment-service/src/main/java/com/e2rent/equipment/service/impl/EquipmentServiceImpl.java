@@ -11,9 +11,11 @@ import com.e2rent.equipment.mapper.EquipmentMapper;
 import com.e2rent.equipment.repository.EquipmentRepository;
 import com.e2rent.equipment.service.IEquipmentService;
 import com.e2rent.equipment.service.ImageService;
+import com.e2rent.equipment.service.client.UsersFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,14 +28,15 @@ import java.util.List;
 public class EquipmentServiceImpl implements IEquipmentService {
 
     private final EquipmentRepository equipmentRepository;
-
     private final ImageService imageService;
-
+    private final UsersFeignClient usersFeignClient;
     private static final int MAX_IMAGE_LIMIT = 5;
 
     @Override
     @Transactional
-    public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file) {
+    public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file, String authorizationToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+        equipmentDto.setUserId(currentUserId);
         Equipment equipment = EquipmentMapper.INSTANCE.toEquipment(equipmentDto);
         equipment.setStatus(EquipmentStatus.ACTIVE);
         Equipment savedEquipment = equipmentRepository.save(equipment);
@@ -47,22 +50,23 @@ public class EquipmentServiceImpl implements IEquipmentService {
     @Override
     public EquipmentDto fetchEquipment(Long equipmentId) {
         var equipment = equipmentRepository.findEquipmentById(equipmentId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
 
         return EquipmentMapper.INSTANCE.toEquipmentDto(equipment);
     }
 
     @Override
     @Transactional
-    public void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, MultipartFile file) {
+    public void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, String authorizationToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+
+        if (!equipment.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
+        }
 
         EquipmentMapper.INSTANCE.updateEquipmentFromDto(equipmentDto, equipment);
-
-        uploadMainImage(file, equipment);
     }
 
     @Override
@@ -80,11 +84,21 @@ public class EquipmentServiceImpl implements IEquipmentService {
     }
 
     @Override
+    public Page<EquipmentSummaryDto> findEquipmentsByUser(String authorizationToken, Pageable pageable) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+        return equipmentRepository.findAllByUserId(currentUserId, pageable);
+    }
+
+    @Override
     @Transactional
-    public void uploadMainImage(Long equipmentId, MultipartFile file) {
+    public void uploadMainImage(Long equipmentId, MultipartFile file, String authorizationToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+
+        if (!equipment.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
+        }
 
         uploadMainImage(file, equipment);
     }
@@ -101,17 +115,28 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void uploadImages(Long equipmentId, List<MultipartFile> files) {
-        files.forEach(image -> addImageToEquipment(equipmentId, image));
+    public void uploadImages(Long equipmentId, List<MultipartFile> files, String authorizationToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+        files.forEach(image -> addImageToEquipment(equipmentId, image, currentUserId));
     }
 
-    private void addImageToEquipment(Long equipmentId, MultipartFile image) {
+    @Override
+    public byte[] downloadImage(Long imageId) {
+        return imageService.downloadImage(imageId);
+    }
+
+    private void addImageToEquipment(Long equipmentId, MultipartFile image, Long currentUserId) {
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
 
+        // Перевірка на власника
+        if (!equipment.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
+        }
+
         if (equipment.getImages().size() >= MAX_IMAGE_LIMIT) {
-            throw new ImageLimitExceededException("Reached maximum limit (" + MAX_IMAGE_LIMIT + ")" +
-                    " of images per one equipment.");
+            throw new ImageLimitExceededException("Досягнуто ліміт (" + MAX_IMAGE_LIMIT
+                    + ") зображень для одного обладнання.");
         }
 
         if (image != null && !image.isEmpty()) {

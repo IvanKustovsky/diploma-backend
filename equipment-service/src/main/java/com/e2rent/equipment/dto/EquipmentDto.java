@@ -1,6 +1,8 @@
 package com.e2rent.equipment.dto;
 
+import com.e2rent.equipment.enums.EquipmentCategory;
 import com.e2rent.equipment.enums.EquipmentCondition;
+import com.e2rent.equipment.enums.EquipmentSubcategory;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
@@ -17,6 +19,10 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 public class EquipmentDto {
 
+    @Schema(description = "ID of the equipment", example = "1")
+    @Positive(message = "Equipment id must be positive number")
+    private Long id;
+
     @Schema(description = "Name of the equipment", example = "Diesel generator")
     @NotEmpty(message = "Name cannot be null or empty")
     @Size(max = 255, message = "Name must be less than 255 characters")
@@ -27,10 +33,15 @@ public class EquipmentDto {
     @Size(max = 255, message = "Description must be less than 255 characters")
     private String description;
 
-    @Schema(description = "Category of the equipment", example = "Tools")
-    @NotEmpty(message = "Category cannot be null or empty")
-    @Size(max = 255, message = "Category must be less than 255 characters")
-    private String category; // TODO: Maybe change to enum
+    @Schema(description = "Category of the equipment", example = "TOOLS")
+    @NotNull(message = "Category cannot be null")
+    @Enumerated(EnumType.STRING)
+    private EquipmentCategory category;
+
+    @Schema(description = "Subcategory of the equipment", example = "WELDING_MACHINE")
+    @NotNull(message = "Subcategory cannot be null")
+    @Enumerated(EnumType.STRING)
+    private EquipmentSubcategory subcategory;
 
     @Schema(description = "Price of the equipment", example = "150.00")
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
@@ -45,10 +56,10 @@ public class EquipmentDto {
     @Positive(message = "User ID must be greater than zero")
     private Long userId;
 
-    @Schema(description = "Main image URL of the equipment", example = "https://example.com/main_image.jpg")
-    private String mainImageUrl;
+    @Schema(description = "Main image ID of the equipment", example = "1")
+    private Long mainImageId;
 
-    @Schema(description = "List of image URLs of the equipment")
-    private List<String> imageUrls = new ArrayList<>();
+    @Schema(description = "List of image IDs of the equipment")
+    private List<Long> imageIds = new ArrayList<>();
 }
 

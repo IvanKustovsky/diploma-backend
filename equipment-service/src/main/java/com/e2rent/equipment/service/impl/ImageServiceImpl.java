@@ -2,7 +2,7 @@ package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
-import com.e2rent.equipment.exception.ImageUploadException;
+import com.e2rent.equipment.exception.ImageProcessingException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.ImageRepository;
 import com.e2rent.equipment.service.ImageService;
@@ -34,8 +34,9 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     public Image uploadImage(MultipartFile imageFile, Equipment equipment) {
         String contentType = imageFile.getContentType();
+
         if (contentType == null || !ALLOWED_IMAGE_TYPES.contains(contentType)) {
-            throw new ImageUploadException("Unsupported image type: " + contentType);
+            throw new ImageProcessingException("Unsupported image type: " + contentType);
         }
 
         try {
@@ -47,16 +48,20 @@ public class ImageServiceImpl implements ImageService {
                     .build();
             return imageRepository.save(imageToSave);
         } catch (IOException e) {
-            throw new ImageUploadException("Failed to process image file", e);
+            throw new ImageProcessingException("Failed to process image file", e);
         }
     }
 
     @Override
     @Transactional
-    public byte[] downloadImage(Long id) throws IOException, DataFormatException {
+    public byte[] downloadImage(Long id) {
         Image dbImage = imageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image", "id", String.valueOf(id)));
-        return ImageUtils.decompressImage(dbImage.getImageData());
+        try {
+            return ImageUtils.decompressImage(dbImage.getImageData());
+        } catch (DataFormatException | IOException exception) {
+            throw new ImageProcessingException("Error downloading an image", exception);
+        }
     }
 
     @Override

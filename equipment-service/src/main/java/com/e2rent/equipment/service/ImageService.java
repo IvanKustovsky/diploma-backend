@@ -11,7 +11,7 @@ public interface ImageService {
 
     Image uploadImage(MultipartFile imageFile, Equipment equipment);
 
-    byte[] downloadImage(Long id) throws IOException, DataFormatException;
+    byte[] downloadImage(Long id);
 
     void deleteImage(Long id);
 }

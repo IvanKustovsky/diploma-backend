@@ -1,7 +1,9 @@
 package com.e2rent.equipment.entity;
 
+import com.e2rent.equipment.enums.EquipmentCategory;
 import com.e2rent.equipment.enums.EquipmentCondition;
 import com.e2rent.equipment.enums.EquipmentStatus;
+import com.e2rent.equipment.enums.EquipmentSubcategory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,8 +32,13 @@ public class Equipment extends BaseEntity {
     @Column
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    private EquipmentCategory category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EquipmentSubcategory subcategory;
 
     @Column(nullable = false)
     private BigDecimal price;
