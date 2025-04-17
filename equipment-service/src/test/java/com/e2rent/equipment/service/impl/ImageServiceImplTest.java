@@ -2,7 +2,7 @@ package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
-import com.e2rent.equipment.exception.ImageUploadException;
+import com.e2rent.equipment.exception.ImageProcessingException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.ImageRepository;
 import com.e2rent.equipment.util.ImageUtils;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +66,7 @@ class ImageServiceImplTest {
 
         // when, then
         assertThatThrownBy(() -> imageServiceImpl.uploadImage(imageFile, equipment))
-                .isInstanceOf(ImageUploadException.class)
+                .isInstanceOf(ImageProcessingException.class)
                 .hasMessageContaining("Unsupported image type");
 
         verify(imageRepository, never()).save(any(Image.class));
@@ -84,14 +83,14 @@ class ImageServiceImplTest {
 
         // when, then
         assertThatThrownBy(() -> imageServiceImpl.uploadImage(imageFile, equipment))
-                .isInstanceOf(ImageUploadException.class)
+                .isInstanceOf(ImageProcessingException.class)
                 .hasMessageContaining("Failed to process image file");
 
         verify(imageRepository, never()).save(any(Image.class));
     }
 
     @Test
-    void downloadImageSuccess() throws IOException, DataFormatException {
+    void downloadImageSuccess() throws IOException {
         // given
         Long imageId = 1L;
         Image dbImage = mock(Image.class);

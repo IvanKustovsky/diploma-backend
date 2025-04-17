@@ -51,7 +51,7 @@ public class Equipment extends BaseEntity {
     @Column(nullable = false)
     private EquipmentStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "main_image_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "fk_equipment_main_image_id"))
     private Image mainImage;
@@ -63,7 +63,12 @@ public class Equipment extends BaseEntity {
     private Long userId;
 
     public void addImage(Image image) {
-        image.setEquipment(this);
-        images.add(image);
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        if (image != null) {
+            this.images.add(image);
+            image.setEquipment(this);
+        }
     }
 }

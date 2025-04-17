@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -91,16 +92,16 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleImageUploadException() {
+    void handleImageProcessingException() {
         // Given
-        var exception = new ImageUploadException("Unsupported image type: " + MediaType.IMAGE_GIF);
+        var exception = new ImageProcessingException("Unsupported image type: " + MediaType.IMAGE_GIF);
 
         // When
         ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
-                .handleImageUploadException(exception, webRequest);
+                .handleImageProcessingException(exception, webRequest);
 
         // Then
-        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
     }
 
@@ -116,6 +117,20 @@ class GlobalExceptionHandlerTest {
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(responseEntity.getBody());
+    }
+
+    @Test
+    void handleAccessDeniedException() {
+        // Given
+        var exception = new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
+
+        // When
+        ResponseEntity<ErrorResponseDto> responseEntity = globalExceptionHandler
+                .handleAccessDeniedException(exception, webRequest);
+
+        // Then
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
     }
 }

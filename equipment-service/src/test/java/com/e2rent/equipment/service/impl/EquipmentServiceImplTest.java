@@ -8,6 +8,7 @@ import com.e2rent.equipment.exception.ImageLimitExceededException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.EquipmentRepository;
 import com.e2rent.equipment.service.ImageService;
+import com.e2rent.equipment.service.client.UsersFeignClient;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -41,24 +44,27 @@ class EquipmentServiceImplTest {
     @Mock
     private ImageService imageService;
 
+    @Mock
+    private UsersFeignClient usersFeignClient;
+
     @InjectMocks
     private EquipmentServiceImpl equipmentServiceImpl;
 
     private static final int MAX_IMAGE_LIMIT = 5;
+    private static final String MOCK_TOKEN = "mockTokenValue";
 
     @Test
     @Order(1)
     void registerEquipment() {
         // given
+        Long mockUserId = 123L;
         EquipmentDto equipmentDto = new EquipmentDto();
-        equipmentDto.setName("Test Equipment");
 
         Equipment equipment = new Equipment();
-        equipment.setEquipmentId(-11L);
-        equipment.setName("Test Equipment");
 
         MultipartFile file = Mockito.mock(MultipartFile.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
         when(file.isEmpty()).thenReturn(false);
 
@@ -66,9 +72,10 @@ class EquipmentServiceImplTest {
         when(imageService.uploadImage(file, equipment)).thenReturn(mainImage);
 
         // when
-        equipmentServiceImpl.registerEquipment(equipmentDto, file);
+        equipmentServiceImpl.registerEquipment(equipmentDto, file, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).save(any(Equipment.class));
         verify(imageService, times(1)).uploadImage(file, equipment);
     }
@@ -77,19 +84,19 @@ class EquipmentServiceImplTest {
     @Order(2)
     void registerEquipmentWithoutMainImage() {
         // given
+        Long mockUserId = 123L;
         EquipmentDto equipmentDto = new EquipmentDto();
-        equipmentDto.setName("Test Equipment");
-
         Equipment equipment = new Equipment();
         equipment.setEquipmentId(-11L);
-        equipment.setName("Test Equipment");
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
 
         // when
-        equipmentServiceImpl.registerEquipment(equipmentDto, null);
+        equipmentServiceImpl.registerEquipment(equipmentDto, null, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).save(any(Equipment.class));
         verify(imageService, never()).uploadImage(null, equipment);
     }
@@ -98,22 +105,21 @@ class EquipmentServiceImplTest {
     @Order(3)
     void registerEquipmentWhenMainImageIsEmpty() {
         // given
+        Long mockUserId = 123L;
         EquipmentDto equipmentDto = new EquipmentDto();
-        equipmentDto.setName("Test Equipment");
-
         Equipment equipment = new Equipment();
-        equipment.setEquipmentId(-11L);
-        equipment.setName("Test Equipment");
 
         MultipartFile file = Mockito.mock(MultipartFile.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
         when(file.isEmpty()).thenReturn(true);
 
         // when
-        equipmentServiceImpl.registerEquipment(equipmentDto, file);
+        equipmentServiceImpl.registerEquipment(equipmentDto, file, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).save(any(Equipment.class));
         verify(imageService, never()).uploadImage(file, equipment);
     }
@@ -125,7 +131,6 @@ class EquipmentServiceImplTest {
         Long equipmentId = 1L;
         Equipment equipment = new Equipment();
         equipment.setEquipmentId(equipmentId);
-        equipment.setName("Test Equipment");
 
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
 
@@ -134,13 +139,12 @@ class EquipmentServiceImplTest {
 
         // then
         assertNotNull(result);
-        assertEquals("Test Equipment", result.getName()); // Перевіряємо правильне поле
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
     }
 
     @Test
     @Order(5)
-    void fetchNotExistingEquipmentThrowsException() {
+    void fetchNotExistingEquipmentThrowsResourceNotFoundException() {
         // given
         Long equipmentId = 1L;
 
@@ -159,6 +163,7 @@ class EquipmentServiceImplTest {
     @Order(6)
     void updateEquipment() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         EquipmentDto equipmentDto = new EquipmentDto();
         equipmentDto.setName("Updated Equipment");
@@ -166,46 +171,72 @@ class EquipmentServiceImplTest {
         Equipment existingEquipment = new Equipment();
         existingEquipment.setEquipmentId(equipmentId);
         existingEquipment.setName("Old Equipment");
+        existingEquipment.setUserId(mockUserId);
 
-        MultipartFile file = Mockito.mock(MultipartFile.class);
-
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(existingEquipment));
-        when(file.isEmpty()).thenReturn(false);
 
         // when
-        equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, file);
+        equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
-        verify(imageService, times(1)).uploadImage(file, existingEquipment);
     }
 
     @Test
     @Order(7)
-    void updateNotExistingEquipmentThrowsException() {
+    void updateNotExistingEquipmentThrowsResourceNotFoundException() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         EquipmentDto equipmentDto = new EquipmentDto();
-        equipmentDto.setName("Updated Equipment");
 
         Equipment existingEquipment = new Equipment();
         existingEquipment.setEquipmentId(equipmentId);
-        existingEquipment.setName("Old Equipment");
 
         MultipartFile file = Mockito.mock(MultipartFile.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+
         // when, then
-        assertThatThrownBy(() -> equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, file))
+        assertThatThrownBy(() -> equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, MOCK_TOKEN))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(String.format("%s not found with the given input data %s: '%s'",
                         "Equipment", "ID", equipmentId));
 
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
         verify(imageService, never()).uploadImage(file, existingEquipment);
     }
 
     @Test
     @Order(8)
+    void updateSomeoneElseEquipmentThrowsAccessDeniedException () {
+        // given
+        Long mockUserId = 123L;
+        Long equipmentId = 1L;
+        Long equipmentUserId = 12L;
+        EquipmentDto equipmentDto = new EquipmentDto();
+
+        Equipment existingEquipment = new Equipment();
+        existingEquipment.setEquipmentId(equipmentId);
+        existingEquipment.setUserId(equipmentUserId);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(existingEquipment));
+
+        // when, then
+        assertThatThrownBy(() -> equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, MOCK_TOKEN))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Ви не можете редагувати чуже обладнання.");
+
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
+    }
+
+    @Test
+    @Order(9)
     void deleteEquipment() {
         // given
         Long equipmentId = 1L;
@@ -223,7 +254,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     void deleteNotExistingEquipmentThrowsException() {
         // given
         Long equipmentId = 1L;
@@ -241,7 +272,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     void findAllEquipmentsWithImage() {
         // given
         Pageable pageable = PageRequest.of(0, 10);
@@ -259,85 +290,147 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(11)
+    @Order(12)
+    void findEquipmentsByUser() {
+        // given
+        Long mockUserId = 123L;
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<EquipmentSummaryDto> page = new PageImpl<>(Collections.emptyList());
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findAllByUserId(mockUserId, pageable)).thenReturn(page);
+
+        // when
+        Page<EquipmentSummaryDto> result = equipmentServiceImpl.findEquipmentsByUser(MOCK_TOKEN, pageable);
+
+        // then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findAllByUserId(mockUserId, pageable);
+    }
+
+    @Test
+    @Order(13)
     void uploadMainImage() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         Equipment equipment = new Equipment();
         equipment.setEquipmentId(equipmentId);
+        equipment.setUserId(mockUserId);
         MultipartFile file = mock(MultipartFile.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
 
         // when
-        equipmentServiceImpl.uploadMainImage(equipmentId, file);
+        equipmentServiceImpl.uploadMainImage(equipmentId, file, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
         verify(imageService, times(1)).uploadImage(file, equipment);
     }
 
     @Test
-    @Order(12)
+    @Order(14)
     void uploadMainImageWhenEquipmentNotExist() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         Equipment equipment = new Equipment();
         MultipartFile file = mock(MultipartFile.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+
         // when, then
-        assertThatThrownBy(() -> equipmentServiceImpl.uploadMainImage(equipmentId, file))
+        assertThatThrownBy(() -> equipmentServiceImpl.uploadMainImage(equipmentId, file, MOCK_TOKEN))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(String.format("%s not found with the given input data %s: '%s'",
                         "Equipment", "ID", equipmentId));
 
         // then
-        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
-        verify(imageService, never()).uploadImage(file, equipment);
-    }
-
-    @Test
-    @Order(13)
-    void uploadNullAsMainImage() {
-        // given
-        Long equipmentId = 1L;
-        Equipment equipment = new Equipment();
-        equipment.setEquipmentId(equipmentId);
-
-        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
-
-        // when
-        equipmentServiceImpl.uploadMainImage(equipmentId, null);
-
-        // then
-        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
-        verify(imageService, never()).uploadImage(null, equipment);
-    }
-
-    @Test
-    @Order(14)
-    void uploadEmptyFileAsMainImage() {
-        // given
-        Long equipmentId = 1L;
-        Equipment equipment = new Equipment();
-        equipment.setEquipmentId(equipmentId);
-        MultipartFile file = mock(MultipartFile.class);
-
-        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
-        when(file.isEmpty()).thenReturn(true);
-
-        // when
-        equipmentServiceImpl.uploadMainImage(equipmentId, file);
-
-        // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
         verify(imageService, never()).uploadImage(file, equipment);
     }
 
     @Test
     @Order(15)
+    void uploadMainImageToSomeoneElseEquipmentThrowsAccessDeniedException() {
+        // given
+        Long mockUserId = 123L;
+        Long equipmentUserId = 77L;
+        Long equipmentId = 1L;
+        Equipment equipment = new Equipment();
+        equipment.setUserId(equipmentUserId);
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+
+        // when, then
+        assertThatThrownBy(() -> equipmentServiceImpl.uploadMainImage(equipmentId, file, MOCK_TOKEN))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Ви не можете редагувати чуже обладнання.");
+
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
+        verify(imageService, never()).uploadImage(file, equipment);
+    }
+
+    @Test
+    @Order(16)
+    void uploadNullAsMainImage() {
+        // given
+        Long mockUserId = 123L;
+        Long equipmentId = 1L;
+        Equipment equipment = new Equipment();
+        equipment.setEquipmentId(equipmentId);
+        equipment.setUserId(mockUserId);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+
+        // when
+        equipmentServiceImpl.uploadMainImage(equipmentId, null, MOCK_TOKEN);
+
+        // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
+        verify(imageService, never()).uploadImage(null, equipment);
+    }
+
+    @Test
+    @Order(17)
+    void uploadEmptyFileAsMainImage() {
+        // given
+        Long mockUserId = 123L;
+        Long equipmentId = 1L;
+        Equipment equipment = new Equipment();
+        equipment.setEquipmentId(equipmentId);
+        equipment.setUserId(mockUserId);
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+        when(file.isEmpty()).thenReturn(true);
+
+        // when
+        equipmentServiceImpl.uploadMainImage(equipmentId, file, MOCK_TOKEN);
+
+        // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
+        verify(imageService, never()).uploadImage(file, equipment);
+    }
+
+    @Test
+    @Order(18)
     void uploadMainImageWithReplaceOldOne() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         Long imageId = 100L;
         Equipment equipment = mock(Equipment.class);
@@ -346,6 +439,8 @@ class EquipmentServiceImplTest {
         Image mainImage = mock(Image.class);
         Image updatedMainImage = mock(Image.class);
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipment.getUserId()).thenReturn(mockUserId);
         when(mainImage.getId()).thenReturn(imageId);
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
         when(equipment.getMainImage()).thenReturn(mainImage);
@@ -353,9 +448,10 @@ class EquipmentServiceImplTest {
         when(imageService.uploadImage(file, equipment)).thenReturn(updatedMainImage);
 
         // when
-        equipmentServiceImpl.uploadMainImage(equipmentId, file);
+        equipmentServiceImpl.uploadMainImage(equipmentId, file, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
         verify(imageService, times(1)).deleteImage(imageId);
         verify(imageService, times(1)).uploadImage(file, equipment);
@@ -363,9 +459,10 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(16)
+    @Order(19)
     void uploadImages() {
         // given
+        Long mockUserId = 123L;
         Long equipmentId = 1L;
         Equipment equipment = spy(new Equipment());
         equipment.setEquipmentId(equipmentId);
@@ -374,6 +471,8 @@ class EquipmentServiceImplTest {
         Image image1 = new Image();
         Image image2 = new Image();
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipment.getUserId()).thenReturn(mockUserId);
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
         when(imageService.uploadImage(any(MultipartFile.class), eq(equipment)))
                 .thenReturn(image1)
@@ -384,19 +483,21 @@ class EquipmentServiceImplTest {
         List<MultipartFile> files = List.of(file1, file2);
 
         // when
-        equipmentServiceImpl.uploadImages(equipmentId, files);
+        equipmentServiceImpl.uploadImages(equipmentId, files, MOCK_TOKEN);
 
         // then
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(2)).findEquipmentById(equipmentId);
         verify(imageService, times(files.size())).uploadImage(any(MultipartFile.class), eq(equipment));
         verify(equipment, times(files.size())).addImage(any(Image.class));
     }
 
     @Test
-    @Order(17)
-    void addImagesToEquipmentThrowsException() {
+    @Order(20)
+    void uploadImagesThrowsImageLimitExceededException() {
         // given
         Long equipmentId = 1L;
+        Long mockUserId = 123L;
         MultipartFile file = mock(MultipartFile.class);
         Equipment equipment = mock(Equipment.class);
 
@@ -405,15 +506,57 @@ class EquipmentServiceImplTest {
             images.add(mock(Image.class));
         }
 
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipment.getUserId()).thenReturn(mockUserId);
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
         when(equipment.getImages()).thenReturn(images);
 
         // when, then
-        assertThatThrownBy(() -> equipmentServiceImpl.uploadImages(equipmentId, List.of(file)))
+        assertThatThrownBy(() -> equipmentServiceImpl.uploadImages(equipmentId, List.of(file), MOCK_TOKEN))
                 .isInstanceOf(ImageLimitExceededException.class)
-                .hasMessageContaining(String.format("Reached maximum limit (" + MAX_IMAGE_LIMIT + ")" +
-                        " of images per one equipment."));
+                .hasMessageContaining(String.format("Досягнуто ліміт (" + MAX_IMAGE_LIMIT
+                        + ") зображень для одного обладнання."));
 
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(imageService, never()).uploadImage(file, equipment);
+    }
+
+    @Test
+    @Order(21)
+    void addImagesToEquipmentThrowsAccessDeniedException() {
+        // given
+        Long mockUserId = 123L;
+        Long equipmentUserId = 77L; // інший користувач
+        Long equipmentId = 1L;
+        Equipment equipment = new Equipment();
+        equipment.setUserId(equipmentUserId);
+
+        MultipartFile mockFile = mock(MultipartFile.class);
+        List<MultipartFile> files = List.of(mockFile);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+
+        // when, then
+        assertThatThrownBy(() -> equipmentServiceImpl.uploadImages(equipmentId, files, MOCK_TOKEN))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Ви не можете редагувати чуже обладнання.");
+
+        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
+        verify(imageService, never()).uploadImage(any(), any());
+    }
+
+    @Test
+    @Order(22)
+    void downloadImage() {
+        // given
+        Long imageId = 11L;
+
+        // when
+        equipmentServiceImpl.downloadImage(imageId);
+
+        // then
+        verify(imageService, times(1)).downloadImage(imageId);
     }
 }

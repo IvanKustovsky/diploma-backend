@@ -3,8 +3,10 @@ package com.e2rent.equipment.repository;
 import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
+import com.e2rent.equipment.enums.EquipmentCategory;
 import com.e2rent.equipment.enums.EquipmentCondition;
 import com.e2rent.equipment.enums.EquipmentStatus;
+import com.e2rent.equipment.enums.EquipmentSubcategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -34,7 +36,8 @@ class EquipmentRepositoryTest {
         // given
         Equipment equipmentWithoutMainImage = new Equipment();
         equipmentWithoutMainImage.setName("Equipment 1");
-        equipmentWithoutMainImage.setCategory("Tools");
+        equipmentWithoutMainImage.setCategory(EquipmentCategory.BACKUP_POWER);
+        equipmentWithoutMainImage.setSubcategory(EquipmentSubcategory.INVERTER_GENERATOR);
         equipmentWithoutMainImage.setPrice(BigDecimal.valueOf(100.00));
         equipmentWithoutMainImage.setCondition(EquipmentCondition.NEW);
         equipmentWithoutMainImage.setUserId(-12L);
@@ -42,7 +45,8 @@ class EquipmentRepositoryTest {
 
         Equipment equipment1 = new Equipment();
         equipment1.setName("Equipment 1");
-        equipment1.setCategory("Tools");
+        equipment1.setCategory(EquipmentCategory.TOOLS);
+        equipment1.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
         equipment1.setPrice(BigDecimal.valueOf(100.00));
         equipment1.setCondition(EquipmentCondition.NEW);
         equipment1.setUserId(-12L);
@@ -50,7 +54,8 @@ class EquipmentRepositoryTest {
 
         Equipment equipment2 = new Equipment();
         equipment2.setName("Equipment 2");
-        equipment2.setCategory("Tools");
+        equipment2.setCategory(EquipmentCategory.TOOLS);
+        equipment2.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
         equipment2.setPrice(BigDecimal.valueOf(200.00));
         equipment2.setCondition(EquipmentCondition.USED);
         equipment2.setUserId(-13L);
@@ -94,7 +99,8 @@ class EquipmentRepositoryTest {
         // given
         Equipment equipment = new Equipment();
         equipment.setName("Equipment");
-        equipment.setCategory("Tools");
+        equipment.setCategory(EquipmentCategory.TOOLS);
+        equipment.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
         equipment.setPrice(BigDecimal.valueOf(150.00));
         equipment.setCondition(EquipmentCondition.NEW);
         equipment.setUserId(-14L);
