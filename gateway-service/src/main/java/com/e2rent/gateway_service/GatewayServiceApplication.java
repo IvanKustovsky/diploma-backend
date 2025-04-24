@@ -20,19 +20,19 @@ public class GatewayServiceApplication {
                 .route(p -> p
                         .path("/e2rent/users/**")
                         .filters(f -> f
-                                .rewritePath("/e2rent/users/(?<segment>.*)", "/users/${segment}")
+                                .rewritePath("/e2rent/(?<segment>.*)", "/${segment}")
                                 .filter(authFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://USERS"))
                 .route(p -> p
-                        .path("/e2rent/equipments/**")
+                        .path("/e2rent/equipments/**", "/e2rent/advertisement/**")
                         .filters(f -> f
-                                .rewritePath("/e2rent/equipments/(?<segment>.*)", "/equipments/${segment}")
+                                .rewritePath("/e2rent/(?<segment>.*)", "/${segment}")
                                 .filter(authFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://EQUIPMENTS"))
                 .route(p -> p
                         .path("/e2rent/auth/**")
                         .filters(f -> f
-                                .rewritePath("/e2rent/auth/(?<segment>.*)", "/auth/${segment}"))
+                                .rewritePath("/e2rent/(?<segment>.*)", "/${segment}"))
                         .uri("lb://AUTH-SERVICE"))
                 .build();
     }

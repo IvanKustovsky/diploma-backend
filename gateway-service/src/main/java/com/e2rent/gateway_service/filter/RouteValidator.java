@@ -20,6 +20,6 @@ public class RouteValidator {
     public void init() {
         isSecured = request -> customProps.getEndpoints()
                 .stream()
-                .noneMatch(uri -> request.getURI().getPath().contains(uri));
+                .noneMatch(pattern -> request.getURI().getPath().matches(pattern));
     }
 }
