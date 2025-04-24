@@ -1,9 +1,7 @@
 package com.e2rent.equipment.enums;
 
 public enum EquipmentStatus {
-    ACTIVE,
+    AVAILABLE,
     RENTED,
-    SOLD,
-    IN_MAINTENANCE,
-    RESERVED
+    INACTIVE
 }

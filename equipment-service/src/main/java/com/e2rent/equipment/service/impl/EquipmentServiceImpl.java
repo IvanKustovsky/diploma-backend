@@ -9,6 +9,7 @@ import com.e2rent.equipment.exception.ImageLimitExceededException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.mapper.EquipmentMapper;
 import com.e2rent.equipment.repository.EquipmentRepository;
+import com.e2rent.equipment.service.IAdvertisementService;
 import com.e2rent.equipment.service.IEquipmentService;
 import com.e2rent.equipment.service.ImageService;
 import com.e2rent.equipment.service.client.UsersFeignClient;
@@ -29,6 +30,7 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     private final EquipmentRepository equipmentRepository;
     private final ImageService imageService;
+    private final IAdvertisementService advertisementService;
     private final UsersFeignClient usersFeignClient;
     private static final int MAX_IMAGE_LIMIT = 5;
 
@@ -38,8 +40,10 @@ public class EquipmentServiceImpl implements IEquipmentService {
         var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
         equipmentDto.setUserId(currentUserId);
         Equipment equipment = EquipmentMapper.INSTANCE.toEquipment(equipmentDto);
-        equipment.setStatus(EquipmentStatus.ACTIVE);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
         Equipment savedEquipment = equipmentRepository.save(equipment);
+
+        advertisementService.createAdvertisement(savedEquipment);
 
         if (file != null && !file.isEmpty()) {
             Image mainImage = imageService.uploadImage(file, savedEquipment);
@@ -67,6 +71,8 @@ public class EquipmentServiceImpl implements IEquipmentService {
         }
 
         EquipmentMapper.INSTANCE.updateEquipmentFromDto(equipmentDto, equipment);
+
+        advertisementService.markAsUpdated(equipmentId);
     }
 
     @Override
@@ -99,7 +105,7 @@ public class EquipmentServiceImpl implements IEquipmentService {
         if (!equipment.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
         }
-
+        advertisementService.markAsUpdated(equipmentId);
         uploadMainImage(file, equipment);
     }
 
@@ -118,6 +124,7 @@ public class EquipmentServiceImpl implements IEquipmentService {
     public void uploadImages(Long equipmentId, List<MultipartFile> files, String authorizationToken) {
         var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
         files.forEach(image -> addImageToEquipment(equipmentId, image, currentUserId));
+        advertisementService.markAsUpdated(equipmentId);
     }
 
     @Override

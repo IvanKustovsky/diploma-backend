@@ -1,10 +1,7 @@
 package com.e2rent.equipment.controller;
 
 import com.e2rent.equipment.constants.EquipmentConstants;
-import com.e2rent.equipment.dto.EquipmentDto;
-import com.e2rent.equipment.dto.EquipmentSummaryDto;
-import com.e2rent.equipment.dto.ErrorResponseDto;
-import com.e2rent.equipment.dto.ResponseDto;
+import com.e2rent.equipment.dto.*;
 import com.e2rent.equipment.enums.EquipmentCategory;
 import com.e2rent.equipment.enums.EquipmentSubcategory;
 import com.e2rent.equipment.service.ICategoryService;
