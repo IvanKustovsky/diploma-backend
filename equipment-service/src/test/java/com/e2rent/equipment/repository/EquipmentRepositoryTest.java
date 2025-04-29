@@ -41,7 +41,7 @@ class EquipmentRepositoryTest {
         equipmentWithoutMainImage.setPrice(BigDecimal.valueOf(100.00));
         equipmentWithoutMainImage.setCondition(EquipmentCondition.NEW);
         equipmentWithoutMainImage.setUserId(-12L);
-        equipmentWithoutMainImage.setStatus(EquipmentStatus.ACTIVE);
+        equipmentWithoutMainImage.setStatus(EquipmentStatus.AVAILABLE);
 
         Equipment equipment1 = new Equipment();
         equipment1.setName("Equipment 1");
@@ -50,7 +50,7 @@ class EquipmentRepositoryTest {
         equipment1.setPrice(BigDecimal.valueOf(100.00));
         equipment1.setCondition(EquipmentCondition.NEW);
         equipment1.setUserId(-12L);
-        equipment1.setStatus(EquipmentStatus.ACTIVE);
+        equipment1.setStatus(EquipmentStatus.AVAILABLE);
 
         Equipment equipment2 = new Equipment();
         equipment2.setName("Equipment 2");
@@ -59,7 +59,7 @@ class EquipmentRepositoryTest {
         equipment2.setPrice(BigDecimal.valueOf(200.00));
         equipment2.setCondition(EquipmentCondition.USED);
         equipment2.setUserId(-13L);
-        equipment2.setStatus(EquipmentStatus.ACTIVE);
+        equipment2.setStatus(EquipmentStatus.AVAILABLE);
 
         equipmentRepository.save(equipmentWithoutMainImage);
         equipmentRepository.save(equipment1);
@@ -104,7 +104,7 @@ class EquipmentRepositoryTest {
         equipment.setPrice(BigDecimal.valueOf(150.00));
         equipment.setCondition(EquipmentCondition.NEW);
         equipment.setUserId(-14L);
-        equipment.setStatus(EquipmentStatus.ACTIVE);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
 
         equipmentRepository.save(equipment);
 

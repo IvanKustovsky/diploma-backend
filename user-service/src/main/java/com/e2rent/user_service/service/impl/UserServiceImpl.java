@@ -15,7 +15,6 @@ import com.e2rent.user_service.service.TokenService;
 import com.e2rent.user_service.service.client.AuthFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +43,7 @@ public class UserServiceImpl implements IUserService {
         UserEntity user = UserMapper.INSTANCE.toEntity(registerUserDto);
         user.setCompany(company);
 
-        // Використовуємо Feign клієнт для реєстрації користувача в Keycloak
-        var response = authFeignClient.registerUser(registerUserDto);
-        log.info("Response {}: ", response);
-        if (response.getStatusCode().value() != HttpStatus.CREATED.value()) {
-            throw new RuntimeException("Failed to register user in auth-service");
-        }
+        authFeignClient.registerUser(registerUserDto);
 
         userRepository.save(user);
     }

@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("User Service Test Class")
-class UserEntityServiceImplTest {
+class UserServiceImplTest {
 
     private static final String CURRENT_EMAIL = "current@example.com";
     private static final String MOBILE_NUMBER = "987654321";
@@ -288,5 +288,57 @@ class UserEntityServiceImplTest {
                 .hasMessage("User already registered with provided mobile number");
 
         verify(userRepositoryMock, never()).save(any(UserEntity.class));
+    }
+
+    @Test
+    @DisplayName("Should extract email from token using TokenService")
+    @Order(12)
+    void extractEmailFromTokenSuccess() {
+        // given
+        String expectedEmail = "user@example.com";
+        when(tokenService.extractEmail(AUTHORIZATION_TOKEN)).thenReturn(expectedEmail);
+
+        // when
+        String actualEmail = userServiceImpl.extractEmailFromToken(AUTHORIZATION_TOKEN);
+
+        // then
+        assertEquals(expectedEmail, actualEmail);
+        verify(tokenService, times(1)).extractEmail(AUTHORIZATION_TOKEN);
+    }
+
+    @Test
+    @DisplayName("Should return user ID when user with given email exists")
+    @Order(13)
+    void getUserIdByEmailSuccess() {
+        // given
+        Long expectedUserId = 42L;
+        UserEntity userWithId = UserEntity.builder()
+                .id(expectedUserId)
+                .email(CURRENT_EMAIL)
+                .build();
+
+        when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.of(userWithId));
+
+        // when
+        Long actualUserId = userServiceImpl.getUserIdByEmail(CURRENT_EMAIL);
+
+        // then
+        assertEquals(expectedUserId, actualUserId);
+        verify(userRepositoryMock, times(1)).findByEmail(CURRENT_EMAIL);
+    }
+
+    @Test
+    @DisplayName("Should throw ResourceNotFoundException when user with email not found")
+    @Order(14)
+    void getUserIdByEmailWhenUserNotFound() {
+        // given
+        when(userRepositoryMock.findByEmail(CURRENT_EMAIL)).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> userServiceImpl.getUserIdByEmail(CURRENT_EMAIL))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("User not found with the given input data email: '%s'", CURRENT_EMAIL));
+
+        verify(userRepositoryMock, times(1)).findByEmail(CURRENT_EMAIL);
     }
 }

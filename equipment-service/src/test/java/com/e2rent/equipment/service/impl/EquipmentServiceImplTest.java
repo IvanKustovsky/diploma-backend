@@ -7,6 +7,7 @@ import com.e2rent.equipment.entity.Image;
 import com.e2rent.equipment.exception.ImageLimitExceededException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.EquipmentRepository;
+import com.e2rent.equipment.service.IAdvertisementService;
 import com.e2rent.equipment.service.ImageService;
 import com.e2rent.equipment.service.client.UsersFeignClient;
 import org.junit.jupiter.api.*;
@@ -47,6 +48,9 @@ class EquipmentServiceImplTest {
     @Mock
     private UsersFeignClient usersFeignClient;
 
+    @Mock
+    private IAdvertisementService advertisementService;
+
     @InjectMocks
     private EquipmentServiceImpl equipmentServiceImpl;
 
@@ -66,6 +70,7 @@ class EquipmentServiceImplTest {
 
         when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
+        doNothing().when(advertisementService).createAdvertisement(any(Equipment.class));
         when(file.isEmpty()).thenReturn(false);
 
         Image mainImage = new Image();
@@ -91,6 +96,7 @@ class EquipmentServiceImplTest {
 
         when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
+        doNothing().when(advertisementService).createAdvertisement(any(Equipment.class));
 
         // when
         equipmentServiceImpl.registerEquipment(equipmentDto, null, MOCK_TOKEN);
@@ -113,6 +119,7 @@ class EquipmentServiceImplTest {
 
         when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.save(any(Equipment.class))).thenReturn(equipment);
+        doNothing().when(advertisementService).createAdvertisement(any(Equipment.class));
         when(file.isEmpty()).thenReturn(true);
 
         // when
@@ -175,6 +182,7 @@ class EquipmentServiceImplTest {
 
         when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
         when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(existingEquipment));
+        doNothing().when(advertisementService).markAsUpdated(equipmentId);
 
         // when
         equipmentServiceImpl.updateEquipment(equipmentId, equipmentDto, MOCK_TOKEN);
