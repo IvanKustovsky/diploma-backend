@@ -85,4 +85,13 @@ public class RentalController {
                 .body(new ResponseDto(RentalConstants.STATUS_200, RentalConstants.STATUS_200));
     }
 
+    @PutMapping("/{rentalId}/cancel")
+    public ResponseEntity<ResponseDto> cancelRental(@PathVariable Long rentalId,
+                                                    @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        rentalService.cancelRental(rentalId, authToken);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(RentalConstants.STATUS_200, RentalConstants.STATUS_200));
+    }
+
 }

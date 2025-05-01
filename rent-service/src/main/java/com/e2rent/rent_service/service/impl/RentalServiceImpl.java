@@ -4,6 +4,7 @@ import com.e2rent.rent_service.dto.CreateRentalRequestDto;
 import com.e2rent.rent_service.dto.RentalResponseDto;
 import com.e2rent.rent_service.entity.Rental;
 import com.e2rent.rent_service.enums.RentalStatus;
+import com.e2rent.rent_service.exception.ConflictException;
 import com.e2rent.rent_service.exception.ResourceNotFoundException;
 import com.e2rent.rent_service.mapper.RentalMapper;
 import com.e2rent.rent_service.repository.RentalRepository;
@@ -17,7 +18,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -51,6 +54,7 @@ public class RentalServiceImpl implements IRentalService {
     }
 
     @Override
+    @Transactional
     public RentalResponseDto getRentalById(Long rentalId, String authToken) {
         Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
 
@@ -63,18 +67,34 @@ public class RentalServiceImpl implements IRentalService {
             throw new AccessDeniedException("У вас немає доступу до цієї оренди.");
         }
 
+        updateRentalStatusIfNeeded(rental);
+
         return RentalMapper.INSTANCE.toDto(rental);
     }
 
     @Override
+    @Transactional
     public Page<RentalResponseDto> getMyOutgoingRentals(String authToken, Pageable pageable) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+
+        // Отримуємо ентіті для оновлення статусів
+        List<Rental> rentals = rentalRepository.findAllByRenterId(currentUserId);
+        rentals.forEach(this::updateRentalStatusIfNeeded);
+
+        // Після оновлення — ще раз дістаємо актуальні DTO
         return rentalRepository.findAllByRenterId(currentUserId, pageable);
     }
 
     @Override
+    @Transactional
     public Page<RentalResponseDto> getMyIncomingRentals(String authToken, Pageable pageable) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+
+        // Отримуємо ентіті для оновлення статусів
+        List<Rental> rentals = rentalRepository.findAllByOwnerId(currentUserId);
+        rentals.forEach(this::updateRentalStatusIfNeeded);
+
+        // Після оновлення — повертаємо оновлені DTO
         return rentalRepository.findAllByOwnerId(currentUserId, pageable);
     }
 
@@ -91,7 +111,7 @@ public class RentalServiceImpl implements IRentalService {
         }
 
         if (rental.getStatus() != RentalStatus.PENDING) {
-            throw new IllegalStateException("Можна підтвердити тільки оренду в статусі PENDING.");
+            throw new ConflictException("Можна підтвердити тільки оренду в статусі PENDING.");
         }
 
         rental.setStatus(RentalStatus.APPROVED);
@@ -112,12 +132,56 @@ public class RentalServiceImpl implements IRentalService {
         }
 
         if (rental.getStatus() != RentalStatus.PENDING) {
-            throw new IllegalStateException("Можна відхилити тільки оренду в статусі PENDING.");
+            throw new ConflictException("Можна відхилити тільки оренду в статусі PENDING.");
         }
 
         rental.setStatus(RentalStatus.REJECTED);
         rental.setOwnerResponseAt(LocalDateTime.now());
         rental.setOwnerMessage(rejectionMessage);
         rentalRepository.save(rental);
+    }
+
+    @Override
+    @Transactional
+    public void cancelRental(Long rentalId, String authToken) {
+        Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental", "rentalId", String.valueOf(rentalId)));
+
+        // Перевірка, що поточний користувач — орендар
+        if (!Objects.equals(rental.getRenterId(), currentUserId)) {
+            throw new AccessDeniedException("Лише орендар може скасувати цю оренду.");
+        }
+
+        // Скасування можливе лише у статусі PENDING
+        if (rental.getStatus() != RentalStatus.PENDING) {
+            throw new ConflictException("Оренду можна скасувати лише до підтвердження власником.");
+        }
+
+        rental.setStatus(RentalStatus.CANCELLED);
+        rentalRepository.save(rental);
+    }
+
+    private void updateRentalStatusIfNeeded(Rental rental) {
+        LocalDate today = LocalDate.now();
+        boolean updated = false;
+
+        if (rental.getStatus() == RentalStatus.PENDING && today.isAfter(rental.getStartDate())) {
+            rental.setStatus(RentalStatus.DECLINED_BY_SYSTEM);
+            updated = true;
+        } else if (rental.getStatus() == RentalStatus.APPROVED) {
+            if (today.isAfter(rental.getEndDate())) {
+                rental.setStatus(RentalStatus.COMPLETED);
+                updated = true;
+            } else if (today.isBefore(rental.getEndDate())) {
+                rental.setStatus(RentalStatus.IN_PROGRESS);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            rentalRepository.save(rental);
+        }
     }
 }
