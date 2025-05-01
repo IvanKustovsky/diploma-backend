@@ -10,58 +10,109 @@ import java.util.List;
 
 public interface IEquipmentService {
 
+    // ---------------------------- CREATE ----------------------------
+
     /**
-     * @param equipmentDto - EquipmentDto Object
-     * @param file - Image file
+     * Реєстрація нового обладнання з головним зображенням.
+     *
+     * @param equipmentDto       DTO з даними про обладнання
+     * @param file               файл зображення
+     * @param authorizationToken токен авторизації користувача
      */
     void registerEquipment(EquipmentDto equipmentDto, MultipartFile file, String authorizationToken);
 
+
+    // ---------------------------- READ ----------------------------
+
     /**
-     * @param equipmentId - EquipmentDto Object
+     * Отримати обладнання за його ідентифікатором.
+     *
+     * @param equipmentId ID обладнання
+     * @return DTO з повною інформацією про обладнання
      */
     EquipmentDto fetchEquipment(Long equipmentId);
 
     /**
-     * @param equipmentId - EquipmentDto Object
-     * @param equipmentDto - EquipmentDto Object
-     */
-    void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, String authorizationToken);
-
-    /**
-     * @param equipmentId - EquipmentId Object
-     */
-    void deleteEquipment(Long equipmentId); // TODO
-
-    /**
-     * @return list of all equipments with main image uploaded
-     */
-    Page<EquipmentSummaryDto> findAllEquipmentsWithImage(Pageable pageable);
-
-    /**
-     * Отримати все обладнання, додане конкретним користувачем
+     * Отримати список обладнання, доданого конкретним користувачем.
      *
-     * @param authorizationToken - ID користувача
-     * @param pageable - об'єкт для пагінації
-     * @return сторінка (Page) з оголошеннями користувача у форматі EquipmentSummaryDto
+     * @param authorizationToken токен авторизації користувача
+     * @param pageable           об'єкт пагінації
+     * @return сторінка DTO з короткою інформацією про обладнання
      */
     Page<EquipmentSummaryDto> findEquipmentsByUser(String authorizationToken, Pageable pageable);
 
     /**
-     * @param equipmentId - EquipmentId Object
-     * @param file - Main image file
+     * Отримати зображення за ID.
+     *
+     * @param imageId ID зображення
+     * @return масив байтів зображення
+     */
+    byte[] downloadImage(Long imageId);
+
+    /**
+     * Отримати ID власника обладнання за його ID.
+     *
+     * @param equipmentId ID обладнання
+     * @return ID користувача-власника
+     */
+    Long getOwnerIdByEquipmentId(Long equipmentId);
+
+
+    // ---------------------------- UPDATE ----------------------------
+
+    /**
+     * Оновити інформацію про обладнання.
+     *
+     * @param equipmentId        ID обладнання
+     * @param equipmentDto       DTO з новими даними
+     * @param authorizationToken токен авторизації користувача
+     */
+    void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, String authorizationToken);
+
+    /**
+     * Завантажити головне зображення для обладнання.
+     *
+     * @param equipmentId        ID обладнання
+     * @param file               файл з головним зображенням
+     * @param authorizationToken токен авторизації користувача
      */
     void uploadMainImage(Long equipmentId, MultipartFile file, String authorizationToken);
 
     /**
-     * @param equipmentId - EquipmentId Object
-     * @param files - List of images
+     * Завантажити додаткові зображення для обладнання.
+     *
+     * @param equipmentId        ID обладнання
+     * @param files              список файлів зображень
+     * @param authorizationToken токен авторизації користувача
      */
     void uploadImages(Long equipmentId, List<MultipartFile> files, String authorizationToken);
 
-    /**
-     * @param imageId - ID зображення
-     * @return байти зображення
-     */
-    byte[] downloadImage(Long imageId);
-}
 
+    // ---------------------------- DELETE ----------------------------
+
+    /**
+     * Видалити обладнання за ID.
+     *
+     * @param equipmentId ID обладнання
+     */
+    void deleteEquipment(Long equipmentId); // TODO: реалізація
+
+
+    // ---------------------------- STATUS MANAGEMENT ----------------------------
+
+    /**
+     * Деактивувати обладнання (робить його недоступним для оренди).
+     *
+     * @param equipmentId        ID обладнання
+     * @param authorizationToken токен авторизації користувача
+     */
+    void deactivateEquipmentById(Long equipmentId, String authorizationToken);
+
+    /**
+     * Активувати обладнання (робить його доступним для оренди).
+     *
+     * @param equipmentId        ID обладнання
+     * @param authorizationToken токен авторизації користувача
+     */
+    void activateEquipmentById(Long equipmentId, String authorizationToken);
+}

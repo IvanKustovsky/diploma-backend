@@ -85,11 +85,6 @@ public class EquipmentServiceImpl implements IEquipmentService {
     }
 
     @Override
-    public Page<EquipmentSummaryDto> findAllEquipmentsWithImage(Pageable pageable) {
-        return equipmentRepository.findAllWithMainImage(pageable);
-    }
-
-    @Override
     public Page<EquipmentSummaryDto> findEquipmentsByUser(String authorizationToken, Pageable pageable) {
         var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
         return equipmentRepository.findAllByUserId(currentUserId, pageable);
@@ -130,6 +125,40 @@ public class EquipmentServiceImpl implements IEquipmentService {
     @Override
     public byte[] downloadImage(Long imageId) {
         return imageService.downloadImage(imageId);
+    }
+
+    @Override
+    public Long getOwnerIdByEquipmentId(Long equipmentId) {
+        return equipmentRepository.findOwnerIdByEquipmentId(equipmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
+    }
+
+    @Override
+    @Transactional
+    public void deactivateEquipmentById(Long equipmentId, String authorizationToken) {
+        Equipment equipment = getAuthorizedEquipment(equipmentId, authorizationToken);
+        equipment.setStatus(EquipmentStatus.INACTIVE);
+    }
+
+    @Override
+    @Transactional
+    public void activateEquipmentById(Long equipmentId, String authorizationToken) {
+        Equipment equipment = getAuthorizedEquipment(equipmentId, authorizationToken);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
+    }
+
+    private Equipment getAuthorizedEquipment(Long equipmentId, String authorizationToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+
+        var equipmentOwnerId = equipmentRepository.findOwnerIdByEquipmentId(equipmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("UserId", "equipmentId", String.valueOf(equipmentId)));
+
+        if (!equipmentOwnerId.equals(currentUserId)) {
+            throw new AccessDeniedException("Ви не можете змінювати статус чужого обладнання.");
+        }
+
+        return equipmentRepository.findEquipmentById(equipmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "equipmentId", String.valueOf(equipmentId)));
     }
 
     private void addImageToEquipment(Long equipmentId, MultipartFile image, Long currentUserId) {

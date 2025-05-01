@@ -71,8 +71,9 @@ public class EquipmentController {
     public ResponseEntity<ResponseDto> registerEquipment(
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
             @RequestParam(value = "main-image", required = false) MultipartFile image,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken) {
-        equipmentService.registerEquipment(equipmentDto, image, authorizationToken);
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+
+        equipmentService.registerEquipment(equipmentDto, image, authToken);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(EquipmentConstants.STATUS_201, EquipmentConstants.MESSAGE_201));
@@ -135,8 +136,8 @@ public class EquipmentController {
     public ResponseEntity<ResponseDto> updateEquipmentDetails(
             @PathVariable(value = "id") @Positive(message = "Equipment id must be positive number") Long id,
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationToken) {
-        equipmentService.updateEquipment(id, equipmentDto, authorizationToken);
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        equipmentService.updateEquipment(id, equipmentDto, authToken);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
@@ -171,30 +172,6 @@ public class EquipmentController {
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
     }
 
-    @Operation(summary = "Fetch equipments REST API",
-            description = "REST API to fetch all Equipments with main image uploaded inside E2Rent")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    }
-    )
-    @GetMapping("/all")
-    public ResponseEntity<Page<EquipmentSummaryDto>> fetchEquipments(Pageable pageable) {
-        var equipments = equipmentService.findAllEquipmentsWithImage(pageable);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(equipments);
-    }
-
     @Operation(summary = "Fetch user equipments REST API",
             description = "REST API to fetch user Equipments with main image uploaded inside E2Rent")
     @ApiResponses({
@@ -212,13 +189,31 @@ public class EquipmentController {
     }
     )
     @GetMapping("/my")
-    public ResponseEntity<Page<EquipmentSummaryDto>> fetchMyEquipments(Pageable pageable,
-                                                                       @RequestHeader(HttpHeaders.AUTHORIZATION)
-                                                                       String authorizationToken) {
-        var equipments = equipmentService.findEquipmentsByUser(authorizationToken, pageable);
+    public ResponseEntity<Page<EquipmentSummaryDto>> fetchMyEquipments(
+            Pageable pageable,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        var equipments = equipmentService.findEquipmentsByUser(authToken, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(equipments);
+    }
+
+    @PutMapping("/{equipmentId}/deactivate")
+    public ResponseEntity<ResponseDto> deactivateEquipment(@PathVariable Long equipmentId,
+                                                           @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        equipmentService.deactivateEquipmentById(equipmentId, authToken);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
+    }
+
+    @PutMapping("/{equipmentId}/activate")
+    public ResponseEntity<ResponseDto> activateEquipment(@PathVariable Long equipmentId,
+                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        equipmentService.activateEquipmentById(equipmentId, authToken);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
     }
 
     @Operation(summary = "Upload Main Image REST API",
@@ -313,5 +308,13 @@ public class EquipmentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(categoriesWithSubCategories);
+    }
+
+    @GetMapping("/{equipmentId}/owner")
+    public ResponseEntity<Long> getEquipmentOwnerId(@PathVariable Long equipmentId) {
+        var ownerId = equipmentService.getOwnerIdByEquipmentId(equipmentId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ownerId);
     }
 }

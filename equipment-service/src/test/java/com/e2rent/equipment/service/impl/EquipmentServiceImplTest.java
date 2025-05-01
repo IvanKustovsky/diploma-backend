@@ -4,6 +4,7 @@ import com.e2rent.equipment.dto.EquipmentDto;
 import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
+import com.e2rent.equipment.enums.EquipmentStatus;
 import com.e2rent.equipment.exception.ImageLimitExceededException;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.EquipmentRepository;
@@ -281,24 +282,6 @@ class EquipmentServiceImplTest {
 
     @Test
     @Order(11)
-    void findAllEquipmentsWithImage() {
-        // given
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<EquipmentSummaryDto> page = new PageImpl<>(Collections.emptyList());
-
-        when(equipmentRepository.findAllWithMainImage(pageable)).thenReturn(page);
-
-        // when
-        Page<EquipmentSummaryDto> result = equipmentServiceImpl.findAllEquipmentsWithImage(pageable);
-
-        // then
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(equipmentRepository, times(1)).findAllWithMainImage(pageable);
-    }
-
-    @Test
-    @Order(12)
     void findEquipmentsByUser() {
         // given
         Long mockUserId = 123L;
@@ -319,7 +302,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(13)
+    @Order(12)
     void uploadMainImage() {
         // given
         Long mockUserId = 123L;
@@ -342,7 +325,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(14)
+    @Order(13)
     void uploadMainImageWhenEquipmentNotExist() {
         // given
         Long mockUserId = 123L;
@@ -365,7 +348,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(15)
+    @Order(14)
     void uploadMainImageToSomeoneElseEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -389,7 +372,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(16)
+    @Order(15)
     void uploadNullAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -411,7 +394,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     void uploadEmptyFileAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -435,7 +418,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(18)
+    @Order(17)
     void uploadMainImageWithReplaceOldOne() {
         // given
         Long mockUserId = 123L;
@@ -467,7 +450,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     void uploadImages() {
         // given
         Long mockUserId = 123L;
@@ -501,7 +484,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(20)
+    @Order(19)
     void uploadImagesThrowsImageLimitExceededException() {
         // given
         Long equipmentId = 1L;
@@ -530,7 +513,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(21)
+    @Order(20)
     void addImagesToEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -556,7 +539,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     void downloadImage() {
         // given
         Long imageId = 11L;
@@ -566,5 +549,111 @@ class EquipmentServiceImplTest {
 
         // then
         verify(imageService, times(1)).downloadImage(imageId);
+    }
+
+    @Test
+    @Order(22)
+    void getOwnerIdByEquipmentId_returnsOwnerId() {
+        // given
+        Long equipmentId = 1L;
+        Long expectedOwnerId = 42L;
+
+        when(equipmentRepository.findOwnerIdByEquipmentId(equipmentId))
+                .thenReturn(Optional.of(expectedOwnerId));
+
+        // when
+        Long result = equipmentServiceImpl.getOwnerIdByEquipmentId(equipmentId);
+
+        // then
+        assertEquals(expectedOwnerId, result);
+        verify(equipmentRepository, times(1)).findOwnerIdByEquipmentId(equipmentId);
+    }
+
+    @Test
+    @Order(23)
+    void getOwnerIdByEquipmentId_throwsResourceNotFoundException_ifNotFound() {
+        // given
+        Long equipmentId = 1L;
+
+        when(equipmentRepository.findOwnerIdByEquipmentId(equipmentId))
+                .thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> equipmentServiceImpl.getOwnerIdByEquipmentId(equipmentId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Equipment not found with the given input data ID: '" + equipmentId + "'");
+
+        verify(equipmentRepository, times(1)).findOwnerIdByEquipmentId(equipmentId);
+    }
+
+    @Test
+    @Order(24)
+    void deactivateEquipmentById_setsStatusToInactive_ifAuthorized() {
+        // given
+        Long equipmentId = 1L;
+        Long ownerId = 123L;
+
+        Equipment equipment = new Equipment();
+        equipment.setEquipmentId(equipmentId);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(ownerId));
+        when(equipmentRepository.findOwnerIdByEquipmentId(equipmentId)).thenReturn(Optional.of(ownerId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+
+        // when
+        equipmentServiceImpl.deactivateEquipmentById(equipmentId, MOCK_TOKEN);
+
+        // then
+        assertEquals(EquipmentStatus.INACTIVE, equipment.getStatus());
+        verify(usersFeignClient).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository).findOwnerIdByEquipmentId(equipmentId);
+        verify(equipmentRepository).findEquipmentById(equipmentId);
+    }
+
+    @Test
+    @Order(25)
+    void activateEquipmentById_setsStatusToAvailable_ifAuthorized() {
+        // given
+        Long equipmentId = 1L;
+        Long ownerId = 123L;
+
+        Equipment equipment = new Equipment();
+        equipment.setEquipmentId(equipmentId);
+        equipment.setStatus(EquipmentStatus.INACTIVE);
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(ownerId));
+        when(equipmentRepository.findOwnerIdByEquipmentId(equipmentId)).thenReturn(Optional.of(ownerId));
+        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(equipment));
+
+        // when
+        equipmentServiceImpl.activateEquipmentById(equipmentId, MOCK_TOKEN);
+
+        // then
+        assertEquals(EquipmentStatus.AVAILABLE, equipment.getStatus());
+        verify(usersFeignClient).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository).findOwnerIdByEquipmentId(equipmentId);
+        verify(equipmentRepository).findEquipmentById(equipmentId);
+    }
+
+    @Test
+    @Order(26)
+    void deactivateEquipmentById_throwsAccessDenied_ifUserNotOwner() {
+        // given
+        Long equipmentId = 1L;
+        Long currentUserId = 100L;
+        Long ownerId = 999L;
+
+        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(currentUserId));
+        when(equipmentRepository.findOwnerIdByEquipmentId(equipmentId)).thenReturn(Optional.of(ownerId));
+
+        // when, then
+        assertThatThrownBy(() -> equipmentServiceImpl.deactivateEquipmentById(equipmentId, MOCK_TOKEN))
+                .isInstanceOf(AccessDeniedException.class)
+                .hasMessageContaining("Ви не можете змінювати статус чужого обладнання.");
+
+        verify(usersFeignClient).getUserIdFromToken(MOCK_TOKEN);
+        verify(equipmentRepository).findOwnerIdByEquipmentId(equipmentId);
+        verify(equipmentRepository, never()).findEquipmentById(any());
     }
 }

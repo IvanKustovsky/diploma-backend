@@ -48,7 +48,7 @@ public class AdvertisementController {
     @Operation(summary = "Approve advertisement",
             description = "Approve an advertisement by ID and leave admin comment")
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{id}/approve")
+    @PutMapping("/{id}/approve")
     public ResponseEntity<Void> approveAdvertisement(@PathVariable Long id,
                                                      @Valid @RequestBody AdvertisementModerationRequestDto request) {
         advertisementService.approveAdvertisement(id, request.getAdminMessage());
@@ -58,7 +58,7 @@ public class AdvertisementController {
     @Operation(summary = "Reject advertisement",
             description = "Reject an advertisement by ID and leave admin comment")
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{id}/reject")
+    @PutMapping("/{id}/reject")
     public ResponseEntity<Void> rejectAdvertisement(@PathVariable Long id,
                                                     @Valid @RequestBody AdvertisementModerationRequestDto request) {
         advertisementService.rejectAdvertisement(id, request.getAdminMessage());

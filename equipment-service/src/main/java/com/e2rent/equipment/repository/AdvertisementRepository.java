@@ -22,14 +22,14 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
             "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +
             "FROM Advertisement a " +
             "JOIN a.equipment e " +
-            "WHERE a.status = :status")
+            "WHERE a.status = :status AND e.status = 'AVAILABLE'")
     Page<AdvertisementDto> findAllByStatus(@Param("status") AdvertisementStatus status, Pageable pageable);
 
     @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
             "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +
             "FROM Advertisement a " +
             "JOIN a.equipment e " +
-            "WHERE a.status IN :statuses")
+            "WHERE a.status IN :statuses AND e.status = 'AVAILABLE'")
     Page<AdvertisementDto> findAllByStatusIn(@Param("statuses") List<AdvertisementStatus> statuses, Pageable pageable);
 
     @Query("""
@@ -37,7 +37,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
                 e.mainImage.id, a.status, a.adminMessage)
                 FROM Advertisement a
                 JOIN a.equipment e
-                WHERE e.userId = :userId AND a.status = :status
+                WHERE e.userId = :userId AND a.status = :status AND e.status = 'AVAILABLE'
             """)
     Page<AdvertisementDto> findAllApprovedByUserId(@Param("userId") Long userId,
                                                    @Param("status") AdvertisementStatus status, Pageable pageable

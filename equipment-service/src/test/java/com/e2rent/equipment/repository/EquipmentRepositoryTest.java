@@ -1,6 +1,5 @@
 package com.e2rent.equipment.repository;
 
-import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
 import com.e2rent.equipment.enums.EquipmentCategory;
@@ -12,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -30,69 +26,6 @@ class EquipmentRepositoryTest {
 
     @Autowired
     private ImageRepository imageRepository;
-
-    @Test
-    void findAllWithMainImage() {
-        // given
-        Equipment equipmentWithoutMainImage = new Equipment();
-        equipmentWithoutMainImage.setName("Equipment 1");
-        equipmentWithoutMainImage.setCategory(EquipmentCategory.BACKUP_POWER);
-        equipmentWithoutMainImage.setSubcategory(EquipmentSubcategory.INVERTER_GENERATOR);
-        equipmentWithoutMainImage.setPrice(BigDecimal.valueOf(100.00));
-        equipmentWithoutMainImage.setCondition(EquipmentCondition.NEW);
-        equipmentWithoutMainImage.setUserId(-12L);
-        equipmentWithoutMainImage.setStatus(EquipmentStatus.AVAILABLE);
-
-        Equipment equipment1 = new Equipment();
-        equipment1.setName("Equipment 1");
-        equipment1.setCategory(EquipmentCategory.TOOLS);
-        equipment1.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
-        equipment1.setPrice(BigDecimal.valueOf(100.00));
-        equipment1.setCondition(EquipmentCondition.NEW);
-        equipment1.setUserId(-12L);
-        equipment1.setStatus(EquipmentStatus.AVAILABLE);
-
-        Equipment equipment2 = new Equipment();
-        equipment2.setName("Equipment 2");
-        equipment2.setCategory(EquipmentCategory.TOOLS);
-        equipment2.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
-        equipment2.setPrice(BigDecimal.valueOf(200.00));
-        equipment2.setCondition(EquipmentCondition.USED);
-        equipment2.setUserId(-13L);
-        equipment2.setStatus(EquipmentStatus.AVAILABLE);
-
-        equipmentRepository.save(equipmentWithoutMainImage);
-        equipmentRepository.save(equipment1);
-        equipmentRepository.save(equipment2);
-
-        Image mainImage1 = new Image();
-        mainImage1.setName("image1.jpg");
-        mainImage1.setEquipment(equipment1);
-        imageRepository.save(mainImage1);
-
-        Image mainImage2 = new Image();
-        mainImage2.setName("image2.jpg");
-        mainImage2.setEquipment(equipment2);
-        imageRepository.save(mainImage2);
-
-        equipment1.setMainImage(mainImage1);
-        equipment2.setMainImage(mainImage2);
-        equipmentRepository.save(equipment1);
-        equipmentRepository.save(equipment2);
-
-        Pageable pageable = PageRequest.of(0, 10);
-
-        // when
-        Page<EquipmentSummaryDto> result = equipmentRepository.findAllWithMainImage(pageable);
-
-        // then
-        assertFalse(result.isEmpty());
-        assertEquals(2, result.getTotalElements());
-        assertEquals(equipment1.getEquipmentId(), result.getContent().get(0).getId());
-        assertEquals(mainImage1.getId(), result.getContent().get(0).getMainImageId());
-        assertEquals(equipment2.getEquipmentId(), result.getContent().get(1).getId());
-        assertEquals(mainImage2.getId(), result.getContent().get(1).getMainImageId());
-    }
 
     @Test
     void findEquipmentById() {
