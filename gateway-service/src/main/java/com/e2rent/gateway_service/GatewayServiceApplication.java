@@ -34,6 +34,11 @@ public class GatewayServiceApplication {
                         .filters(f -> f
                                 .rewritePath("/e2rent/(?<segment>.*)", "/${segment}"))
                         .uri("lb://AUTH-SERVICE"))
+                .route(p -> p
+                        .path("/e2rent/rentals/**")
+                        .filters(f -> f
+                                .rewritePath("/e2rent/(?<segment>.*)", "/${segment}"))
+                        .uri("lb://RENT-SERVICE"))
                 .build();
     }
 }
