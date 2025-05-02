@@ -153,9 +153,10 @@ public class UserController {
     }
     )
     @PutMapping
-    public ResponseEntity<ResponseDto> updateUserDetails(@Valid @RequestBody UpdateUserDto updateUserDto,
-                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        userService.updateUser(updateUserDto, token);
+    public ResponseEntity<ResponseDto> updateUserDetails(
+            @Valid @RequestBody UpdateUserDto updateUserDto,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        userService.updateUser(updateUserDto, authToken);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(UserConstants.STATUS_200, UserConstants.MESSAGE_200));
@@ -200,9 +201,8 @@ public class UserController {
     }
 
     @GetMapping("/getUserIdFromToken")
-    public ResponseEntity<Long> getUserIdFromToken(@RequestHeader(HttpHeaders.AUTHORIZATION)
-                                                       String authorizationToken) {
-        String email = userService.extractEmailFromToken(authorizationToken);
+    public ResponseEntity<Long> getUserIdFromToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        String email = userService.extractEmailFromToken(authToken);
         Long userId = userService.getUserIdByEmail(email);
         return ResponseEntity.ok(userId);
     }

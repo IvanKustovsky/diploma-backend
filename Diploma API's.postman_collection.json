@@ -552,7 +552,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:8090/equipments/api/v1/7",
+							"raw": "http://localhost:8090/equipments/api/v1/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -562,26 +562,19 @@
 								"equipments",
 								"api",
 								"v1",
-								"7"
+								"1"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "FetchAllEquipments",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "FetchEquipmentImage",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
 						"url": {
-							"raw": "http://localhost:8090/equipments/api/v1/all",
+							"raw": "http://localhost:8090/equipments/api/v1/images/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -591,7 +584,8 @@
 								"equipments",
 								"api",
 								"v1",
-								"all"
+								"images",
+								"1"
 							]
 						}
 					},
@@ -660,8 +654,623 @@
 			]
 		},
 		{
+			"name": "rentals",
+			"item": [
+				{
+					"name": "CreateRental",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDU5NDQzNTgsImlhdCI6MTc0NTk0NDA1OCwianRpIjoiYTNiOTNjMTUtZDMwZi00ZGNkLTgyOTgtYjUxNTE0YTU0YWFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI2MTUwMjk0My1hZGE0LTQ2NGItOTllYi01NWNiNGNkMjNlMjciLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.BfVXyF1LhaJsKC_17YaCTpZ2JgRot1NxJ57xLIS4hx_pLk6bNcLM4KNZQfAAlUOALvKqQwCGyZxouEKyPoz-YTMBv5FgKfsW7S64eS0pMGVPVqFtohyseLz9Z6anMFByhgfQ0FrzjmP9e1B6K6Wlg_qpfvkSHqiBykT3GM8oATreIWfz1DO4HLbWVEu5LUBiDwGAo8qbYC4uSbb7aMMd6Kkz3Xqav44RvBpLxfcSUsqj-_pUjiZFXODsjo9AyOV1TbyURPtDMlQrRmW7kMpHB8HgmzWrbcdKfWgsYlMz3aIAW42zVElPXzOPNf1kmBQ_9v34WEbCHr2j0bh39rn4LQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"equipmentId\": 3,\r\n  \"startDate\": \"2025-05-10\",\r\n  \"endDate\": \"2025-05-15\",\r\n  \"address\": \"вул. Енергетична, 5, Київ\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyIncomingRequests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ1NjcsImlhdCI6MTc0NjEwNDI2NywianRpIjoiYjc2YjJiNjktODgyYi00OTgyLWE1ZGItMWYxYjcwMjEzYjM3IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJkNGNlNzU2MS1kOGVlLTQ4NmQtODA0ZS1iOGIwODYzODE4ODYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.gVStdh3g9XJ8PImIqBXM8O28Hj1-GsN9w6aQPyR7_ME1-nmVzUPgivSiWfnMN_ZTDUE6zm38VDLdlxdWPpDaKeyNxQwh32XlXyeXeuVHTz_8kYaN6h-S9QMcmgziI9l4QC157qtDJ2YJD9Nxv-mbZby2POLVLYpBKbJRZNiIrlw1haHZ__yqpjTfsp0F25AWfvX53q4xQqxEEE6opwNeFXEvFDBtEzhxCQ54ezmPOBkPeY1vaoIbtSx-oK5yaeDCzs4Yc5-LK-de6YEhAwPFk5UnjLVGl04vpj5WMTCm4c3k-3flJgafw1xOJf7RSbOBOtY-z4V8pIc3QqYEeLebKg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/incoming",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"incoming"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyOutgoingRequests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDU5NDQzNTgsImlhdCI6MTc0NTk0NDA1OCwianRpIjoiYTNiOTNjMTUtZDMwZi00ZGNkLTgyOTgtYjUxNTE0YTU0YWFhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI2MTUwMjk0My1hZGE0LTQ2NGItOTllYi01NWNiNGNkMjNlMjciLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.BfVXyF1LhaJsKC_17YaCTpZ2JgRot1NxJ57xLIS4hx_pLk6bNcLM4KNZQfAAlUOALvKqQwCGyZxouEKyPoz-YTMBv5FgKfsW7S64eS0pMGVPVqFtohyseLz9Z6anMFByhgfQ0FrzjmP9e1B6K6Wlg_qpfvkSHqiBykT3GM8oATreIWfz1DO4HLbWVEu5LUBiDwGAo8qbYC4uSbb7aMMd6Kkz3Xqav44RvBpLxfcSUsqj-_pUjiZFXODsjo9AyOV1TbyURPtDMlQrRmW7kMpHB8HgmzWrbcdKfWgsYlMz3aIAW42zVElPXzOPNf1kmBQ_9v34WEbCHr2j0bh39rn4LQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/outgoing",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"outgoing"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FetchRentalById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ApproveRental",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/2/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"2",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReejctRental",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rejectionMessage\": \"Товар відступній в даний період.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/2/reject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"2",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CancelRental",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rejectionMessage\": \"Товар відступній в даний період.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8060/rentals/api/v1/2/cancel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8060",
+							"path": [
+								"rentals",
+								"api",
+								"v1",
+								"2",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "gateway",
 			"item": [
+				{
+					"name": "gateway-user",
+					"item": [
+						{
+							"name": "RegisterUser",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Eugene\",\r\n    \"lastName\": \"Kasparov\",\r\n    \"email\": \"email1238@gmail.com\",\r\n    \"mobileNumber\": \"+380966958693\",\r\n    \"password\" : \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/users/api/v1/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"users",
+										"api",
+										"v1",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RegisterUserWithCompany",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Kustovsky\",\r\n    \"email\": \"ivank13456@gmail.com\",\r\n    \"mobileNumber\": \"+380966958692\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71893168\",\r\n        \"address\": \"1254 Elm Street\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/users/api/v1/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"users",
+										"api",
+										"v1",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FetchUser",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJyUkx2dkppZUh1RkM2dDFqcmJ2YUluS2VsaEs0UkZSUm9wSHNlNlhoRlBzIn0.eyJleHAiOjE3Mzc3MzA2OTUsImlhdCI6MTczNzczMDM5NSwianRpIjoiODRmODA3YWQtOTdlZS00MWUxLTk5YjgtMjdlMWExNWEyYTY0IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjA4NWM4YTIyLTc4ODEtNDczOC1iMGFkLTEwNTgwMWUzYTk1NyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIwMzhkNDVhZC1lMTg3LTRlZTktYWQ2YS1kNzk3ZjBkNmE1NWUiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbmszMzIzbEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiSXZhbiIsImZhbWlseV9uYW1lIjoiS3VzdG92c2t5IiwiZW1haWwiOiJpdmFuazMzMjNsQGdtYWlsLmNvbSJ9.mTI9N6zKFQNvu_iFcW9T2M26tLA5l1hrWyQIMcukFNLWs75xIkntuiOsXkxuN0Zj4lhLXnlr7udo2B7gv07-EIP0olOsRErmzTPzaX4LkSw-bTClqm35fQjF-wX4WjB7eQu8cb92R2iU38HwVyj_CZXwMJtSI7IYuKcU4dw5dbslG09m95rtdLKVWWo-E_z9EHl6JIzwYltftWrRN11qDxlAxYqOr2Xev_Ct7wcDflsmnNSYdea3j4J-N_YPFN8Z20BFOZknDGb-N2tSWMyNDXlGLRFzoWKq6KlgW8-oC3fGwBLaxf-ZQSxETuOspLrTR32ox1dmN3CkycvxIAwDdQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank1345@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"users",
+										"api",
+										"v1"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "ivank1345@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUser",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJCakJqUENtaFVXNjMyQ1VYZVFHUnhjbElwUnFwbGhMWVNZVU9JRTYtUDJnIn0.eyJleHAiOjE3Mzc5NzAwMDcsImlhdCI6MTczNzk2OTcwNywianRpIjoiMDUxOWYwZmMtOWQwNi00YzE5LWFmMmItYjRlZWQ0ZGYxODE1IiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwMjAvcmVhbG1zL2UycmVudF9kZXYiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZmYwZmY1M2UtYjZkZC00NDE3LWFhODMtNDhhNTI0OTI1YzU0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZTJyZW50LWRldi1rZXljbG9hayIsInNpZCI6IjEwNGZmMTRlLTg2OGMtNDhlNC05Yjk0LWU4YmUyMTA2OTZjNiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZTJyZW50X2RldiIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSXZhbiBLdXN0b3Zza3kiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazMzMjNsQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMzMyM2xAZ21haWwuY29tIn0.mUqdTPKPeiNg40dxE4aCaL2OrXbzCSvqy3k8pxjSgLjxWfnkTwFRu3ZNQp1lEDA75ni4LQceIB7LZXBeAHd7LlDBYKdfPFGvp7Y2fYEp-Qf-8Rk0Xd5JFJ5G51DbEFV1gZQD-aGffwx0TTRXw20RrvgoVzxPLXn1rYBPWJTiFLAhp7g8urWmPcCZpFkC9GCaKoxKmWKpHJMs7OAt_yC5bUvpe-y_j7oo-JcTHpSlxFJFz8CrB6gRygvsCpjgvQ7y99zy5BFmNagamOeFDV64Qh6APxNQqe_U1tOm-OqqqsWDHY3GvGM6EWamnBCa3m-6xwyP-9YTRhma4xCU01FYeA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"LeBron\",\r\n    \"lastName\": \"James\",\r\n    \"mobileNumber\": \"+380965843789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/users/api/v1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"users",
+										"api",
+										"v1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUser",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDQyODA5ODcsImlhdCI6MTc0NDI4MDY4NywianRpIjoiMjQzYjE2NzQtNTAzZi00YjU4LWE1NWYtNzkwN2IwMjNjMjAxIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJhYjA5MGM0ZC0yZTFjLTRkMWMtOTYxZi0zMjJmMTFhMTc3NTAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.YMMSFp5wVQwjZdM0I6KCq_v0ECm63vVqir9kGwGqNoDscgnjEe4gg8t-6zE43AbWBbV_UzGF3X_fEWfb3uQo5MzlDSLIgGDEjxyNK3YpnsFNAQ1KuDwWlBIhTak90x3CyxgyuhRsowRsxMOB1JCctAew2FRaBHxmNWgahIqtgZWj7e9U8_5tMo2TQb9-Iyn8EhLg0KRMuJBjMJl6r2nExExo91hEMCGzsCxoiWccfaU9Ht3p_3z1Tre5ONLj0KkSw_PAZ-kzrwPsNmDh1qxuCI7dKPAl0Fsp0VIHwsHRt89c8k6dJEYIb_xWicHssxPb59RcIweLu7RaXyS95qBbjA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank114@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"users",
+										"api",
+										"v1"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "ivank114@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "gateway-auth",
+					"item": [
+						{
+							"name": "RegisterUser",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"Eugene\",\r\n    \"lastName\": \"Kasparov\",\r\n    \"email\": \"email@gmail.com\",\r\n    \"mobileNumber\": \"+380961273961\",\r\n    \"password\" : \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"vankust1217@gmail.com\",\r\n    \"password\" : \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/refresh",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUser",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/delete?email=ivank113@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "ivank113@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"ivank1222@gmail.com\",\r\n    \"password\" : \"password123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/auth/api/v1/logout",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"auth",
+										"api",
+										"v1",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "gateway-equipment",
 					"item": [
@@ -673,7 +1282,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsUmptU0xtdUNKR2Fha2tubEJSd19tSHVBZ09wQ1J2TFZfMEpGV0FiVTU4In0.eyJleHAiOjE3Mzc0NDgyODksImlhdCI6MTczNzQ0Nzk4OSwianRpIjoiY2YyMjVjZWYtOGZmYS00YmVjLWEyZTgtMDBiNTE5MjhjMzFjIiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwMjAvcmVhbG1zL2UycmVudF9kZXYiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZjlkYWUzZGUtZTU4Ny00OTJjLTk5ZjktNTJmNGI0MWEyYWNiIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZTJyZW50LWRldi1rZXljbG9hayIsInNpZCI6ImM2ZjQwMTAyLTU5ZGUtNDIwYS04ZmNjLTc2ODc5ZDkxNzIwZiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZTJyZW50X2RldiIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSXZhbiBLdXN0b3Zza3kiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazMzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMzNAZ21haWwuY29tIn0.isKVJacr5KehBovUx1l2of8yYOCh9DdXsuYugyCQDmzmKGyKd7MiP4U3uVvSqB0wni-9SEaigamZS7usRX-zOoiLMsSfDV3gFElyDHGD2o_jxoSZBq8zDJK_Kt_HrrxGfdOLLf0472083qnUL_y13T-FKY81BD5dhRnOB9pGU8-rue1yseYUI-6uWZo7WvtatoPswHmah7p3qjhXCC-nLNAHRV1cpVZpEckA_K6Wlcm7Z-ucLzhWaVVSz1I9wkRWrgYKV6vMXrZCwcZar02_PzIR3c9MI2QkagDTgERupOO9ZBENsmiyDoIPH3l3T_Z9bNZKpnInyK7n_ZhaVG41JQ",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDQzNzcxNzgsImlhdCI6MTc0NDM3Njg3OCwianRpIjoiYWVjMGYwNTYtZTVlMC00ZDVmLWI4OTEtZmU0MTUwMWNhNDAwIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI1MjE1MzQ2ZC0yN2MwLTQxYjktYjE4YS1mYWQ0ZWJkZmRjYzQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.Z8coo6WB_KhoIzizFLScujNpTLcyKicJ1cb2MRzTt-gskQsvCUqu7srMaoZe2Kdhr30_mI3wM8RWG64gGPAuIcd0qzQehFgxucA2X0H5rja6XMM8JncX6M5hGnLp3-vgMKl_AOgvcjh6wpZYmpD2OkZM0SDCPt38_dnDDheuyVdgP8QmlxxrYi5UsP4vUI7T-LdnhHr_uXXy6q6T94faQn9xEBr1Q7W8ZcEEQDWfEIPTFQLSCoVA9JgQT1MRI_wvrOpjmTWLSBdBYfVth51bagF2bRpv8hGxiN2Q7uGUWvRCMGIq1KuXzgO8NgsOGnSzEq3xSIbFbpzc6stnw9iF8w",
 											"type": "string"
 										}
 									]
@@ -687,11 +1296,11 @@
 											"key": "main-image",
 											"contentType": "",
 											"type": "file",
-											"src": "/C:/Users/user/Desktop/Фото/Фотошоп/шак.jpg"
+											"src": "/C:/Users/user/Desktop/яйце-курине.jpg"
 										},
 										{
 											"key": "equipmentDto",
-											"value": "{\n    \"name\": \"Diesel Generator W13\",\n    \"description\": \"Machine produces electricity by burning diesel fuel\",\n    \"category\": \"Generators\",\n    \"price\" : \"1150.0\",\n    \"condition\" : \"NEW\",\n    \"userId\" : 1 \n}",
+											"value": "{\n    \"name\": \"Diesel Generator W13\",\n    \"description\": \"Machine produces electricity by burning diesel fuel\",\n    \"category\": \"Generators\",\n    \"price\" : \"750.0\",\n    \"condition\" : \"USED\" \n}",
 											"contentType": "application/json",
 											"type": "text"
 										}
@@ -723,7 +1332,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkSmZvSG0yYmZEYklrZVFwalp3WmZQNTBQUHVXYl9KWm5hNjlhUy1RU0FNIn0.eyJleHAiOjE3Mjc3ODIyNDUsImlhdCI6MTcyNzc4MTk0NSwianRpIjoiZjgxNzJhMDUtNTYyYS00YjBmLWFjYzMtYWMzODI2ZjcxMzBmIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImFmYmZmODA1LWZmMzMtNDE5OC05NWMxLTVlMjc2MzBlNjg1MyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIxOWQ3ZWY2OS0xNWU3LTQxMWMtOTc2MS1mNWY4YzUyZjg4NTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbmsxMjI1QGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMTIyNUBnbWFpbC5jb20ifQ.An-16zMrp1dpLmKEPHbaQBVLpayAfo8X8ElpGw3FQoAjcVIYzELgH30I_2T-i12pVX65t0NwWny0b0pxZf-OJ9u3TVGSn2WfOwsonVjaEM6R-01ifudXtEP7Jbnzhjw0dWSpATNtPZE2wELxmqEdlFrtLAxGmLh3HaOhpxfFGBXLy3KOo40fuw-2RU-gTeKXNhIM3gAZyVOpqGO7zcjUfglpLRKbh_Go3ffvPV8iGBKxGAQoeCU4zr_JjSjwG-r7xhSe0PbhfRq87ZXtuEIf8fmfJqcbx9n3dxyiqqZqic3oNnZ2Ddyya7W2Htx7zjLUeC6AJxaroBRKC3uUxs1LCQ",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBbjBOQnVXeUN3RXNsaVpDaFFfWG1mS0xWRU5RczBCbllUTHctYzBPdDBFIn0.eyJleHAiOjE3NDQyNzY2NjYsImlhdCI6MTc0NDI3NjM2NiwianRpIjoiYTYxM2U3NzctNTAzZS00MWUxLWEzMjctMTdhMTRiY2I5ZTcxIiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwMjAvcmVhbG1zL2UycmVudF9kZXYiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiNzY1ZWUxYTQtNDhlZi00YTk5LWEzNzUtZDI1YzUwOThhZDg0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZTJyZW50LWRldi1rZXljbG9hayIsInNpZCI6ImZlNjYxMDE1LTYzMjYtNGQxZS05MDRjLWIyNWE1Mjk2ZWQ4ZSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZTJyZW50X2RldiIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiQWxleCBZZWxsb3ciLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhbGV4eWVsbG93MTIzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJBbGV4IiwiZmFtaWx5X25hbWUiOiJZZWxsb3ciLCJlbWFpbCI6ImFsZXh5ZWxsb3cxMjNAZ21haWwuY29tIn0.Ve5oXnYfPz2zhgm3DVJDsPlHackvKEZpEZnTEBP524LAaMF_GkIVzXgBmdtt1HnPQV0hGDNz65i_IQ-3t4utkZBYMoWadzLHxlj6BnxiejoU36dKlY30dQffyhkr0v1XjyQVG63JUzz397xGD1p6BAL5rVgez9pocMn2RA1r7_hDtmrmiHk5rd74P55LiujKgtho8qywoQ9vSSuPE6pEYb8AkuMifRzUkKHuuGVWAB36tTp-tmAbOetU0ARiLfPulB4w4poKrHYrazzRM-syAuyvwdqw0HesmhGBSvyVoIU9W5HISKoVJngERlDkYHM1iD8mp13cJeFr_Jjlux0cvw",
 											"type": "string"
 										}
 									]
@@ -862,7 +1471,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsUmptU0xtdUNKR2Fha2tubEJSd19tSHVBZ09wQ1J2TFZfMEpGV0FiVTU4In0.eyJleHAiOjE3Mzc0NDgyODksImlhdCI6MTczNzQ0Nzk4OSwianRpIjoiY2YyMjVjZWYtOGZmYS00YmVjLWEyZTgtMDBiNTE5MjhjMzFjIiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwMjAvcmVhbG1zL2UycmVudF9kZXYiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZjlkYWUzZGUtZTU4Ny00OTJjLTk5ZjktNTJmNGI0MWEyYWNiIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZTJyZW50LWRldi1rZXljbG9hayIsInNpZCI6ImM2ZjQwMTAyLTU5ZGUtNDIwYS04ZmNjLTc2ODc5ZDkxNzIwZiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZTJyZW50X2RldiIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSXZhbiBLdXN0b3Zza3kiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazMzQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMzNAZ21haWwuY29tIn0.isKVJacr5KehBovUx1l2of8yYOCh9DdXsuYugyCQDmzmKGyKd7MiP4U3uVvSqB0wni-9SEaigamZS7usRX-zOoiLMsSfDV3gFElyDHGD2o_jxoSZBq8zDJK_Kt_HrrxGfdOLLf0472083qnUL_y13T-FKY81BD5dhRnOB9pGU8-rue1yseYUI-6uWZo7WvtatoPswHmah7p3qjhXCC-nLNAHRV1cpVZpEckA_K6Wlcm7Z-ucLzhWaVVSz1I9wkRWrgYKV6vMXrZCwcZar02_PzIR3c9MI2QkagDTgERupOO9ZBENsmiyDoIPH3l3T_Z9bNZKpnInyK7n_ZhaVG41JQ",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDQ5ODMxMDcsImlhdCI6MTc0NDk4MjgwNywianRpIjoiMTFiZTRjZDMtMDUyMy00OTk4LWJmNmEtMDM2Mjc1MDg4MjU5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJiNTE2MTRkYS03ZWIwLTQ4YmEtOGUwNi0zY2UxN2U4ZDk2ZTMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.Wd_TVZZVYQA0iCXzKUxC24pNCaYSDbdeTe1mq7P90TBnAHJ7PEegy7QpytcLDhqNkfAR3VgnybhIeHcrPqyQ-c88JaK-xI83MmHuPqaT1nGmp_DfysFy1L2T3tlDzV1Z7zGCbFiktFjJOfrCRDNxjxFdcgejqw02lZH5Txo8xFdeXm_nrqdq58_9o5HI9iiTnVX9BDsLw3pHpheXSSZqyu2g5TO4XAoP4BmrdjR0PmHOOTOid8496qbIcH5kRtCVnoj7GayUQCLl7FZGqvRPSiVcGNielvSYK7k8UKEiy3tNQZeJn428H-cw25osTfwXW0m-4L5irNKFlqgavqpuiA",
 											"type": "string"
 										}
 									]
@@ -874,7 +1483,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://localhost:8080/e2rent/equipments/api/v1/12",
+									"raw": "http://localhost:8080/e2rent/equipments/api/v1/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -885,14 +1494,41 @@
 										"equipments",
 										"api",
 										"v1",
-										"12"
+										"2"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "FetchAllEquipments",
+							"name": "FetchEquipmentImage",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/equipments/api/v1/images/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"equipments",
+										"api",
+										"v1",
+										"images",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FetchApprovedAds",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -907,7 +1543,87 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://localhost:8080/e2rent/equipments/api/v1/all",
+									"raw": "http://localhost:8080/e2rent/advertisement/api/v1/approved",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"advertisement",
+										"api",
+										"v1",
+										"approved"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FetchPendingAds",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDU1MDI2NDEsImlhdCI6MTc0NTUwMjM0MSwianRpIjoiZDg4NzZjMzAtY2QzYS00NDFjLTk4YzktODJjNTUyNDk5MmM4IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIwNmQ5ZDUxMS1hYjU2LTQwOTctYmM0MC0yZTgwODE1MTZkNmQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.EhmmSHOVbxBu8cMeo0rYcZS2iwdQXJj8nJKBH583Qe3yZVsuAvJJSFj4j1QpPLPw3aJane_pIWoXZ7SVME1X0-4OmXPWmyd9_TgK3wNcW_o-M_c58eDDhS3n1THKB9LHcMG0qOKVtwoElUpigzCuk1suTbeqQU855lIg44JlbMMRQAc11hjBtCZZmfDjiBCxIMiiTAEfgiI-GTDGWW4SP8u7gGKYdb_vUpXmpTfKwRgn3quW1ohPag8KS0nskMtKiWw0g_0-HJ3SalBiDZ2dqRaGV20xsbVqq7HklMzhOdWLAh8WxjpgX8OIT5JOVXePcjNUX7p2EqpZLHG3i4sOwg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/advertisement/api/v1/pending",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"advertisement",
+										"api",
+										"v1",
+										"pending"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FetchMyEquipments",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDQ5ODMxMDcsImlhdCI6MTc0NDk4MjgwNywianRpIjoiMTFiZTRjZDMtMDUyMy00OTk4LWJmNmEtMDM2Mjc1MDg4MjU5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJiNTE2MTRkYS03ZWIwLTQ4YmEtOGUwNi0zY2UxN2U4ZDk2ZTMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.Wd_TVZZVYQA0iCXzKUxC24pNCaYSDbdeTe1mq7P90TBnAHJ7PEegy7QpytcLDhqNkfAR3VgnybhIeHcrPqyQ-c88JaK-xI83MmHuPqaT1nGmp_DfysFy1L2T3tlDzV1Z7zGCbFiktFjJOfrCRDNxjxFdcgejqw02lZH5Txo8xFdeXm_nrqdq58_9o5HI9iiTnVX9BDsLw3pHpheXSSZqyu2g5TO4XAoP4BmrdjR0PmHOOTOid8496qbIcH5kRtCVnoj7GayUQCLl7FZGqvRPSiVcGNielvSYK7k8UKEiy3tNQZeJn428H-cw25osTfwXW0m-4L5irNKFlqgavqpuiA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/equipments/api/v1/my",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -918,7 +1634,7 @@
 										"equipments",
 										"api",
 										"v1",
-										"all"
+										"my"
 									]
 								}
 							},
@@ -1009,87 +1725,58 @@
 					]
 				},
 				{
-					"name": "gateway-user",
+					"name": "geteway-rentals",
 					"item": [
 						{
-							"name": "RegisterUser",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"Eugene\",\r\n    \"lastName\": \"Kasparov\",\r\n    \"email\": \"email@gmail.com\",\r\n    \"mobileNumber\": \"+380966958699\",\r\n    \"password\" : \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1/register",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"users",
-										"api",
-										"v1",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "RegisterUserWithCompany",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Kustovsky\",\r\n    \"email\": \"ivank1345@gmail.com\",\r\n    \"mobileNumber\": \"+380966958692\",\r\n    \"password\" : \"password123\",\r\n    \"company\": {\r\n        \"name\": \"Tech Solutions Ltd1.\",\r\n        \"code\": \"71893169\",\r\n        \"address\": \"1254 Elm Street\"\r\n    }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1/register",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"users",
-										"api",
-										"v1",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "FetchUser",
+							"name": "CreateRental",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJyUkx2dkppZUh1RkM2dDFqcmJ2YUluS2VsaEs0UkZSUm9wSHNlNlhoRlBzIn0.eyJleHAiOjE3Mzc3MzA2OTUsImlhdCI6MTczNzczMDM5NSwianRpIjoiODRmODA3YWQtOTdlZS00MWUxLTk5YjgtMjdlMWExNWEyYTY0IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjA4NWM4YTIyLTc4ODEtNDczOC1iMGFkLTEwNTgwMWUzYTk1NyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIwMzhkNDVhZC1lMTg3LTRlZTktYWQ2YS1kNzk3ZjBkNmE1NWUiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaXZhbmszMzIzbEBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiSXZhbiIsImZhbWlseV9uYW1lIjoiS3VzdG92c2t5IiwiZW1haWwiOiJpdmFuazMzMjNsQGdtYWlsLmNvbSJ9.mTI9N6zKFQNvu_iFcW9T2M26tLA5l1hrWyQIMcukFNLWs75xIkntuiOsXkxuN0Zj4lhLXnlr7udo2B7gv07-EIP0olOsRErmzTPzaX4LkSw-bTClqm35fQjF-wX4WjB7eQu8cb92R2iU38HwVyj_CZXwMJtSI7IYuKcU4dw5dbslG09m95rtdLKVWWo-E_z9EHl6JIzwYltftWrRN11qDxlAxYqOr2Xev_Ct7wcDflsmnNSYdea3j4J-N_YPFN8Z20BFOZknDGb-N2tSWMyNDXlGLRFzoWKq6KlgW8-oC3fGwBLaxf-ZQSxETuOspLrTR32ox1dmN3CkycvxIAwDdQ",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMTgxMzksImlhdCI6MTc0NjExNzgzOSwianRpIjoiOWZhYmY2OTMtMzI2Ni00M2NjLWIyYTktYjc5NjJhMTA0MzUyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI0MjVlODU1YS1lZWVhLTRjYTUtOGE0OC1kM2RlZTBhY2NlNGEiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.akAMyAYAHUwMh-pR056kMmy4hJGgND4La_PLt78hp4T42zHNoU8bESWdt7bYAbp6Dcd1einVp_2YD0zKOcStWp2zI3A6ZrxTZ5SCYcjKztOqgkWrshBxDWLuTG7neA6ifyaWYW-jms5akVx6vxBJW6a_4ic3wi0EopSh-rAq9mY8-AkTvLpK6JOxReMiXhU3lOY5Lt5HgFrXPTU5JcuvGGhPbMoZH1-u7UN6KdABA7u7Dg29Gedkt8zz-6xh3sFbo59aC5ST_VAQVGnayhEDsYjAOYE7xLXE04S6xgw4Lt7s20jVEm8fWANw9t0wQOLQLCsYbJsQkdJMQZF-7Jn5ag",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"equipmentId\": 5,\r\n  \"startDate\": \"2025-05-01\",\r\n  \"endDate\": \"2025-05-30\",\r\n  \"address\": \"вул. Енергетична, 5, Київ\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"rentals",
+										"api",
+										"v1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MyOutgoingRequests",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMTUyNzMsImlhdCI6MTc0NjExNDk3MywianRpIjoiOTVkNWI3ODAtYzRhYy00NjljLThlZTUtZThkMjcyZmQ2MTk2IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImYxMzllMTM1LWJkODUtNDNmYS05ZWViLTEyNzg5NmI4ZDFlMCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI0MDQ2YjE0Ni00Y2Q0LTQ3NjItYjkwZC0yZTU1NGE5YjljM2EiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMThAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMThAZ21haWwuY29tIn0.NCosNPdb8kHpvZJ4_NSNVHUJ6VFTC0_guSzqHhb26YSzBsWwyfgPzlCn-DNdIyN_b1ZQjPAPOo6HA4W0DFepCiaQMM03lvatfblPO6AP38CAfkHociaj6FJ9v0G9nTP5WNTFN3CvQQ89DDHVw1z2M7EGWn_04kURLNWOZIZmBXUHsZUyIww0ySQpWl5uIAflruskuxz2pc7jjFcv7X2NvDhY-b3PxNRn9Tjg9q4bIesSUxw4LQf4zH4htoSkbeoSqDjUvDOGkX3bor_4WhpqpR_zUmRov8irdvF2Tfj80d5XiT_OFiMeGQZ0WTVowZYSUpqY5p4uv3dkDVhZ3KqvMw",
 											"type": "string"
 										}
 									]
@@ -1097,7 +1784,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank1345@gmail.com",
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/outgoing",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1105,29 +1792,124 @@
 									"port": "8080",
 									"path": [
 										"e2rent",
-										"users",
+										"rentals",
 										"api",
-										"v1"
-									],
-									"query": [
-										{
-											"key": "email",
-											"value": "ivank1345@gmail.com"
-										}
+										"v1",
+										"outgoing"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "UpdateUser",
+							"name": "MyIncomingRequests",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJCakJqUENtaFVXNjMyQ1VYZVFHUnhjbElwUnFwbGhMWVNZVU9JRTYtUDJnIn0.eyJleHAiOjE3Mzc5NzAwMDcsImlhdCI6MTczNzk2OTcwNywianRpIjoiMDUxOWYwZmMtOWQwNi00YzE5LWFmMmItYjRlZWQ0ZGYxODE1IiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwMjAvcmVhbG1zL2UycmVudF9kZXYiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZmYwZmY1M2UtYjZkZC00NDE3LWFhODMtNDhhNTI0OTI1YzU0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZTJyZW50LWRldi1rZXljbG9hayIsInNpZCI6IjEwNGZmMTRlLTg2OGMtNDhlNC05Yjk0LWU4YmUyMTA2OTZjNiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZTJyZW50X2RldiIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSXZhbiBLdXN0b3Zza3kiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazMzMjNsQGdtYWlsLmNvbSIsImdpdmVuX25hbWUiOiJJdmFuIiwiZmFtaWx5X25hbWUiOiJLdXN0b3Zza3kiLCJlbWFpbCI6Iml2YW5rMzMyM2xAZ21haWwuY29tIn0.mUqdTPKPeiNg40dxE4aCaL2OrXbzCSvqy3k8pxjSgLjxWfnkTwFRu3ZNQp1lEDA75ni4LQceIB7LZXBeAHd7LlDBYKdfPFGvp7Y2fYEp-Qf-8Rk0Xd5JFJ5G51DbEFV1gZQD-aGffwx0TTRXw20RrvgoVzxPLXn1rYBPWJTiFLAhp7g8urWmPcCZpFkC9GCaKoxKmWKpHJMs7OAt_yC5bUvpe-y_j7oo-JcTHpSlxFJFz8CrB6gRygvsCpjgvQ7y99zy5BFmNagamOeFDV64Qh6APxNQqe_U1tOm-OqqqsWDHY3GvGM6EWamnBCa3m-6xwyP-9YTRhma4xCU01FYeA",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYwOTEzNjYsImlhdCI6MTc0NjA5MTA2NiwianRpIjoiMzUwZmJjNjUtYWNmZS00OWQ1LTkyMTYtMDQ0Y2NlOTAwOWM0IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiIxNzc4ZWUyNS04NTkwLTRkYTEtOGQ2Yy0yOTRmYmJkNGE5YzciLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.YDtOjV2dgyZYdqhSTeLFuQRT6v69FzGiBogRUBcL7xE9-_72DcDo_r7QB-2oiLFjBir4gk80GNRJxDSnDYFtRwvazWgLriv_V2HBch8UnniGQDmmoXJYW_uOGcns-kgfb_iF_Ug4L1P7l8C0cNvi7LC2Hs9XglGj7_fEjMyGcJ3A1gSw-hYznWitT-jLwPcjwWWoWdwSyaEVe_vHKsZs_M69RWqneq9J6ZqLOmBzdtZKl-R6js4DcSLSE1PyW68zXy-2t1Mfr0X6I9jUVxL5E4Ok2rva0667AInx8rDoQWv3D6cP6CiT0u2wFYOWksItMKsoojrpJYoBaPd5I-EBYw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/incoming",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"rentals",
+										"api",
+										"v1",
+										"incoming"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FetchRentalById",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"rentals",
+										"api",
+										"v1",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ApproveRental",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMTUyMzMsImlhdCI6MTc0NjExNDkzMywianRpIjoiYjAxMDNiZWItOWRjYy00NWRhLTlkOWEtODk5ZmEyZmZiZDQ5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI2ZjI1NDVlYS01NDRlLTRlOTktOWZkNS1kN2MxNjAzZGRjN2EiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.M6ibZjzZMTMJ0FZVdl9tXjWClDWrgFcr-UuR5qayok1QGlxcCdFMBqNT17eQakRmki0g2J1kB2gmljmSzHkxiGbKuER0FtGIdWUZJNV3UIcfEF-6G3VINXgHh9SCcCJy0mAdF30eJSgsGRxLNZ0vNLzXA6SKAJL-kWlQ7TQ8p6eMeFP1e1OeP8nmpDUfYGp1LYgCwsnnTeyCaFdk1VqQkiEa9qBYZuVNLz2rkLgKBCKL9GZDReVrQWWyKkVJaev-6bJ5jGNvmXI0hM9pVHnhxj-swFjvL_7muZctP9l2dhwG3Um7whHwol6gxte-Wa1TzVnj18DfsLqmRI7IcTlKYg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/1/approve",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"e2rent",
+										"rentals",
+										"api",
+										"v1",
+										"1",
+										"approve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ReejctRental",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMDQ2ODIsImlhdCI6MTc0NjEwNDM4MiwianRpIjoiN2Q5MTE0M2UtMDBhZS00ZWFlLTkyNGEtNWE5N2FiNThiNmQyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJlM2FmMWY3Yi1hMTcwLTQzMmItOWUzOC01Y2U4NWViMzM0NTYiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.SNLXGqdm5wD4H7iqlPFXnznrKOzcABhI5acZ-USfpuUwqCOzrhuJBrElHrh9O1WzT8Jb21YlNVHPfwBcwno7UhD-MOmhesMd7o_6Zq9sBjIAHp_QsWqpXOft1TZPzM52A0qNrjsEWIdo2IL7yXyzApSfjPd3z9spo1APz8NkIo1PzgiCILGgpC_C2mdS5fpwXW9olXi2LygcA-rE-s9CpfFarRWFIz6yfoPZ81wbmLBEmwWFtBn5WntX8KitD1J0coL-BWghZ7_Bdx4aearCSaRLJp32L_gDNUxN67f3HastcZxvoa9CFxfPSIjspRQZfuEPAhUJd-CLx66S-GzrtA",
 											"type": "string"
 										}
 									]
@@ -1136,7 +1918,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"LeBron\",\r\n    \"lastName\": \"James\",\r\n    \"mobileNumber\": \"+380965843789\"\r\n}",
+									"raw": "{\r\n    \"rejectionMessage\": \"Товар відступній в даний період.\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1144,7 +1926,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1",
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/2/reject",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1152,68 +1934,34 @@
 									"port": "8080",
 									"path": [
 										"e2rent",
-										"users",
+										"rentals",
 										"api",
-										"v1"
+										"v1",
+										"2",
+										"reject"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "DeleteUser",
+							"name": "CancelRental",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDM3NzA3MTcsImlhdCI6MTc0Mzc3MDQxNywianRpIjoiYmYyMmU5YTMtOWJiZC00ZDA3LWE2ZTMtODc4MjI0MzQyNTE4IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImVhY2I2OTlmLTk2ZDgtNGU4OC04NTYwLWI3NTllZDMyMjkxMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiJkM2ZiOWNiNi1mNTQ2LTQzNGItYTNkZi1kZTBhZmJiNDgyNDIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsIkFETUlOIiwidW1hX2F1dGhvcml6YXRpb24iLCJVU0VSIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiSm9obiBEb2UiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJpdmFuazEyMjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IkpvaG4iLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiaXZhbmsxMjIyQGdtYWlsLmNvbSJ9.elkcht0Cz-2Kz__-FhpTXZPsZFMjNwh7misCSmz92DXNVmFNKngLVun33hclM8aQYWf69aDlBlhxxCLLl8fHoANdds2tER4D0eCc_Nvkm2PC_5_qLhuAT9-GkQ2IAvwoHw4ErfLSDmbKYH5jQqS4U5byKs2PP1Bxbfs1OzgQZL31KBu87M8qe_3GvGC7pRacuLJAqH_mQyK3iVFHjT07-fPH8MDQ8gHkpfh8sE9ImCKEhSq3_1wLmQY2rRDR8SSitTeVdcyIRzomNWDgW-L0gUx0_EPjr9VvMa3WsE5cN_vMCARJXD3vMEbLzLWLMdKtXio3vCM4E5ZfNtiyAaacZw",
+											"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEM1NnSmFjYXh0MWtGN3Bocko4Q2ZsZ2xRd3dLZXV1UHZCN0hsQ2hvRUdzIn0.eyJleHAiOjE3NDYxMTY5OTcsImlhdCI6MTc0NjExNjY5NywianRpIjoiN2FjNDk5MjQtOTVjNC00NThkLTgwMGItZTE0NmIzMWQ0ZDkyIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDIwL3JlYWxtcy9lMnJlbnRfZGV2IiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjM3M2U4ZTgzLWRlOTQtNDExYi05Yzc1LTJjZDc0Y2M5N2I5ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImUycmVudC1kZXYta2V5Y2xvYWsiLCJzaWQiOiI3YTk1OTY5NS1jNGYwLTQ5NzMtODViNy0xMjRlNDdlYTczMTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLWUycmVudF9kZXYiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiVVNFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikl2YW4gS3VzdG92c2t5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoidmFua3VzdDEyMTdAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ikl2YW4iLCJmYW1pbHlfbmFtZSI6Ikt1c3RvdnNreSIsImVtYWlsIjoidmFua3VzdDEyMTdAZ21haWwuY29tIn0.dxXNUZIXBar4384hN30MmSTN9p7rbTMGooWWB9oBfvoBH_wuhQ3ILs0CwcrAU_Dp2e-FoencYZ5LX6DqNSQaLnjqduzd2TqjIYrcWAlxDfTY7-pSQuL9iaI01y52pWZzKRPLR5S17A4bmf31BNpGImHXtC-fM-M4K7r10B_nYXjstoAAU0CvG8bLYfMi0WAtM2WNebv4H_6LakeA9tsrXAWmtJir7io_84jiMAb3M12YpkCMN8V2dnKaERxhTfWjtQiQciKcpqgKSvV62b5QnbbuDJ8mlVHZgkyaMO-g6p9fHrOYV_Rq-1plxuUB6YXW6z_VQRb4YL4omuq1dafRgQ",
 											"type": "string"
 										}
 									]
 								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/e2rent/users/api/v1?email=ivank114@gmail.com",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"users",
-										"api",
-										"v1"
-									],
-									"query": [
-										{
-											"key": "email",
-											"value": "ivank114@gmail.com"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "gateway-auth",
-					"item": [
-						{
-							"name": "RegisterUser",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"firstName\": \"Eugene\",\r\n    \"lastName\": \"Kasparov\",\r\n    \"email\": \"email@gmail.com\",\r\n    \"mobileNumber\": \"+380961273961\",\r\n    \"password\" : \"password123\"\r\n}",
+									"raw": "{\r\n    \"rejectionMessage\": \"Товар відступній в даний період.\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1221,7 +1969,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/register",
+									"raw": "http://localhost:8080/e2rent/rentals/api/v1/4/cancel",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1229,135 +1977,11 @@
 									"port": "8080",
 									"path": [
 										"e2rent",
-										"auth",
+										"rentals",
 										"api",
 										"v1",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Login",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"ivank1222@gmail.com\",\r\n    \"password\" : \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/login",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"auth",
-										"api",
-										"v1",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Refresh",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/refresh",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"auth",
-										"api",
-										"v1",
-										"refresh"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "DeleteUser",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/delete?email=ivank113@gmail.com",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"auth",
-										"api",
-										"v1",
-										"delete"
-									],
-									"query": [
-										{
-											"key": "email",
-											"value": "ivank113@gmail.com"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Logout",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"ivank1222@gmail.com\",\r\n    \"password\" : \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/e2rent/auth/api/v1/logout",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"e2rent",
-										"auth",
-										"api",
-										"v1",
-										"logout"
+										"4",
+										"cancel"
 									]
 								}
 							},

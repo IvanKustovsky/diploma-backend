@@ -108,6 +108,7 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "equipments"
       SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
+      SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
     depends_on:
       rent-app-db:
         condition: service_healthy
@@ -141,6 +142,28 @@ services:
       file: common-config.yml
       service: microservice-eureka-config
 
+  rent-service:
+    image: "ivankus197/rent-service:v1"
+    container_name: rental-ms
+    ports:
+      - "8060:8060"
+    healthcheck:
+      test: "curl --fail --silent localhost:8060/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "rent-service"
+      SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL}"
+      SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "${SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
   gatewayserver:
     image: "ivankus197/gateway-service:v1"
     container_name: gatewayserver-ms
@@ -155,6 +178,16 @@ services:
     extends:
       file: common-config.yml
       service: microservice-eureka-config
+
+  frontend:
+    image: "ivankus197/frontend:v1"
+    container_name: frontend
+    ports:
+      - "3000:80"
+    networks:
+      - rent-app
+    depends_on:
+      - gatewayserver
 
 networks:
   rent-app:
