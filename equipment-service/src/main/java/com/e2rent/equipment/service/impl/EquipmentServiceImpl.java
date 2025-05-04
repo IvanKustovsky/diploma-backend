@@ -36,8 +36,8 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file, String authorizationToken) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    public void registerEquipment(EquipmentDto equipmentDto, MultipartFile file, String authToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         equipmentDto.setUserId(currentUserId);
         Equipment equipment = EquipmentMapper.INSTANCE.toEquipment(equipmentDto);
         equipment.setStatus(EquipmentStatus.AVAILABLE);
@@ -61,8 +61,8 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, String authorizationToken) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    public void updateEquipment(Long equipmentId, EquipmentDto equipmentDto, String authToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
 
@@ -85,15 +85,15 @@ public class EquipmentServiceImpl implements IEquipmentService {
     }
 
     @Override
-    public Page<EquipmentSummaryDto> findEquipmentsByUser(String authorizationToken, Pageable pageable) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    public Page<EquipmentSummaryDto> findEquipmentsByUser(String authToken, Pageable pageable) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         return equipmentRepository.findAllByUserId(currentUserId, pageable);
     }
 
     @Override
     @Transactional
-    public void uploadMainImage(Long equipmentId, MultipartFile file, String authorizationToken) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    public void uploadMainImage(Long equipmentId, MultipartFile file, String authToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
 
@@ -116,8 +116,8 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void uploadImages(Long equipmentId, List<MultipartFile> files, String authorizationToken) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    public void uploadImages(Long equipmentId, List<MultipartFile> files, String authToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         files.forEach(image -> addImageToEquipment(equipmentId, image, currentUserId));
         advertisementService.markAsUpdated(equipmentId);
     }
@@ -135,20 +135,20 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void deactivateEquipmentById(Long equipmentId, String authorizationToken) {
-        Equipment equipment = getAuthorizedEquipment(equipmentId, authorizationToken);
+    public void deactivateEquipmentById(Long equipmentId, String authToken) {
+        Equipment equipment = getAuthorizedEquipment(equipmentId, authToken);
         equipment.setStatus(EquipmentStatus.INACTIVE);
     }
 
     @Override
     @Transactional
-    public void activateEquipmentById(Long equipmentId, String authorizationToken) {
-        Equipment equipment = getAuthorizedEquipment(equipmentId, authorizationToken);
+    public void activateEquipmentById(Long equipmentId, String authToken) {
+        Equipment equipment = getAuthorizedEquipment(equipmentId, authToken);
         equipment.setStatus(EquipmentStatus.AVAILABLE);
     }
 
-    private Equipment getAuthorizedEquipment(Long equipmentId, String authorizationToken) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authorizationToken).getBody();
+    private Equipment getAuthorizedEquipment(Long equipmentId, String authToken) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
 
         var equipmentOwnerId = equipmentRepository.findOwnerIdByEquipmentId(equipmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("UserId", "equipmentId", String.valueOf(equipmentId)));

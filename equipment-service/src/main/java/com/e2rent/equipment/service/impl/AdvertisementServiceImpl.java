@@ -7,6 +7,7 @@ import com.e2rent.equipment.enums.AdvertisementStatus;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.AdvertisementRepository;
 import com.e2rent.equipment.service.IAdvertisementService;
+import com.e2rent.equipment.service.client.UsersFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.List;
 public class AdvertisementServiceImpl implements IAdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
+    private final UsersFeignClient usersFeignClient;
 
     @Override
     @Transactional
@@ -64,8 +66,9 @@ public class AdvertisementServiceImpl implements IAdvertisementService {
     }
 
     @Override
-    public Page<AdvertisementDto> getAllApproved(Pageable pageable) {
-        return advertisementRepository.findAllByStatus(AdvertisementStatus.APPROVED, pageable);
+    public Page<AdvertisementDto> getAllApproved(String authToken, Pageable pageable) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        return advertisementRepository.findAllByStatusExcludingUser(AdvertisementStatus.APPROVED, currentUserId, pageable);
     }
 
     @Override

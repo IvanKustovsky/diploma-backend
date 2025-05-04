@@ -22,8 +22,10 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
             "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +
             "FROM Advertisement a " +
             "JOIN a.equipment e " +
-            "WHERE a.status = :status AND e.status = 'AVAILABLE'")
-    Page<AdvertisementDto> findAllByStatus(@Param("status") AdvertisementStatus status, Pageable pageable);
+            "WHERE a.status = :status AND e.status = 'AVAILABLE' AND e.userId <> :excludedUserId")
+    Page<AdvertisementDto> findAllByStatusExcludingUser(@Param("status") AdvertisementStatus status,
+                                           @Param("excludedUserId") Long excludedUserId,
+                                           Pageable pageable);
 
     @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
             "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +

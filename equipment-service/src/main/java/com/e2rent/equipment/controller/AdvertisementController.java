@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -82,8 +83,10 @@ public class AdvertisementController {
     }
     )
     @GetMapping("/approved")
-    public ResponseEntity<Page<AdvertisementDto>> getAllApproved(Pageable pageable) {
-        Page<AdvertisementDto> approvedAds = advertisementService.getAllApproved(pageable);
+    public ResponseEntity<Page<AdvertisementDto>> getAllApproved(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,
+            Pageable pageable) {
+        Page<AdvertisementDto> approvedAds = advertisementService.getAllApproved(authToken, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(approvedAds);
