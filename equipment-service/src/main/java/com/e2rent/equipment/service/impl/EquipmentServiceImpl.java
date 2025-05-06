@@ -152,14 +152,21 @@ public class EquipmentServiceImpl implements IEquipmentService {
             throw new AccessDeniedException("Ви не можете редагувати чуже обладнання.");
         }
 
-        if (equipment.getImages().size() >= MAX_IMAGE_LIMIT) {
-            throw new ImageLimitExceededException("Досягнуто ліміт (" + MAX_IMAGE_LIMIT
-                    + ") зображень для одного обладнання.");
+        // Перевірка ліміту (враховує і головне зображення, і додаткові)
+        int totalImages = equipment.getImages().size() + (equipment.getMainImage() != null ? 1 : 0);
+        if (totalImages >= MAX_IMAGE_LIMIT) {
+            throw new ImageLimitExceededException("Досягнуто загальний ліміт ("
+                    + MAX_IMAGE_LIMIT + ") зображень.");
         }
 
         if (image != null && !image.isEmpty()) {
             var uploadedImage = imageService.uploadImage(image, equipment);
-            equipment.addImage(uploadedImage);
+
+            if (equipment.getMainImage() == null) {
+                equipment.setMainImage(uploadedImage);
+            } else {
+                equipment.addImage(uploadedImage);
+            }
         }
     }
 }

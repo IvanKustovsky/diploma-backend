@@ -43,9 +43,9 @@ public class UserServiceImpl implements IUserService {
         UserEntity user = UserMapper.INSTANCE.toEntity(registerUserDto);
         user.setCompany(company);
 
+        userRepository.save(user);
         authFeignClient.registerUser(registerUserDto);
 
-        userRepository.save(user);
     }
 
     @Override
@@ -110,14 +110,14 @@ public class UserServiceImpl implements IUserService {
     private void checkIfUserExistsByEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
-                    throw new UserAlreadyExistsException("User already registered with provided email");
+                    throw new UserAlreadyExistsException("Користувач з електронною адресою " + email + " вже зареєстрований");
                 });
     }
 
     private void checkIfUserExistsByMobileNumber(String mobileNumber) {
         userRepository.findByMobileNumber(mobileNumber)
                 .ifPresent(user -> {
-                    throw new UserAlreadyExistsException("User already registered with provided mobile number");
+                    throw new UserAlreadyExistsException("Користувач з номером телефону " + mobileNumber + " вже зареєстрований");
                 });
     }
 }
