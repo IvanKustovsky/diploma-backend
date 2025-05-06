@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Сервіс для роботи з орендними запитами.
  */
-public interface IRentalService {
+public interface    IRentalService {
 
     /**
      * Створює новий запит на оренду.
@@ -69,4 +69,14 @@ public interface IRentalService {
      * @param authToken токен автентифікації користувача (тільки орендар може скасувати)
      */
     void cancelRental(Long rentalId, String authToken);
+
+    /**
+     * Генерує PDF-документ, що містить деталі оренди.
+     * Доступ дозволено лише орендарю або власнику обладнання.
+     *
+     * @param rentalId  ідентифікатор оренди
+     * @param authToken токен автентифікації користувача
+     * @return масив байтів, що представляє PDF-файл
+     */
+    byte[] generateRentalPdf(Long rentalId, String authToken);
 }

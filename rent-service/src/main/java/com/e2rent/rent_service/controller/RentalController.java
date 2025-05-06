@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,6 +89,23 @@ public class RentalController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(RentalConstants.STATUS_200, RentalConstants.STATUS_200));
+    }
+
+    @GetMapping("/{rentalId}/pdf")
+    public ResponseEntity<byte[]> downloadRentalPdf(@PathVariable Long rentalId,
+                                                    @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        byte[] pdfBytes = rentalService.generateRentalPdf(rentalId, authToken);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(ContentDisposition
+                .inline()
+                .filename("rental_" + rentalId + ".pdf")
+                .build());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 
 }

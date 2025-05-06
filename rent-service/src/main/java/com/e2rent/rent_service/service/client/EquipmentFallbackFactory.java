@@ -1,6 +1,8 @@
 package com.e2rent.rent_service.service.client;
 
+import com.e2rent.rent_service.dto.EquipmentResponseDto;
 import com.e2rent.rent_service.exception.ServiceUnavailableException;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,12 @@ public class EquipmentFallbackFactory implements FallbackFactory<EquipmentFeignC
 
         // Повертаємо fallback-реалізацію EquipmentFeignClient
         return new EquipmentFeignClient() {
+
             @Override
-            public ResponseEntity<Long> getOwnerIdByEquipmentId(@PathVariable("equipmentId") Long equipmentId) {
-                log.warn("Fallback for getOwnerIdByEquipmentId. Returning fallback response.");
+            public ResponseEntity<EquipmentResponseDto> fetchEquipment(
+                    @PathVariable(value = "id")
+                    @Positive(message = "Equipment id must be positive number") Long id) {
+                log.warn("Fallback for fetchEquipment. Returning fallback response.");
                 throw new ServiceUnavailableException("Equipment service unavailable: " + cause.getMessage());
             }
         };

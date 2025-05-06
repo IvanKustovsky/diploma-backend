@@ -4,6 +4,7 @@ import com.e2rent.rent_service.enums.RentalStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -34,6 +35,9 @@ public class Rental extends BaseEntity {
 
     @Column(name = "address", nullable = false)
     private String address;
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)

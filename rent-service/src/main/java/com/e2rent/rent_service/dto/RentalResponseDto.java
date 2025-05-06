@@ -6,14 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
-//@Schema(name = "Register User", description = "Schema to hold User registration information")
 @AllArgsConstructor
 @NoArgsConstructor
 public class RentalResponseDto {
+
     private Long id;
     private Long equipmentId;
     private Long renterId;
@@ -21,6 +23,8 @@ public class RentalResponseDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private String address;
+    private BigDecimal totalPrice;
     private RentalStatus status;
+    private LocalDateTime ownerResponseAt;
     private String rejectionMessage;
 }

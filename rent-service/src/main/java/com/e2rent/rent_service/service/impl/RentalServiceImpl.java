@@ -1,7 +1,9 @@
 package com.e2rent.rent_service.service.impl;
 
 import com.e2rent.rent_service.dto.CreateRentalRequestDto;
+import com.e2rent.rent_service.dto.EquipmentResponseDto;
 import com.e2rent.rent_service.dto.RentalResponseDto;
+import com.e2rent.rent_service.dto.UserResponseDto;
 import com.e2rent.rent_service.entity.Rental;
 import com.e2rent.rent_service.enums.RentalStatus;
 import com.e2rent.rent_service.exception.ConflictException;
@@ -18,8 +20,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,13 +36,20 @@ public class RentalServiceImpl implements IRentalService {
     private final RentalRepository rentalRepository;
     private final UsersFeignClient usersFeignClient;
     private final EquipmentFeignClient equipmentFeignClient;
+    private final RentalPdfGenerator rentalPdfGenerator;
 
     @Override
     @Transactional
     public void createRental(CreateRentalRequestDto request, String authToken) {
         Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        var equipment = equipmentFeignClient.fetchEquipment(request.getEquipmentId()).getBody();
 
-        Long ownerId = equipmentFeignClient.getOwnerIdByEquipmentId(request.getEquipmentId()).getBody();
+        Long ownerId = equipment.getUserId();
+        BigDecimal pricePerDay = equipment.getPricePerDay();
+
+        // Обчислюємо кількість днів (включаючи обидва дні)
+        long days = ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) + 1;
+        BigDecimal totalPrice = pricePerDay.multiply(BigDecimal.valueOf(days));
 
         // Перевірка, чи орендар не є власником
         if (Objects.equals(ownerId, currentUserId)) {
@@ -49,6 +60,7 @@ public class RentalServiceImpl implements IRentalService {
         rental.setStatus(RentalStatus.PENDING);
         rental.setRenterId(currentUserId);
         rental.setOwnerId(ownerId);
+        rental.setTotalPrice(totalPrice);
 
         rentalRepository.save(rental);
     }
@@ -163,6 +175,28 @@ public class RentalServiceImpl implements IRentalService {
         rentalRepository.save(rental);
     }
 
+    @Override
+    @Transactional
+    public byte[] generateRentalPdf(Long rentalId, String authToken) {
+        Long currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+
+        Rental rental = rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental", "rentalId", String.valueOf(rentalId)));
+
+        if (!Objects.equals(rental.getRenterId(), currentUserId) &&
+                !Objects.equals(rental.getOwnerId(), currentUserId)) {
+            throw new AccessDeniedException("У вас немає доступу до цієї оренди.");
+        }
+
+        updateRentalStatusIfNeeded(rental);
+
+        UserResponseDto renter = usersFeignClient.fetchUserById(rental.getRenterId()).getBody();
+        UserResponseDto owner = usersFeignClient.fetchUserById(rental.getOwnerId()).getBody();
+        EquipmentResponseDto equipment = equipmentFeignClient.fetchEquipment(rental.getEquipmentId()).getBody();
+
+        return rentalPdfGenerator.generateRentalAgreementPdf(rental, renter, owner, equipment);
+    }
+
     private void updateRentalStatusIfNeeded(Rental rental) {
         LocalDate today = LocalDate.now();
         boolean updated = false;
@@ -174,7 +208,7 @@ public class RentalServiceImpl implements IRentalService {
             if (today.isAfter(rental.getEndDate())) {
                 rental.setStatus(RentalStatus.COMPLETED);
                 updated = true;
-            } else if (today.isBefore(rental.getEndDate())) {
+            } else if (today.isAfter(rental.getStartDate()) && today.isBefore(rental.getEndDate())) {
                 rental.setStatus(RentalStatus.IN_PROGRESS);
                 updated = true;
             }
