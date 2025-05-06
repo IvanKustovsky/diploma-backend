@@ -240,42 +240,6 @@ class EquipmentServiceImplTest {
 
     @Test
     @Order(9)
-    void deleteEquipment() {
-        // given
-        Long equipmentId = 1L;
-        Equipment existingEquipment = new Equipment();
-        existingEquipment.setEquipmentId(equipmentId);
-
-        when(equipmentRepository.findEquipmentById(equipmentId)).thenReturn(Optional.of(existingEquipment));
-
-        // when
-        equipmentServiceImpl.deleteEquipment(equipmentId);
-
-        // then
-        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
-        verify(equipmentRepository, times(1)).deleteById(equipmentId);
-    }
-
-    @Test
-    @Order(10)
-    void deleteNotExistingEquipmentThrowsException() {
-        // given
-        Long equipmentId = 1L;
-        Equipment existingEquipment = new Equipment();
-        existingEquipment.setEquipmentId(equipmentId);
-
-        // when, then
-        assertThatThrownBy(() -> equipmentServiceImpl.deleteEquipment(equipmentId))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining(String.format("%s not found with the given input data %s: '%s'",
-                        "Equipment", "ID", equipmentId));
-
-        verify(equipmentRepository, times(1)).findEquipmentById(equipmentId);
-        verify(equipmentRepository, never()).deleteById(equipmentId);
-    }
-
-    @Test
-    @Order(11)
     void uploadMainImage() {
         // given
         Long mockUserId = 123L;
@@ -298,7 +262,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     void uploadMainImageWhenEquipmentNotExist() {
         // given
         Long mockUserId = 123L;
@@ -321,7 +285,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     void uploadMainImageToSomeoneElseEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -345,7 +309,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(14)
+    @Order(12)
     void uploadNullAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -367,7 +331,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(15)
+    @Order(13)
     void uploadEmptyFileAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -391,7 +355,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(16)
+    @Order(14)
     void uploadMainImageWithReplaceOldOne() {
         // given
         Long mockUserId = 123L;
@@ -423,7 +387,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(17)
+    @Order(15)
     void uploadImages() {
         // given
         Long mockUserId = 123L;
@@ -457,7 +421,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(18)
+    @Order(16)
     void uploadImagesThrowsImageLimitExceededException() {
         // given
         Long equipmentId = 1L;
@@ -486,7 +450,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(19)
+    @Order(17)
     void addImagesToEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -512,7 +476,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(20)
+    @Order(18)
     void downloadImage() {
         // given
         Long imageId = 11L;
@@ -525,7 +489,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(21)
+    @Order(19)
     void getOwnerIdByEquipmentId_returnsOwnerId() {
         // given
         Long equipmentId = 1L;
@@ -543,7 +507,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(22)
+    @Order(20)
     void getOwnerIdByEquipmentId_throwsResourceNotFoundException_ifNotFound() {
         // given
         Long equipmentId = 1L;
@@ -560,7 +524,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(23)
+    @Order(21)
     void deactivateEquipmentById_setsStatusToInactive_ifAuthorized() {
         // given
         Long equipmentId = 1L;
@@ -585,7 +549,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(24)
+    @Order(22)
     void activateEquipmentById_setsStatusToAvailable_ifAuthorized() {
         // given
         Long equipmentId = 1L;
@@ -610,7 +574,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(25)
+    @Order(23)
     void deactivateEquipmentById_throwsAccessDenied_ifUserNotOwner() {
         // given
         Long equipmentId = 1L;

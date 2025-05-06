@@ -16,8 +16,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -137,35 +135,6 @@ public class EquipmentController {
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
         equipmentService.updateEquipment(id, equipmentDto, authToken);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
-    }
-
-    @Operation(summary = "Delete equipment REST API",
-            description = "REST API to delete Equipment by its ID inside E2Rent")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "HTTP Status NOT_FOUND"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    }
-    )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto> deleteEquipmentDetails(
-            @PathVariable(value = "id") @Positive(message = "Equipment id must be positive number") Long id) {
-        equipmentService.deleteEquipment(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));

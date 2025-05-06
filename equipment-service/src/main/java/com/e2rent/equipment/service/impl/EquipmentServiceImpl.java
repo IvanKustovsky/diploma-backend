@@ -74,15 +74,6 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
     @Override
     @Transactional
-    public void deleteEquipment(Long equipmentId) {
-        equipmentRepository.findEquipmentById(equipmentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
-
-        equipmentRepository.deleteById(equipmentId);
-    }
-
-    @Override
-    @Transactional
     public void uploadMainImage(Long equipmentId, MultipartFile file, String authToken) {
         var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         Equipment equipment = equipmentRepository.findEquipmentById(equipmentId)

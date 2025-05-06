@@ -76,16 +76,6 @@ public interface IEquipmentService {
     void uploadImages(Long equipmentId, List<MultipartFile> files, String authorizationToken);
 
 
-    // ---------------------------- DELETE ----------------------------
-
-    /**
-     * Видалити обладнання за ID.
-     *
-     * @param equipmentId ID обладнання
-     */
-    void deleteEquipment(Long equipmentId); // TODO: реалізація
-
-
     // ---------------------------- STATUS MANAGEMENT ----------------------------
 
     /**
