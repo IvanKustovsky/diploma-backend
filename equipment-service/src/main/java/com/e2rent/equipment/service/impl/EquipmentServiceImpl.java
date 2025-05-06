@@ -1,7 +1,6 @@
 package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.dto.EquipmentDto;
-import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
 import com.e2rent.equipment.enums.EquipmentStatus;
@@ -14,8 +13,6 @@ import com.e2rent.equipment.service.IEquipmentService;
 import com.e2rent.equipment.service.ImageService;
 import com.e2rent.equipment.service.client.UsersFeignClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,12 +79,6 @@ public class EquipmentServiceImpl implements IEquipmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Equipment", "ID", String.valueOf(equipmentId)));
 
         equipmentRepository.deleteById(equipmentId);
-    }
-
-    @Override
-    public Page<EquipmentSummaryDto> findEquipmentsByUser(String authToken, Pageable pageable) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
-        return equipmentRepository.findAllByUserId(currentUserId, pageable);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.dto.EquipmentDto;
-import com.e2rent.equipment.dto.EquipmentSummaryDto;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.entity.Image;
 import com.e2rent.equipment.enums.EquipmentStatus;
@@ -17,16 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -282,27 +276,6 @@ class EquipmentServiceImplTest {
 
     @Test
     @Order(11)
-    void findEquipmentsByUser() {
-        // given
-        Long mockUserId = 123L;
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<EquipmentSummaryDto> page = new PageImpl<>(Collections.emptyList());
-
-        when(usersFeignClient.getUserIdFromToken(MOCK_TOKEN)).thenReturn(ResponseEntity.ok(mockUserId));
-        when(equipmentRepository.findAllByUserId(mockUserId, pageable)).thenReturn(page);
-
-        // when
-        Page<EquipmentSummaryDto> result = equipmentServiceImpl.findEquipmentsByUser(MOCK_TOKEN, pageable);
-
-        // then
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-        verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
-        verify(equipmentRepository, times(1)).findAllByUserId(mockUserId, pageable);
-    }
-
-    @Test
-    @Order(12)
     void uploadMainImage() {
         // given
         Long mockUserId = 123L;
@@ -325,7 +298,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(13)
+    @Order(12)
     void uploadMainImageWhenEquipmentNotExist() {
         // given
         Long mockUserId = 123L;
@@ -348,7 +321,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(14)
+    @Order(13)
     void uploadMainImageToSomeoneElseEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -372,7 +345,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(15)
+    @Order(14)
     void uploadNullAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -394,7 +367,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(16)
+    @Order(15)
     void uploadEmptyFileAsMainImage() {
         // given
         Long mockUserId = 123L;
@@ -418,7 +391,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     void uploadMainImageWithReplaceOldOne() {
         // given
         Long mockUserId = 123L;
@@ -450,7 +423,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(18)
+    @Order(17)
     void uploadImages() {
         // given
         Long mockUserId = 123L;
@@ -484,7 +457,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     void uploadImagesThrowsImageLimitExceededException() {
         // given
         Long equipmentId = 1L;
@@ -513,7 +486,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(20)
+    @Order(19)
     void addImagesToEquipmentThrowsAccessDeniedException() {
         // given
         Long mockUserId = 123L;
@@ -539,7 +512,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(21)
+    @Order(20)
     void downloadImage() {
         // given
         Long imageId = 11L;
@@ -552,7 +525,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     void getOwnerIdByEquipmentId_returnsOwnerId() {
         // given
         Long equipmentId = 1L;
@@ -570,7 +543,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     void getOwnerIdByEquipmentId_throwsResourceNotFoundException_ifNotFound() {
         // given
         Long equipmentId = 1L;
@@ -587,7 +560,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(24)
+    @Order(23)
     void deactivateEquipmentById_setsStatusToInactive_ifAuthorized() {
         // given
         Long equipmentId = 1L;
@@ -612,7 +585,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(25)
+    @Order(24)
     void activateEquipmentById_setsStatusToAvailable_ifAuthorized() {
         // given
         Long equipmentId = 1L;
@@ -637,7 +610,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    @Order(26)
+    @Order(25)
     void deactivateEquipmentById_throwsAccessDenied_ifUserNotOwner() {
         // given
         Long equipmentId = 1L;

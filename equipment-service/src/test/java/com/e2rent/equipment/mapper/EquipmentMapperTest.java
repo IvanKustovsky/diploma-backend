@@ -22,7 +22,7 @@ class EquipmentMapperTest {
         equipment.setName("Diesel Generator");
         equipment.setDescription("Produces electricity by burning diesel fuel");
         equipment.setCategory(EquipmentCategory.DISTRIBUTION);
-        equipment.setPrice(BigDecimal.valueOf(150.00));
+        equipment.setPricePerDay(BigDecimal.valueOf(150.00));
         equipment.setCondition(EquipmentCondition.NEW);
         equipment.setUserId(1L);
 
@@ -48,7 +48,7 @@ class EquipmentMapperTest {
         assertEquals(equipment.getName(), equipmentDto.getName());
         assertEquals(equipment.getDescription(), equipmentDto.getDescription());
         assertEquals(equipment.getCategory(), equipmentDto.getCategory());
-        assertEquals(equipment.getPrice(), equipmentDto.getPrice());
+        assertEquals(equipment.getPricePerDay(), equipmentDto.getPricePerDay());
         assertEquals(equipment.getCondition(), equipmentDto.getCondition());
 
         // Перевіряємо ID основного зображення
@@ -67,7 +67,7 @@ class EquipmentMapperTest {
         equipmentDto.setName("Diesel Generator");
         equipmentDto.setDescription("Produces electricity by burning diesel fuel");
         equipmentDto.setCategory(EquipmentCategory.BACKUP_POWER);
-        equipmentDto.setPrice(BigDecimal.valueOf(150.00));
+        equipmentDto.setPricePerDay(BigDecimal.valueOf(150.00));
         equipmentDto.setCondition(EquipmentCondition.NEW);
         equipmentDto.setUserId(1L);
 
@@ -78,7 +78,7 @@ class EquipmentMapperTest {
         assertEquals(equipmentDto.getName(), equipment.getName());
         assertEquals(equipmentDto.getDescription(), equipment.getDescription());
         assertEquals(equipmentDto.getCategory(), equipment.getCategory());
-        assertEquals(equipmentDto.getPrice(), equipment.getPrice());
+        assertEquals(equipmentDto.getPricePerDay(), equipment.getPricePerDay());
         assertEquals(equipmentDto.getCondition(), equipment.getCondition());
     }
 
@@ -96,7 +96,7 @@ class EquipmentMapperTest {
         assertNull(equipmentDto.getName());
         assertNull(equipmentDto.getDescription());
         assertNull(equipmentDto.getCategory());
-        assertNull(equipmentDto.getPrice());
+        assertNull(equipmentDto.getPricePerDay());
         assertNull(equipmentDto.getCondition());
         assertNull(equipmentDto.getMainImageId());
         assertTrue(equipmentDto.getImageIds().isEmpty());
@@ -115,7 +115,7 @@ class EquipmentMapperTest {
         assertNull(equipment.getName());
         assertNull(equipment.getDescription());
         assertNull(equipment.getCategory());
-        assertNull(equipment.getPrice());
+        assertNull(equipment.getPricePerDay());
         assertNull(equipment.getCondition());
         assertNull(equipment.getMainImage());
         assertNull(equipment.getImages());
@@ -145,14 +145,14 @@ class EquipmentMapperTest {
         Equipment equipment = new Equipment();
         equipment.setName("Old Generator");
         equipment.setCategory(EquipmentCategory.CABLING);
-        equipment.setPrice(new BigDecimal(1500));
+        equipment.setPricePerDay(new BigDecimal(1500));
         equipment.setDescription("Old generator description");
         equipment.setCondition(EquipmentCondition.NEW);
 
         EquipmentDto equipmentDto = new EquipmentDto();
         equipmentDto.setName("New Generator");
         equipmentDto.setCategory(EquipmentCategory.BACKUP_POWER);
-        equipmentDto.setPrice(new BigDecimal(1250));
+        equipmentDto.setPricePerDay(new BigDecimal(1250));
         equipmentDto.setDescription("New generator description");
         equipmentDto.setCondition(EquipmentCondition.USED);
 
@@ -162,7 +162,7 @@ class EquipmentMapperTest {
         // then
         assertEquals("New Generator", equipment.getName());
         assertEquals(EquipmentCategory.BACKUP_POWER, equipment.getCategory());
-        assertEquals(new BigDecimal(1250), equipment.getPrice());
+        assertEquals(new BigDecimal(1250), equipment.getPricePerDay());
         assertEquals("New generator description", equipment.getDescription());
         assertEquals(EquipmentCondition.USED, equipment.getCondition());
     }

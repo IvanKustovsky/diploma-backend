@@ -72,7 +72,6 @@ public class EquipmentController {
             @RequestPart("equipmentDto") @Valid EquipmentDto equipmentDto,
             @RequestParam(value = "main-image", required = false) MultipartFile image,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
-
         equipmentService.registerEquipment(equipmentDto, image, authToken);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -170,32 +169,6 @@ public class EquipmentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDto(EquipmentConstants.STATUS_200, EquipmentConstants.MESSAGE_200));
-    }
-
-    @Operation(summary = "Fetch user equipments REST API",
-            description = "REST API to fetch user Equipments with main image uploaded inside E2Rent")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    }
-    )
-    @GetMapping("/my")
-    public ResponseEntity<Page<EquipmentSummaryDto>> fetchMyEquipments(
-            Pageable pageable,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
-        var equipments = equipmentService.findEquipmentsByUser(authToken, pageable);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(equipments);
     }
 
     @PutMapping("/{equipmentId}/deactivate")

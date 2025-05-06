@@ -84,7 +84,7 @@ public class AdvertisementController {
     )
     @GetMapping("/approved")
     public ResponseEntity<Page<AdvertisementDto>> getAllApproved(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authToken,
             Pageable pageable) {
         Page<AdvertisementDto> approvedAds = advertisementService.getAllApproved(authToken, pageable);
         return ResponseEntity
@@ -115,5 +115,15 @@ public class AdvertisementController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(approvedAds);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<Page<AdvertisementDto>> fetchMyAdvertisements(
+            Pageable pageable,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) {
+        Page<AdvertisementDto> myAds = advertisementService.getMyAdvertisements(authToken, pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(myAds);
     }
 }

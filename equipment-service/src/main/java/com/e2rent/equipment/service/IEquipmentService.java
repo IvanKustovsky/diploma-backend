@@ -1,9 +1,6 @@
 package com.e2rent.equipment.service;
 
 import com.e2rent.equipment.dto.EquipmentDto;
-import com.e2rent.equipment.dto.EquipmentSummaryDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -31,15 +28,6 @@ public interface IEquipmentService {
      * @return DTO з повною інформацією про обладнання
      */
     EquipmentDto fetchEquipment(Long equipmentId);
-
-    /**
-     * Отримати список обладнання, доданого конкретним користувачем.
-     *
-     * @param authorizationToken токен авторизації користувача
-     * @param pageable           об'єкт пагінації
-     * @return сторінка DTO з короткою інформацією про обладнання
-     */
-    Page<EquipmentSummaryDto> findEquipmentsByUser(String authorizationToken, Pageable pageable);
 
     /**
      * Отримати зображення за ID.

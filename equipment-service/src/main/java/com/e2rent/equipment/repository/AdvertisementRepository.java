@@ -19,7 +19,14 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     Optional<Advertisement> findByEquipment_EquipmentId(Long equipmentId);
 
     @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
-            "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +
+            "a.id, e.equipmentId, e.name, e.status, e.pricePerDay, e.mainImage.id, a.status, a.adminMessage) " +
+            "FROM Advertisement a " +
+            "JOIN a.equipment e " +
+            "WHERE a.status = :status AND e.status = 'AVAILABLE'")
+    Page<AdvertisementDto> findAllByStatus(@Param("status") AdvertisementStatus status, Pageable pageable);
+
+    @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
+            "a.id, e.equipmentId, e.name, e.status, e.pricePerDay, e.mainImage.id, a.status, a.adminMessage) " +
             "FROM Advertisement a " +
             "JOIN a.equipment e " +
             "WHERE a.status = :status AND e.status = 'AVAILABLE' AND e.userId <> :excludedUserId")
@@ -28,15 +35,15 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
                                            Pageable pageable);
 
     @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
-            "a.id, e.equipmentId, e.name, e.price, e.mainImage.id, a.status, a.adminMessage) " +
+            "a.id, e.equipmentId, e.name, e.status, e.pricePerDay, e.mainImage.id, a.status, a.adminMessage) " +
             "FROM Advertisement a " +
             "JOIN a.equipment e " +
             "WHERE a.status IN :statuses AND e.status = 'AVAILABLE'")
     Page<AdvertisementDto> findAllByStatusIn(@Param("statuses") List<AdvertisementStatus> statuses, Pageable pageable);
 
     @Query("""
-                SELECT new com.e2rent.equipment.dto.AdvertisementDto(a.id, e.equipmentId, e.name, e.price,
-                e.mainImage.id, a.status, a.adminMessage)
+                SELECT new com.e2rent.equipment.dto.AdvertisementDto(a.id, e.equipmentId, e.name, e.status,
+                 e.pricePerDay, e.mainImage.id, a.status, a.adminMessage)
                 FROM Advertisement a
                 JOIN a.equipment e
                 WHERE e.userId = :userId AND a.status = :status AND e.status = 'AVAILABLE'
@@ -44,4 +51,11 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
     Page<AdvertisementDto> findAllApprovedByUserId(@Param("userId") Long userId,
                                                    @Param("status") AdvertisementStatus status, Pageable pageable
     );
+
+    @Query("SELECT new com.e2rent.equipment.dto.AdvertisementDto(" +
+            "a.id, e.equipmentId, e.name, e.status, e.pricePerDay, e.mainImage.id, a.status, a.adminMessage) " +
+            "FROM Advertisement a " +
+            "JOIN a.equipment e " +
+            "WHERE e.userId = :userId")
+    Page<AdvertisementDto> findAllByUserId(@Param("userId") Long userId, Pageable pageable);
 }

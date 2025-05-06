@@ -4,6 +4,7 @@ import com.e2rent.equipment.dto.AdvertisementDto;
 import com.e2rent.equipment.entity.Advertisement;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.enums.AdvertisementStatus;
+import com.e2rent.equipment.enums.EquipmentStatus;
 import com.e2rent.equipment.exception.ResourceNotFoundException;
 import com.e2rent.equipment.repository.AdvertisementRepository;
 import com.e2rent.equipment.service.client.UsersFeignClient;
@@ -153,8 +154,8 @@ class AdvertisementServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         List<AdvertisementDto> ads = List.of(
-                new AdvertisementDto(1L, 101L, "Equipment 1", BigDecimal.valueOf(100), 1001L, AdvertisementStatus.APPROVED, null),
-                new AdvertisementDto(2L, 102L, "Equipment 2", BigDecimal.valueOf(200), 1002L, AdvertisementStatus.APPROVED, null)
+                new AdvertisementDto(1L, 101L, "Equipment 1", EquipmentStatus.AVAILABLE, BigDecimal.valueOf(100), 1001L, AdvertisementStatus.APPROVED, null),
+                new AdvertisementDto(2L, 102L, "Equipment 2", EquipmentStatus.AVAILABLE, BigDecimal.valueOf(200), 1002L, AdvertisementStatus.APPROVED, null)
         );
         Page<AdvertisementDto> expectedPage = new PageImpl<>(ads, pageable, ads.size());
 

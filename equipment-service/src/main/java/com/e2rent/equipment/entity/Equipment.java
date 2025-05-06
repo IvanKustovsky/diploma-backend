@@ -42,7 +42,7 @@ public class Equipment extends BaseEntity {
     private EquipmentSubcategory subcategory;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal pricePerDay;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

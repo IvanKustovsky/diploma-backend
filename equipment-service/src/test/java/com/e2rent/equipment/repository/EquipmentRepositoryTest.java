@@ -34,7 +34,7 @@ class EquipmentRepositoryTest {
         equipment.setName("Equipment");
         equipment.setCategory(EquipmentCategory.TOOLS);
         equipment.setSubcategory(EquipmentSubcategory.CHARGING_STATION);
-        equipment.setPrice(BigDecimal.valueOf(150.00));
+        equipment.setPricePerDay(BigDecimal.valueOf(150.00));
         equipment.setCondition(EquipmentCondition.NEW);
         equipment.setUserId(-14L);
         equipment.setStatus(EquipmentStatus.AVAILABLE);
@@ -74,7 +74,7 @@ class EquipmentRepositoryTest {
         assertEquals(mainImage.getId(), foundEquipment.getMainImage().getId());
         assertEquals(equipment.getName(), foundEquipment.getName());
         assertEquals(equipment.getCategory(), foundEquipment.getCategory());
-        assertEquals(equipment.getPrice(), foundEquipment.getPrice());
+        assertEquals(equipment.getPricePerDay(), foundEquipment.getPricePerDay());
         assertEquals(equipment.getCondition(), foundEquipment.getCondition());
     }
 }

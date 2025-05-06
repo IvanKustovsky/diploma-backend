@@ -45,7 +45,7 @@ public class EquipmentDto {
 
     @Schema(description = "Price of the equipment", example = "150.00")
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than zero")
-    private BigDecimal price;
+    private BigDecimal pricePerDay;
 
     @Schema(description = "Condition of the equipment", example = "NEW, USED or REFURBISHED")
     @NotNull(message = "Condition cannot be null")

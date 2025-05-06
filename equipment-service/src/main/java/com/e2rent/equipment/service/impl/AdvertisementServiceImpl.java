@@ -67,8 +67,12 @@ public class AdvertisementServiceImpl implements IAdvertisementService {
 
     @Override
     public Page<AdvertisementDto> getAllApproved(String authToken, Pageable pageable) {
-        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
-        return advertisementRepository.findAllByStatusExcludingUser(AdvertisementStatus.APPROVED, currentUserId, pageable);
+        if (authToken != null) {
+            var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+            return advertisementRepository.findAllByStatusExcludingUser(
+                    AdvertisementStatus.APPROVED, currentUserId, pageable);
+        }
+        return advertisementRepository.findAllByStatus(AdvertisementStatus.APPROVED, pageable);
     }
 
     @Override
@@ -81,6 +85,12 @@ public class AdvertisementServiceImpl implements IAdvertisementService {
     @Override
     public Page<AdvertisementDto> getAllApprovedByUserId(Long userId, Pageable pageable) {
         return advertisementRepository.findAllApprovedByUserId(userId, AdvertisementStatus.APPROVED, pageable);
+    }
+
+    @Override
+    public Page<AdvertisementDto> getMyAdvertisements(String authToken, Pageable pageable) {
+        var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        return advertisementRepository.findAllByUserId(currentUserId, pageable);
     }
 
 }
