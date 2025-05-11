@@ -1,6 +1,7 @@
 package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.dto.AdvertisementDto;
+import com.e2rent.equipment.dto.AdvertisementFilterDto;
 import com.e2rent.equipment.entity.Advertisement;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.enums.AdvertisementStatus;
@@ -160,16 +161,20 @@ class AdvertisementServiceImplTest {
         Page<AdvertisementDto> expectedPage = new PageImpl<>(ads, pageable, ads.size());
 
         when(usersFeignClient.getUserIdFromToken(authToken)).thenReturn(ResponseEntity.ok(currentUserId));
-        when(advertisementRepository.findAllByStatusExcludingUser(AdvertisementStatus.APPROVED, currentUserId, pageable))
+        when(advertisementRepository.findFilteredAdvertisements(null, null, null,
+                BigDecimal.valueOf(50L), null, "keyword", currentUserId, pageable))
                 .thenReturn(expectedPage);
 
         // when
-        Page<AdvertisementDto> result = advertisementService.getAllApproved(authToken, pageable);
+        Page<AdvertisementDto> result = advertisementService.searchFilteredAdvertisements(authToken,
+                new AdvertisementFilterDto(null, null, null,
+                        BigDecimal.valueOf(50L), null, "keyword"), pageable);
 
         // then
         assertEquals(expectedPage, result);
         verify(usersFeignClient).getUserIdFromToken(authToken);
-        verify(advertisementRepository).findAllByStatusExcludingUser(AdvertisementStatus.APPROVED, currentUserId, pageable);
+        verify(advertisementRepository).findFilteredAdvertisements(null, null, null,
+                BigDecimal.valueOf(50L), null, "keyword", currentUserId, pageable);
     }
 
     @Test
@@ -196,10 +201,31 @@ class AdvertisementServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         List<AdvertisementDto> ads = List.of(new AdvertisementDto(/* ... */), new AdvertisementDto(/* ... */));
         Page<AdvertisementDto> page = new PageImpl<>(ads, pageable, ads.size());
+
         when(advertisementRepository.findAllApprovedByUserId(userId, AdvertisementStatus.APPROVED, pageable)).thenReturn(page);
 
         // when
         Page<AdvertisementDto> result = advertisementService.getAllApprovedByUserId(userId, pageable);
+
+        // then
+        assertEquals(page, result);
+    }
+
+    @Test
+    @Order(10)
+    void getMyAdvertisements() {
+        // given
+        String authToken = "Bearer someValidToken";
+        Long currentUserId = 42L;
+        Pageable pageable = PageRequest.of(0, 10);
+        List<AdvertisementDto> ads = List.of(new AdvertisementDto(/* ... */), new AdvertisementDto(/* ... */));
+        Page<AdvertisementDto> page = new PageImpl<>(ads, pageable, ads.size());
+
+        when(usersFeignClient.getUserIdFromToken(authToken)).thenReturn(ResponseEntity.ok(currentUserId));
+        when(advertisementRepository.findAllByUserId(currentUserId, pageable)).thenReturn(page);
+
+        // when
+        Page<AdvertisementDto> result = advertisementService.getMyAdvertisements(authToken, pageable);
 
         // then
         assertEquals(page, result);

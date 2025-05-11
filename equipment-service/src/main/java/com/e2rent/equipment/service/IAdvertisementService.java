@@ -1,6 +1,7 @@
 package com.e2rent.equipment.service;
 
 import com.e2rent.equipment.dto.AdvertisementDto;
+import com.e2rent.equipment.dto.AdvertisementFilterDto;
 import com.e2rent.equipment.entity.Equipment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,15 +50,6 @@ public interface IAdvertisementService {
     // ---------------------------- READ ----------------------------
 
     /**
-     * Отримати сторінку всіх схвалених оголошень, доступних для перегляду користувачем.
-     *
-     * @param authToken токен авторизації користувача
-     * @param pageable  об'єкт пагінації
-     * @return сторінка DTO схвалених оголошень
-     */
-    Page<AdvertisementDto> getAllApproved(String authToken, Pageable pageable);
-
-    /**
      * Отримати сторінку всіх оголошень, які очікують на модерацію.
      *
      * @param pageable об'єкт пагінації
@@ -82,5 +74,18 @@ public interface IAdvertisementService {
      * @return сторінка DTO оголошень, створених користувачем і схвалених модератором
      */
     Page<AdvertisementDto> getMyAdvertisements(String authToken, Pageable pageable);
+
+    /**
+     * Отримати сторінку схвалених оголошень за заданими фільтрами, де статус оголошення — APPROVED,
+     * а статус обладнання — AVAILABLE.
+     *
+     * @param authToken   Токен користувача
+     * @param filter   об'єкт із параметрами фільтрації
+     * @param pageable об'єкт пагінації
+     * @return сторінка DTO оголошень, що відповідають критеріям
+     */
+    Page<AdvertisementDto> searchFilteredAdvertisements(String authToken,
+                                                        AdvertisementFilterDto filter,
+                                                        Pageable pageable);
 }
 

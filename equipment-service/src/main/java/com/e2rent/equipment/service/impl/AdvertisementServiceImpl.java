@@ -1,6 +1,7 @@
 package com.e2rent.equipment.service.impl;
 
 import com.e2rent.equipment.dto.AdvertisementDto;
+import com.e2rent.equipment.dto.AdvertisementFilterDto;
 import com.e2rent.equipment.entity.Advertisement;
 import com.e2rent.equipment.entity.Equipment;
 import com.e2rent.equipment.enums.AdvertisementStatus;
@@ -66,16 +67,6 @@ public class AdvertisementServiceImpl implements IAdvertisementService {
     }
 
     @Override
-    public Page<AdvertisementDto> getAllApproved(String authToken, Pageable pageable) {
-        if (authToken != null) {
-            var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
-            return advertisementRepository.findAllByStatusExcludingUser(
-                    AdvertisementStatus.APPROVED, currentUserId, pageable);
-        }
-        return advertisementRepository.findAllByStatus(AdvertisementStatus.APPROVED, pageable);
-    }
-
-    @Override
     public Page<AdvertisementDto> getAllPending(Pageable pageable) {
         return advertisementRepository.findAllByStatusIn(
                 List.of(AdvertisementStatus.CREATED, AdvertisementStatus.UPDATED), pageable
@@ -91,6 +82,26 @@ public class AdvertisementServiceImpl implements IAdvertisementService {
     public Page<AdvertisementDto> getMyAdvertisements(String authToken, Pageable pageable) {
         var currentUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
         return advertisementRepository.findAllByUserId(currentUserId, pageable);
+    }
+
+    @Override
+    public Page<AdvertisementDto> searchFilteredAdvertisements(String authToken,
+                                                               AdvertisementFilterDto filter,
+                                                               Pageable pageable) {
+        Long excludedUserId = null;
+        if (authToken != null) {
+            excludedUserId = usersFeignClient.getUserIdFromToken(authToken).getBody();
+        }
+        return advertisementRepository.findFilteredAdvertisements(
+                filter.getCategory(),
+                filter.getSubcategory(),
+                filter.getCondition(),
+                filter.getMinPrice(),
+                filter.getMaxPrice(),
+                filter.getKeyword(),
+                excludedUserId,
+                pageable
+        );
     }
 
 }

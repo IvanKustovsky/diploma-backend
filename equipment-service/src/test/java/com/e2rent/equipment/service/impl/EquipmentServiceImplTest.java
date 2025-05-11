@@ -417,7 +417,7 @@ class EquipmentServiceImplTest {
         verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(equipmentRepository, times(2)).findEquipmentById(equipmentId);
         verify(imageService, times(files.size())).uploadImage(any(MultipartFile.class), eq(equipment));
-        verify(equipment, times(files.size())).addImage(any(Image.class));
+        verify(equipment, times(files.size() - 1)).addImage(any(Image.class));
     }
 
     @Test
@@ -442,8 +442,7 @@ class EquipmentServiceImplTest {
         // when, then
         assertThatThrownBy(() -> equipmentServiceImpl.uploadImages(equipmentId, List.of(file), MOCK_TOKEN))
                 .isInstanceOf(ImageLimitExceededException.class)
-                .hasMessageContaining(String.format("Досягнуто ліміт (" + MAX_IMAGE_LIMIT
-                        + ") зображень для одного обладнання."));
+                .hasMessageContaining("Досягнуто загальний ліміт");
 
         verify(usersFeignClient, times(1)).getUserIdFromToken(MOCK_TOKEN);
         verify(imageService, never()).uploadImage(file, equipment);

@@ -154,7 +154,7 @@ public class EquipmentServiceImpl implements IEquipmentService {
 
         // Перевірка ліміту (враховує і головне зображення, і додаткові)
         int totalImages = equipment.getImages().size() + (equipment.getMainImage() != null ? 1 : 0);
-        if (totalImages >= MAX_IMAGE_LIMIT) {
+        if (totalImages > MAX_IMAGE_LIMIT) {
             throw new ImageLimitExceededException("Досягнуто загальний ліміт ("
                     + MAX_IMAGE_LIMIT + ") зображень.");
         }
