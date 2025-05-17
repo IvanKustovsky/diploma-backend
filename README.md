@@ -22,7 +22,7 @@ The system consists of the following microservices:
 
 3.  **Configuration Server (config-service):**
     * Technology: `Spring Cloud Config Server`
-    * Purpose: Centralized configuration management for all microservices. Reads configuration data from a GitHub repository.
+    * Purpose: Centralized configuration management for all microservices. Reads configuration data from a GitHub repository. 📁 [server-config (branch: e2rent)](https://github.com/IvanKustovsky/server-config/tree/e2rent)
 
 4.  **Authentication Service (auth-service):**
     * Technology: Wrapper around Keycloak API.
